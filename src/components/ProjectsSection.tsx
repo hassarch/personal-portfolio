@@ -16,21 +16,6 @@ const projects: Project[] = [
     description: 'A comprehensive healthcare management system that allows patients to schedule appointments, view medical records, communicate with doctors, and manage their health information securely.',
     technologies: ['React', 'Node.js', 'PostgreSQL', 'Express'],
     githubUrl: 'https://github.com/yourusername/patient-portal',
-    liveUrl: 'https://yourproject.com',
-  },
-  {
-    title: 'Pet Adoption',
-    description: 'An interactive platform connecting pet lovers with rescue organizations. Features include pet listings, search filters, adoption applications, and user profiles for managing favorite pets.',
-    technologies: ['Next.js', 'TypeScript', 'MongoDB', 'Tailwind CSS'],
-    githubUrl: 'https://github.com/yourusername/pet-adoption',
-    liveUrl: 'https://yourproject.com',
-  },
-  {
-    title: 'Student Performance Predictor',
-    description: 'A machine learning-powered application that predicts student academic performance based on various factors. Includes data visualization, performance analytics, and actionable insights for educators.',
-    technologies: ['Python', 'React', 'TensorFlow', 'Flask'],
-    githubUrl: 'https://github.com/yourusername/student-predictor',
-    liveUrl: 'https://yourproject.com',
   },
 ];
 
@@ -48,9 +33,11 @@ const ProjectsSection = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div className="flex justify-center max-w-5xl mx-auto">
           {projects.map((project, index) => (
-            <ProjectCard key={index} project={project} />
+            <div key={index} className="w-full md:w-2/3 lg:w-1/2">
+              <ProjectCard project={project} />
+            </div>
           ))}
         </div>
       </div>
