@@ -90,7 +90,7 @@ const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="relative py-24 px-6">
+    <section id="contact" className="relative py-24 px-6 scroll-mt-28 sm:scroll-mt-32">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">

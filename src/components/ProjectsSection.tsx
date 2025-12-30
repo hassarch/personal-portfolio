@@ -28,7 +28,7 @@ const projects: Project[] = [
 
 const ProjectsSection = () => {
   return (
-    <section id="projects" className="relative py-24 px-6">
+    <section id="projects" className="relative py-24 px-6 scroll-mt-28 sm:scroll-mt-32">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -40,11 +40,9 @@ const ProjectsSection = () => {
           </p>
         </div>
 
-        <div className="flex justify-center max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {projects.map((project, index) => (
-            <div key={index} className="w-full md:w-2/3 lg:w-1/2">
-              <ProjectCard project={project} />
-            </div>
+            <ProjectCard key={index} project={project} />
           ))}
         </div>
       </div>

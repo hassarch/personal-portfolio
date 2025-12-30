@@ -2,7 +2,7 @@ import { Code2, Lightbulb, Rocket } from 'lucide-react';
 
 const AboutSection = () => {
   return (
-    <section id="about" className="relative py-24 px-6">
+    <section id="about" className="relative py-24 px-6 scroll-mt-28 sm:scroll-mt-32">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -20,7 +20,7 @@ const AboutSection = () => {
               <p className="text-lg text-muted-foreground leading-relaxed">I enjoy turning concepts into real, working applications.</p>
             </div>
 
-            <div className="grid grid-cols-3 gap-4 pt-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 pt-6">
               <StatCard icon={<Code2 className="text-primary" />} value="20+" label="Projects" />
               <StatCard icon={<Lightbulb className="text-accent" />} value="2-3" label="Years Exp" />
               <StatCard icon={<Rocket className="text-primary" />} value="10+" label="Happy Clients" />
