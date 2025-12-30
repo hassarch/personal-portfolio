@@ -37,14 +37,10 @@ const ContactSection = () => {
       const formspreeEndpoint = import.meta.env.VITE_FORMSPREE_ENDPOINT;
       
       if (!formspreeEndpoint || formspreeEndpoint.includes('YOUR_FORM_ID')) {
-        const subject = encodeURIComponent(`Contact from ${data.name}`);
-        const body = encodeURIComponent(`Name: ${data.name}\nEmail: ${data.email}\n\nMessage:\n${data.message}`);
-        window.location.href = `mailto:hassanrj245@gmail.com?subject=${subject}&body=${body}`;
-        
         toast({
-          title: 'Opening email client...',
-          description: 'Please send the email from your email client, or configure Formspree for direct submission.',
-          variant: 'default',
+          title: 'Form Not Configured',
+          description: 'The contact form is not properly configured. Please contact me directly at hassanrj245@gmail.com',
+          variant: 'destructive',
         });
         
         reset();
