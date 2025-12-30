@@ -17,6 +17,13 @@ const projects: Project[] = [
     technologies: ['React', 'Node.js', 'MongoDB', 'Express', 'Tailwind CSS', 'TypeScript','shadcn-ui' ],
     githubUrl: 'https://github.com/hassarch/patient-portal.git',
   },
+  {
+    title: 'Mind Pulse',
+    description:'MindPulse is an AI-powered web app that helps students track mood, sleep, stress, and study habits through quick daily check-ins, visual analytics, and burnout risk prediction, delivering personalized insights in a clean, privacy-focused interface',
+    technologies: ['React', 'TypeScript', 'Vite', 'shadcn/ui', 'Radix UI', 'Tailwind CSS', 'React Query', 'Zod', 'Recharts'],
+    githubUrl: 'https://github.com/hassarch/habit-tracker.git',
+    liveUrl: 'https://mind-pulse-ai.vercel.app/',
+  }
 ];
 
 const ProjectsSection = () => {
