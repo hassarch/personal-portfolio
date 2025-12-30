@@ -14,8 +14,8 @@ const projects: Project[] = [
   {
     title: 'Patient Portal',
     description: 'A comprehensive healthcare management system that allows patients to schedule appointments, view medical records, communicate with doctors, and manage their health information securely.',
-    technologies: ['React', 'Node.js', 'PostgreSQL', 'Express'],
-    githubUrl: 'https://github.com/yourusername/patient-portal',
+    technologies: ['React', 'Node.js', 'MongoDB', 'Express', 'Tailwind CSS', 'TypeScript','shadcn-ui' ],
+    githubUrl: 'https://github.com/hassarch/patient-portal.git',
   },
 ];
 
