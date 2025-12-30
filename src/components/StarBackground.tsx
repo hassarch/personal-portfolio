@@ -15,7 +15,7 @@ const StarBackground = () => {
 
   const generateStars = useCallback(() => {
     const newStars: Star[] = [];
-    const count = window.innerWidth < 768 ? 200 : 400;
+    const count = window.innerWidth < 768 ? 180 : 360;
 
     for (let i = 0; i < count; i++) {
       newStars.push({
@@ -54,74 +54,108 @@ const StarBackground = () => {
             top: `${star.y}%`,
             width: `${star.size}px`,
             height: `${star.size}px`,
-            '--duration': `${star.duration}s`,
-            '--delay': `${star.delay}s`,
+            ['--duration' as any]: `${star.duration}s`,
+            ['--delay' as any]: `${star.delay}s`,
             opacity: star.opacity,
           } as React.CSSProperties}
         />
       ))}
 
-      <ShootingStar delay={0} />
-      <ShootingStar delay={7} />
-      <ShootingStar delay={14} />
-      <ShootingStar delay={21} />
-      <ShootingStar delay={28} />
-      <ShootingStar delay={35} />
+      <ShootingStars />
     </div>
   );
 };
 
-const ShootingStar = ({ delay }: { delay: number }) => {
-  const [position, setPosition] = useState({ x: 0, y: 0, visible: false });
+type ActiveStar = {
+  id: number;
+  x: number;
+  y: number;
+  dx: number;
+  dy: number;
+  duration: number;
+  angle: number;
+  size: number;
+  expiresAt: number;
+};
+
+function ShootingStars({ max = 4 }: { max?: number }) {
+  const [stars, setStars] = useState<ActiveStar[]>([]);
+  const now = () => Date.now();
 
   useEffect(() => {
-    const animate = () => {
-      setPosition({
-        x: Math.random() * 80 + 10,
-        y: Math.random() * 40,
-        visible: true,
+    const tickMs = 120; // fast tick for probability spawning
+    const baseProb = 0.035; // spawn chance per tick
+    const burstChance = 0.02; // 2% chance to temporarily boost spawn rate
+
+    const interval = setInterval(() => {
+      setStars((prev) => {
+        const t = now();
+        const alive = prev.filter((s) => s.expiresAt > t);
+        if (alive.length >= max) return alive;
+
+        // probabilistic spawn
+        const inBurst = Math.random() < burstChance;
+        const spawnProb = inBurst ? baseProb * 2.2 : baseProb;
+        if (Math.random() >= spawnProb) return alive;
+
+        // Reference-inspired NW→SE spawn from top or left
+        const w = window.innerWidth || 1200;
+        const h = window.innerHeight || 800;
+        const fromTop = Math.random() < 0.6;
+        const startX = fromTop ? Math.random() * w : -80;
+        const startY = fromTop ? -80 : Math.random() * (h * 0.6);
+
+        // speed in px per tick; angle ~45deg +/- 22.5deg
+        const speed = 7 + Math.random() * 6; // 7-13
+        const angleRad = Math.PI / 4 + Math.random() * (Math.PI / 8);
+        const vx = Math.cos(angleRad) * speed;
+        const vy = Math.sin(angleRad) * speed;
+        const life = 70 + Math.random() * 50; // frames (~8.4s max at 120ms tick) but we convert to ms duration
+
+        const dx = vx * life; // px
+        const dy = vy * life; // px
+        const duration = life * tickMs; // ms
+        const angle = 45; // visual rotation
+        const size = Math.random() * 1.2 + 1.8; // 1.8 - 3.0px head
+
+        const star: ActiveStar = {
+          id: t + Math.floor(Math.random() * 1000),
+          x: (startX / w) * 100, // convert px to % for positioning
+          y: (startY / h) * 100,
+          dx,
+          dy,
+          duration,
+          angle,
+          size,
+          expiresAt: t + duration,
+        };
+        return [...alive, star];
       });
+    }, tickMs);
 
-      setTimeout(() => {
-        setPosition((prev) => ({ ...prev, visible: false }));
-      }, 1000);
-    };
-
-    const interval = setInterval(animate, 8000);
-    const timeout = setTimeout(animate, delay * 1000);
-
-    return () => {
-      clearInterval(interval);
-      clearTimeout(timeout);
-    };
-  }, [delay]);
-
-  if (!position.visible) return null;
+    return () => clearInterval(interval);
+  }, [max]);
 
   return (
-    <div
-      className="absolute w-1 h-1 bg-star rounded-full"
-      style={{
-        left: `${position.x}%`,
-        top: `${position.y}%`,
-        boxShadow: '0 0 6px 2px hsl(var(--star-color))',
-        animation: 'shooting-star 1s linear forwards',
-      }}
-    >
-      <style>{`
-        @keyframes shooting-star {
-          0% {
-            transform: translateX(0) translateY(0) rotate(-45deg);
-            opacity: 1;
-          }
-          100% {
-            transform: translateX(200px) translateY(200px) rotate(-45deg);
-            opacity: 0;
-          }
-        }
-      `}</style>
-    </div>
+    <>
+      {stars.map((s) => (
+        <div
+          key={s.id}
+          className="absolute shooting-star"
+          style={{
+            left: `${s.x}%`,
+            top: `${s.y}%`,
+            width: `${s.size}px`,
+            height: `${s.size}px`,
+            ['--dx' as any]: `${s.dx}px`,
+            ['--dy' as any]: `${s.dy}px`,
+            ['--shoot-duration' as any]: `${s.duration}ms`,
+            ['--angle' as any]: `${s.angle}deg`,
+          }}
+        />
+      ))}
+    </>
   );
-};
+}
 
 export default StarBackground;

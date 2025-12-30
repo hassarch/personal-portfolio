@@ -1,8 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @layer base {
   :root {
@@ -169,4 +170,68 @@
 .star {
   animation: twinkle var(--duration) ease-in-out infinite;
   animation-delay: var(--delay);
+}
+
+/* Marquee utilities for Skills section */
+@layer utilities {
+  .animate-marquee {
+    animation: marquee var(--marquee-duration, 30s) linear infinite;
+    will-change: transform;
+  }
+  .animate-marquee-reverse {
+    animation: marquee-reverse var(--marquee-duration, 30s) linear infinite;
+    will-change: transform;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-reverse {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Shooting star with trail */
+@layer utilities {
+  .shooting-star {
+    background: hsl(var(--star-color));
+    border-radius: 9999px;
+    box-shadow: 0 0 10px 3px hsl(var(--star-color) / 0.95);
+    transform: rotate(var(--angle, 0deg));
+    animation: shoot var(--shoot-duration, 1500ms) linear forwards;
+  }
+  .shooting-star::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 2px;
+    width: 200px; /* longer trail */
+    background: linear-gradient(90deg, hsl(var(--star-color) / 1) 0%, hsl(var(--star-color) / 0.55) 65%, transparent 100%);
+    filter: blur(1px);
+    pointer-events: none;
+  }
+}
+
+@keyframes shoot {
+  0% {
+    transform: translate(0, 0) rotate(var(--angle, 0deg));
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--dx, 400px), var(--dy, 0px)) rotate(var(--angle, 0deg));
+    opacity: 0;
+  }
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
+import UfoIcon from './UfoIcon';
 import { Button } from './ui/button';
 
 const navLinks = [
@@ -43,9 +44,18 @@ const Navbar = () => {
         <div className="flex items-center justify-between">
           <a
             href="#"
-            className="text-xl font-bold gradient-text hover:opacity-80 transition-opacity"
+            className="group relative text-xl font-bold hover:opacity-80 transition-opacity"
+            aria-label="Home"
           >
-            {'<MH />'}
+            <UfoIcon className="relative z-10 text-primary animate-float transition-transform duration-500 group-hover:-translate-y-1 group-hover:scale-105 drop-shadow-[0_0_12px_hsl(var(--primary))]" size={54} />
+            <div
+              className="pointer-events-none absolute left-1/2 top-full -translate-x-1/2 -mt-1 h-24 w-24 opacity-0 group-hover:opacity-100 transition-all duration-300"
+              style={{
+                background: 'linear-gradient(to bottom, hsl(var(--primary) / 0.6), hsl(var(--primary) / 0.15), transparent)',
+                clipPath: 'polygon(50% 0%, 10% 100%, 90% 100%)',
+                filter: 'blur(1px) drop-shadow(0 0 8px hsl(var(--primary) / 0.4))',
+              }}
+            />
           </a>
 
           <div className="hidden md:flex items-center gap-8">

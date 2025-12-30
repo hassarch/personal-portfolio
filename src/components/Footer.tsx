@@ -1,3 +1,5 @@
+import UfoIcon from './UfoIcon';
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
@@ -5,12 +7,8 @@ const Footer = () => {
     <footer className="relative py-8 px-6 border-t border-border/50">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <a
-            href="#"
-            className="text-xl font-bold gradient-text hover:opacity-80 transition-opacity"
-          >
-            {'<MH />'}
-          </a>
+          {/* Brand removed per request */}
+          <div className="h-6" />
 
           <p className="text-sm text-muted-foreground">
             © {currentYear} Mohammed Hassan. All rights reserved.

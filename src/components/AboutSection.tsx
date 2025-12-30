@@ -13,21 +13,12 @@ const AboutSection = () => {
 
         <div className="max-w-3xl mx-auto">
           <div className="space-y-6 text-center">
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Hello! I{"'"}m <span className="text-foreground font-medium">Mohammed Hassan</span>, 
-              a passionate full-stack developer based in India. I love turning complex 
-              problems into simple, beautiful, and intuitive solutions.
-            </p>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              I{"'"}m a <span className="text-foreground font-medium">Computer Science undergrad</span> with 
-              2-3 years of experience in web development. I enjoy working on diverse projects 
-              and continuously learning new technologies.
-            </p>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              I love exploring new tech and am passionate about building cool projects. 
-              When I{"'"}m not coding, you{"'"}ll find me diving into the latest frameworks 
-              or contributing to open-source.
-            </p>
+            <div className="space-y-3">
+              <p className="text-lg text-muted-foreground leading-relaxed">I’m a Computer Science and Data Science student who enjoys building projects and learning by doing.</p>
+              <p className="text-lg text-muted-foreground leading-relaxed">I like exploring new technologies and experimenting with ideas.</p>
+              <p className="text-lg text-muted-foreground leading-relaxed">I’m interested in software development, machine learning, and problem solving.</p>
+              <p className="text-lg text-muted-foreground leading-relaxed">I enjoy turning concepts into real, working applications.</p>
+            </div>
 
             <div className="grid grid-cols-3 gap-4 pt-6">
               <StatCard icon={<Code2 className="text-primary" />} value="20+" label="Projects" />

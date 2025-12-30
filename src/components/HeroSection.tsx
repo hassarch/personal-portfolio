@@ -10,10 +10,10 @@ const HeroSection = () => {
     <section className="relative min-h-screen flex items-center justify-center px-6 pt-20">
       <div className="max-w-4xl mx-auto text-center z-10">
         <p
-          className="text-primary font-mono text-sm md:text-base mb-4 opacity-0 animate-fade-in"
+          className="text-white font-mono font-bold text-base md:text-lg mb-4 opacity-0 animate-fade-in"
           style={{ animationDelay: '0.2s' }}
         >
-          Hi, my name is
+          Hi, I'm
         </p>
 
         <h1
@@ -34,9 +34,7 @@ const HeroSection = () => {
           className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed opacity-0 animate-fade-in"
           style={{ animationDelay: '0.8s' }}
         >
-          I love exploring new technologies and building cool projects. 
-          Passionate about crafting exceptional digital experiences 
-          with modern tech stacks.
+          CSE undergraduate passionate about building clean, user-centric web apps. I enjoy turning ideas into real products using modern frontend tech and solving meaningful problems.
         </p>
 
         <div

@@ -25,6 +25,12 @@ const skills = {
   ],
 };
 
+const allSkills = [
+  ...skills.frontend.map((s) => s.name),
+  ...skills.backend.map((s) => s.name),
+  ...skills.tools.map((s) => s.name),
+];
+
 const SkillsSection = () => {
   return (
     <section id="skills" className="relative py-24 px-6">
@@ -39,82 +45,85 @@ const SkillsSection = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          <SkillCategory title="Frontend" skills={skills.frontend} />
-          <SkillCategory title="Backend" skills={skills.backend} />
-          <SkillCategory title="Tools & Others" skills={skills.tools} />
+        <div className="glass-card rounded-2xl p-6 md:p-8 overflow-hidden">
+          <Marquee direction="left" speed={30} items={allSkills} />
         </div>
       </div>
     </section>
   );
 };
 
-const SkillCategory = ({
-  title,
-  skills,
+function Marquee({
+  items,
+  direction = 'left',
+  speed = 30,
 }: {
-  title: string;
-  skills: { name: string; level: number }[];
-}) => (
-  <div className="glass-card p-6 rounded-2xl hover-glow transition-all duration-500">
-    <h3 className="text-xl font-semibold mb-6 text-center">
-      <span className="gradient-text">{title}</span>
-    </h3>
-    <div className="grid grid-cols-3 gap-4">
-      {skills.map((skill) => (
-        <CircularProgress key={skill.name} name={skill.name} level={skill.level} />
-      ))}
-    </div>
-  </div>
-);
+  items: string[];
+  direction?: 'left' | 'right';
+  speed?: number; // seconds for one full loop
+}) {
+  const animationClass = direction === 'left' ? 'animate-marquee' : 'animate-marquee-reverse';
+  const style = { ['--marquee-duration' as any]: `${speed}s` } as React.CSSProperties;
 
-const CircularProgress = ({ name, level }: { name: string; level: number }) => {
-  const circumference = 2 * Math.PI * 36;
-  const strokeDashoffset = circumference - (level / 100) * circumference;
+  // duplicate items to create a seamless loop
+  const loopItems = [...items, ...items];
 
   return (
-    <div className="flex flex-col items-center group">
-      <div className="relative w-20 h-20">
-        <svg className="w-20 h-20 transform -rotate-90">
-          <circle
-            cx="40"
-            cy="40"
-            r="36"
-            stroke="currentColor"
-            strokeWidth="6"
-            fill="transparent"
-            className="text-secondary"
-          />
-          <circle
-            cx="40"
-            cy="40"
-            r="36"
-            stroke="url(#gradient)"
-            strokeWidth="6"
-            fill="transparent"
-            strokeLinecap="round"
-            strokeDasharray={circumference}
-            strokeDashoffset={strokeDashoffset}
-            className="transition-all duration-1000 ease-out group-hover:drop-shadow-[0_0_8px_hsl(var(--primary))]"
-          />
-          <defs>
-            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="hsl(var(--primary))" />
-              <stop offset="100%" stopColor="hsl(var(--accent))" />
-            </linearGradient>
-          </defs>
-        </svg>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors duration-300">
-            {level}%
-          </span>
-        </div>
+    <div className="relative w-full overflow-hidden">
+      <div className={`flex w-max gap-6 ${animationClass}`} style={style} aria-hidden>
+        {loopItems.map((name, idx) => (
+          <SkillPill key={`${name}-${idx}`} label={name} />
+        ))}
       </div>
-      <span className="mt-2 text-xs text-muted-foreground group-hover:text-foreground transition-colors duration-300 text-center">
-        {name}
-      </span>
     </div>
   );
-};
+}
+
+import { Network, GitBranch, Beaker } from 'lucide-react';
+
+function SkillPill({ label }: { label: string }) {
+  const icon = getIconForSkill(label);
+  return (
+    <div className="px-6 py-3.5 rounded-full border border-border/40 bg-muted/30 text-lg md:text-xl text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors whitespace-nowrap flex items-center gap-4">
+      {icon}
+      <span>{label}</span>
+    </div>
+  );
+}
+
+function getIconForSkill(label: string): React.ReactNode {
+  const l = label.toLowerCase();
+  const img = (slug: string, variant: string = 'original') => (
+    <img
+      src={`https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${slug}/${slug}-${variant}.svg`}
+      alt={label}
+      className="h-7 w-7 md:h-8 md:w-8 object-contain"
+      loading="lazy"
+      referrerPolicy="no-referrer"
+    />
+  );
+
+  if (l.includes('react')) return img('react');
+  if (l.includes('type')) return img('typescript');
+  if (l.includes('next')) return img('nextjs');
+  if (l.includes('vue')) return img('vuejs');
+  if (l.includes('tailwind')) return img('tailwindcss', 'plain');
+  if (l.includes('html')) return img('html5');
+  if (l.includes('node')) return img('nodejs');
+  if (l.includes('python')) return img('python');
+  if (l.includes('postgre')) return img('postgresql');
+  if (l.includes('mongo')) return img('mongodb');
+  if (l.includes('graphql')) return img('graphql', 'plain');
+  if (l === 'git') return img('git');
+  if (l.includes('docker')) return img('docker');
+  if (l === 'aws' || l.includes('amazon')) return img('amazonwebservices');
+  if (l.includes('figma')) return img('figma');
+
+  if (l.includes('rest')) return <Network className="h-6 w-6 md:h-7 md:w-7" />;
+  if (l.includes('ci')) return <GitBranch className="h-6 w-6 md:h-7 md:w-7" />;
+  if (l.includes('test')) return <Beaker className="h-6 w-6 md:h-7 md:w-7" />;
+
+  return <Network className="h-6 w-6 md:h-7 md:w-7" />;
+}
 
 export default SkillsSection;
