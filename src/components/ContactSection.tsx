@@ -36,7 +36,10 @@ const ContactSection = () => {
     try {
       const formspreeEndpoint = import.meta.env.VITE_FORMSPREE_ENDPOINT;
       
-      if (!formspreeEndpoint || formspreeEndpoint.includes('YOUR_FORM_ID')) {
+      // Debug logging (remove in production)
+      console.log('Formspree endpoint:', formspreeEndpoint);
+      
+      if (!formspreeEndpoint || formspreeEndpoint.includes('YOUR_FORM_ID') || !formspreeEndpoint.startsWith('https://formspree.io')) {
         toast({
           title: 'Form Not Configured',
           description: 'The contact form is not properly configured. Please contact me directly at hassanrj245@gmail.com',
