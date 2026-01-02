@@ -34,7 +34,7 @@ const HeroSection = () => {
           className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed opacity-0 animate-fade-in"
           style={{ animationDelay: '0.8s' }}
         >
-          CSE undergraduate passionate about building clean, user-centric web apps. I enjoy turning ideas into real products using modern frontend tech and solving meaningful problems.
+          Computer Science undergraduate passionate about building clean, user-centric web apps. I enjoy turning ideas into real products using modern frontend tech and solving meaningful problems.
         </p>
 
         <div
