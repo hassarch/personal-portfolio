@@ -10,28 +10,28 @@ const HeroSection = () => {
     <section className="relative min-h-screen flex items-center justify-center px-6 pt-20">
       <div className="max-w-4xl mx-auto text-center z-10">
         <p
-          className="text-white font-mono font-bold text-base md:text-lg mb-4 opacity-0 animate-fade-in"
+          className="text-white font-mono font-bold text-base md:text-lg mb-4 opacity-0 animate-scale-in-strong"
           style={{ animationDelay: '0.2s' }}
         >
           Hi, I'm
         </p>
 
         <h1
-          className="text-4xl md:text-6xl lg:text-7xl font-display font-semibold mb-4 opacity-0 animate-fade-in"
+          className="text-4xl md:text-6xl lg:text-7xl font-display font-semibold mb-4 opacity-0 animate-scale-in-strong"
           style={{ animationDelay: '0.4s' }}
         >
           <span className="gradient-text text-glow">Mohammed Hassan</span>
         </h1>
 
         <h2
-          className="text-2xl md:text-4xl lg:text-5xl font-semibold text-muted-foreground mb-6 opacity-0 animate-fade-in"
+          className="text-2xl md:text-4xl lg:text-5xl font-semibold text-muted-foreground mb-6 opacity-0 animate-scale-in-strong"
           style={{ animationDelay: '0.6s' }}
         >
           Full Stack Developer
         </h2>
 
         <p
-          className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed opacity-0 animate-fade-in"
+          className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed opacity-0 animate-scale-in-strong"
           style={{ animationDelay: '0.8s' }}
         >
           Computer Science undergraduate passionate about building clean, user-centric web apps. I enjoy turning ideas into real products using modern frontend tech and solving meaningful problems.
@@ -56,6 +56,27 @@ const HeroSection = () => {
           style={{ animationDelay: '1.2s' }}
         >
           <SocialLink href="https://github.com/hassarch" icon={<Github size={22} />} label="GitHub" />
+          <SocialLink
+            href="https://leetcode.com/u/has_san/"
+            icon={
+              <span
+                aria-hidden
+                className="inline-block h-[22px] w-[22px]"
+                style={{
+                  backgroundColor: 'currentColor',
+                  WebkitMaskImage: 'url(https://cdn.simpleicons.org/leetcode/000000)',
+                  maskImage: 'url(https://cdn.simpleicons.org/leetcode/000000)',
+                  WebkitMaskRepeat: 'no-repeat',
+                  maskRepeat: 'no-repeat',
+                  WebkitMaskSize: 'contain',
+                  maskSize: 'contain',
+                  WebkitMaskPosition: 'center',
+                  maskPosition: 'center',
+                }}
+              />
+            }
+            label="LeetCode"
+          />
           <SocialLink href="https://www.linkedin.com/in/hassan0777/" icon={<Linkedin size={22} />} label="LinkedIn" />
           <SocialLink href="mailto:hassanrj245@gmail.com" icon={<Mail size={22} />} label="Email" />
         </div>

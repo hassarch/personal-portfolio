@@ -107,7 +107,7 @@ function getIconForSkill(label: string): React.ReactNode {
   if (l.includes('type')) return img('typescript');
   if (l.includes('next')) return img('nextjs');
   if (l.includes('vue')) return img('vuejs');
-  if (l.includes('tailwind')) return img('tailwindcss', 'plain');
+  if (l.includes('tailwind')) return img('tailwindcss', 'original');
   if (l.includes('html')) return img('html5');
   if (l.includes('node')) return img('nodejs');
   if (l.includes('python')) return img('python');
@@ -116,7 +116,7 @@ function getIconForSkill(label: string): React.ReactNode {
   if (l.includes('graphql')) return img('graphql', 'plain');
   if (l === 'git') return img('git');
   if (l.includes('docker')) return img('docker');
-  if (l === 'aws' || l.includes('amazon')) return img('amazonwebservices');
+  if (l === 'aws' || l.includes('amazon')) return img('amazonwebservices', 'original-wordmark');
   if (l.includes('figma')) return img('figma');
 
   if (l.includes('rest')) return <Network className="h-6 w-6 md:h-7 md:w-7" />;
