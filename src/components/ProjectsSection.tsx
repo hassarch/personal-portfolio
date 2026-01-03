@@ -23,6 +23,13 @@ const projects: Project[] = [
     technologies: ['React', 'TypeScript', 'Vite', 'shadcn/ui', 'Radix UI', 'Tailwind CSS', 'React Query', 'Zod', 'Recharts'],
     githubUrl: 'https://github.com/hassarch/mind-pulse.git',
     liveUrl: 'https://mind-pulse-ai.vercel.app/',
+  },
+  {
+    title: 'Expenso',
+    description: 'An intelligent budget tracking application designed to help users monitor expenses, analyze spending trends through interactive visuals, and forecast future costs with predictive insights, making personal finance management simpler and more effective.',
+    technologies: ['React', 'TypeScript', 'Google OAuth','Vite', 'Tailwind CSS'],
+    githubUrl: 'https://github.com/hassarch/budget-tracker.git',
+    liveUrl: 'https://expenso-alpha.vercel.app/',
   }
 ];
 
