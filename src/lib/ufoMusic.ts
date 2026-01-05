@@ -5,7 +5,7 @@ let audioEl: HTMLAudioElement | null = null;
 let playing = false;
 let initialized = false;
 
-const DEFAULT_SRC = "./public/song.mp3"; // placeholder path
+const DEFAULT_SRC = "/song.mp3"; // placeholder path
 let currentVolume = 0.45; // user preference
 let loop = false; // play once by default
 
