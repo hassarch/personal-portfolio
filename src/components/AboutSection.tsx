@@ -21,9 +21,9 @@ const AboutSection = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 pt-6">
-              <StatCard icon={<Code2 className="text-primary" />} value="20+" label="Projects" />
-              <StatCard icon={<Lightbulb className="text-accent" />} value="2-3" label="Years Exp" />
-              <StatCard icon={<Rocket className="text-primary" />} value="10+" label="Happy Clients" />
+              <StatCard icon={<Code2 className="text-primary" />} value="10+" label="Projects" />
+              <StatCard icon={<Lightbulb className="text-accent" />} value="1-2" label="Years Exp" />
+              <StatCard icon={<Rocket className="text-primary" />} value="7+" label="Hackathons" />
             </div>
           </div>
         </div>

@@ -27,14 +27,14 @@ const HeroSection = () => {
           className="text-2xl md:text-4xl lg:text-5xl font-semibold text-muted-foreground mb-6 opacity-0 animate-scale-in-strong"
           style={{ animationDelay: '0.6s' }}
         >
-          Full Stack Developer
+          
         </h2>
 
         <p
           className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed opacity-0 animate-scale-in-strong"
           style={{ animationDelay: '0.8s' }}
         >
-          Computer Science undergraduate passionate about building clean, user-centric web apps. I enjoy turning ideas into real products using modern frontend tech and solving meaningful problems.
+          A Computer Science undergraduate, passionate about building clean, user-centric web apps. I enjoy turning ideas into real products using modern frontend tech and solving meaningful problems.
         </p>
 
         <div

@@ -15,16 +15,15 @@ const projects: Project[] = [
     title: 'Patient Portal',
     description: 'A comprehensive healthcare management system that allows patients to schedule appointments, view medical records, communicate with doctors, and manage their health information securely.',
     technologies: ['React', 'Node.js', 'MongoDB', 'Express', 'Tailwind CSS', 'TypeScript','shadcn-ui' ],
-    githubUrl: 'https://github.com/hassarch/pateint-portal.git',
+    githubUrl: 'https://github.com/hassarch/patient-portal.git',
   },
   {
     title: 'Mind Pulse',
     description:'MindPulse is an AI-powered web app that helps students track mood, sleep, stress, and study habits through quick daily check-ins, visual analytics, and burnout risk prediction, delivering personalized insights in a clean, privacy-focused interface',
     technologies: ['React', 'TypeScript', 'Vite', 'shadcn/ui', 'Radix UI', 'Tailwind CSS', 'React Query', 'Zod', 'Recharts'],
-    githubUrl: 'https://github.com/hassarch/mind-pulse.git',
+    githubUrl: 'https://github.com/hassarch/habit-tracker.git',
     liveUrl: 'https://mind-pulse-ai.vercel.app/',
-  },
-  {
+  },{
     title: 'Expenso',
     description: 'An intelligent budget tracking application designed to help users monitor expenses, analyze spending trends through interactive visuals, and forecast future costs with predictive insights, making personal finance management simpler and more effective.',
     technologies: ['React', 'TypeScript', 'Google OAuth','Vite', 'Tailwind CSS'],

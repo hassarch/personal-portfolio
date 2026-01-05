@@ -46,6 +46,12 @@ const Navbar = () => {
             href="#"
             className="group relative text-xl font-bold hover:opacity-80 transition-opacity"
             aria-label="Home"
+            onClick={(e) => {
+              // Keep link behavior (scroll to top) but also trigger music
+              try {
+                import('@/lib/ufoMusic').then(m => m.toggleUfoMusic());
+              } catch {}
+            }}
           >
             <UfoIcon className="relative z-10 text-primary animate-float transition-transform duration-500 group-hover:-translate-y-1 group-hover:scale-105 drop-shadow-[0_0_12px_hsl(var(--primary))]" size={54} />
             <div
