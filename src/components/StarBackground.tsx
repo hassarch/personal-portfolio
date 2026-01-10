@@ -57,7 +57,7 @@ const StarBackground = () => {
         />
       ))}
 
-      <ShootingStars />
+      <ShootingStars max={8} />
     </div>
   );
 };
@@ -79,9 +79,9 @@ function ShootingStars({ max = 4 }: { max?: number }) {
   const now = () => Date.now();
 
   useEffect(() => {
-    const tickMs = 120; // fast tick for probability spawning
-    const baseProb = 0.035; // spawn chance per tick
-    const burstChance = 0.02; // 2% chance to temporarily boost spawn rate
+    const tickMs = 100; // fast tick for probability spawning
+    const baseProb = 0.15; // increased spawn chance per tick
+    const burstChance = 0.08; // increased chance to temporarily boost spawn rate
 
     const interval = setInterval(() => {
       setStars((prev) => {
