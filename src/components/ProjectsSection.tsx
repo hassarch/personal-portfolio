@@ -23,7 +23,15 @@ const projects: Project[] = [
     technologies: ['React', 'TypeScript', 'Vite', 'shadcn/ui', 'Radix UI', 'Tailwind CSS', 'React Query', 'Zod', 'Recharts'],
     githubUrl: 'https://github.com/hassarch/habit-tracker.git',
     liveUrl: 'https://mind-pulse-ai.vercel.app/',
-  },{
+  },
+  {
+    title: 'Zone',
+    description: 'A productivity-focused Chrome extension that helps users stay focused by tracking time spent on distracting websites and automatically blocking them when daily limits are reached. It features real-time tracking, instant blocking, live countdowns, usage stats, and a clean, minimal interface.',
+    technologies:['JavaScript', 'Chrome Extension APIs', 'Node.js', 'Express', 'MongoDB', 'HTML', 'CSS'],
+    githubUrl:'https://github.com/hassarch/zone.git',
+},
+  
+  {
     title: 'Expenso',
     description: 'An intelligent budget tracking application designed to help users monitor expenses, analyze spending trends through interactive visuals, and forecast future costs with predictive insights, making personal finance management simpler and more effective.',
     technologies: ['React', 'TypeScript', 'Google OAuth','Vite', 'Tailwind CSS'],
