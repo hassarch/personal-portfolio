@@ -37,7 +37,12 @@ const projects: Project[] = [
     technologies: ['React', 'TypeScript', 'Google OAuth','Vite', 'Tailwind CSS'],
     githubUrl: 'https://github.com/hassarch/budget-tracker.git',
     liveUrl: 'https://expenso-alpha.vercel.app/',
-  }
+  },{
+    title: 'Daily News Summarizer',
+    description: 'An automated AI-powered news summarization service that fetches the latest headlines, generates concise summaries using a self-hosted language model, and delivers a daily top-news digest automatically.',
+    technologies: ['Python', 'FastAPI', 'Ollama', 'LangChain', 'APScheduler'],
+    githubUrl: 'https://github.com/hassarch/daily-news-summary-bot.git',
+}
 ];
 
 const ProjectsSection = () => {
