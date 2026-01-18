@@ -42,6 +42,11 @@ const projects: Project[] = [
     description: 'An automated AI-powered news summarization service that fetches the latest headlines, generates concise summaries using a self-hosted language model, and delivers a daily top-news digest automatically.',
     technologies: ['Python', 'FastAPI', 'Ollama', 'LangChain', 'APScheduler'],
     githubUrl: 'https://github.com/hassarch/daily-news-summary-bot.git',
+},{
+  title:'AutoDoc CLI',
+  description: 'An AI-powered command-line tool that scans your project structure and automatically generates clean, well-organized documentation. It helps developers save time by creating professional READMEs with features, setup steps, and usage instructions instantly.',
+  technologies: ['Node.js','JavaScript','OpenAI API','Commander.js','File System','Npm'],
+  githubUrl: 'https://github.com/hassarch/autodoc-cli.git',
 }
 ];
 
@@ -138,4 +143,3 @@ const ProjectCard = ({ project }: { project: Project }) => {
 };
 
 export default ProjectsSection;
-
