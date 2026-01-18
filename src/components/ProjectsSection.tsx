@@ -51,6 +51,10 @@ const projects: Project[] = [
 ];
 
 const ProjectsSection = () => {
+  // Display only the 4 most recent projects (last 4 in the array)
+  const displayedProjects = projects.slice(-4).reverse();
+  const githubReposUrl = 'https://github.com/hassarch?tab=repositories';
+
   return (
     <section id="projects" className="relative py-24 px-6 scroll-mt-28 sm:scroll-mt-32">
       <div className="max-w-6xl mx-auto">
@@ -65,10 +69,31 @@ const ProjectsSection = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {projects.map((project, index) => (
+          {displayedProjects.map((project, index) => (
             <ProjectCard key={index} project={project} />
           ))}
         </div>
+
+        {projects.length > 4 && (
+          <div className="flex justify-center mt-12">
+            <Button
+              variant="hero"
+              size="lg"
+              className="group/btn"
+              asChild
+            >
+              <a
+                href={githubReposUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2"
+              >
+                See More Projects
+                <ExternalLink size={18} className="group-hover/btn:translate-x-1 transition-transform duration-300" />
+              </a>
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   );
