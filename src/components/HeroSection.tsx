@@ -6,7 +6,7 @@ import { useTypingEffect } from '@/hooks/useTypingEffect';
 const HeroSection = () => {
   const [scrollY, setScrollY] = useState(0);
   const typedText = useTypingEffect(
-    ['Full Stack Developer', 'Problem Solver', 'Tech Enthusiast', 'UI/UX Lover'],
+    ['Full Stack Developer', 'Problem Solver', 'Tech Enthusiast'],
     100,
     50,
     2000
