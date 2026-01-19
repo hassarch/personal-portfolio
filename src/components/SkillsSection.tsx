@@ -1,3 +1,6 @@
+import { Network, GitBranch, Beaker } from 'lucide-react';
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+
 const skills = {
   frontend: [
     { name: 'React', level: 95 },
@@ -32,10 +35,18 @@ const allSkills = [
 ];
 
 const SkillsSection = () => {
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
+  const { ref: marqueeRef, isVisible: marqueeVisible } = useScrollAnimation();
+
   return (
     <section id="skills" className="relative py-24 px-6 scroll-mt-28 sm:scroll-mt-32">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
+        <div 
+          ref={headerRef}
+          className={`text-center mb-16 transition-all duration-700 ${
+            headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+          }`}
+        >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             <span className="gradient-text">Skills & Expertise</span>
           </h2>
@@ -45,7 +56,12 @@ const SkillsSection = () => {
           </p>
         </div>
 
-        <div className="glass-card rounded-2xl p-6 md:p-8 overflow-hidden">
+        <div 
+          ref={marqueeRef}
+          className={`glass-card rounded-2xl p-6 md:p-8 overflow-hidden transition-all duration-700 delay-200 ${
+            marqueeVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+          }`}
+        >
           <Marquee direction="left" speed={30} items={allSkills} />
         </div>
       </div>
@@ -79,12 +95,10 @@ function Marquee({
   );
 }
 
-import { Network, GitBranch, Beaker } from 'lucide-react';
-
 function SkillPill({ label }: { label: string }) {
   const icon = getIconForSkill(label);
   return (
-    <div className="px-6 py-3.5 rounded-full border border-border/40 bg-muted/30 text-lg md:text-xl text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors whitespace-nowrap flex items-center gap-4">
+    <div className="px-6 py-3.5 rounded-full border border-border/40 bg-muted/30 text-lg md:text-xl text-muted-foreground hover:text-foreground hover:border-primary/50 hover:scale-105 transition-all duration-300 whitespace-nowrap flex items-center gap-4">
       {icon}
       <span>{label}</span>
     </div>

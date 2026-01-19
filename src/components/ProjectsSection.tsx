@@ -1,5 +1,6 @@
 import { ExternalLink, Github, Code2 } from 'lucide-react';
 import { Button } from './ui/button';
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
 interface Project {
   title: string;
@@ -54,11 +55,18 @@ const ProjectsSection = () => {
   // Display only the 4 most recent projects (last 4 in the array)
   const displayedProjects = projects.slice(-4).reverse();
   const githubReposUrl = 'https://github.com/hassarch?tab=repositories';
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
+  const { ref: gridRef, isVisible: gridVisible } = useScrollAnimation();
 
   return (
     <section id="projects" className="relative py-24 px-6 scroll-mt-28 sm:scroll-mt-32">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
+        <div 
+          ref={headerRef}
+          className={`text-center mb-16 transition-all duration-700 ${
+            headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+          }`}
+        >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             <span className="gradient-text">Featured Projects</span>
           </h2>
@@ -68,9 +76,12 @@ const ProjectsSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div 
+          ref={gridRef}
+          className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto"
+        >
           {displayedProjects.map((project, index) => (
-            <ProjectCard key={index} project={project} />
+            <ProjectCard key={index} project={project} index={index} isVisible={gridVisible} />
           ))}
         </div>
 
@@ -99,11 +110,16 @@ const ProjectsSection = () => {
   );
 };
 
-const ProjectCard = ({ project }: { project: Project }) => {
+const ProjectCard = ({ project, index, isVisible }: { project: Project; index: number; isVisible: boolean }) => {
   return (
-    <div className="glass-card p-6 rounded-2xl hover-glow transition-all duration-500 group flex flex-col h-full">
-      <div className="mb-4 flex items-center justify-center h-16 w-16 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 group-hover:from-primary/30 group-hover:to-accent/30 transition-all duration-300">
-        <Code2 className="text-primary" size={32} />
+    <div 
+      className={`glass-card p-6 rounded-2xl hover-glow transition-all duration-700 group flex flex-col h-full ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+      }`}
+      style={{ transitionDelay: `${index * 20}ms` }}
+    >
+      <div className="mb-4 flex items-center justify-center h-16 w-16 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 group-hover:from-primary/30 group-hover:to-accent/30 group-hover:scale-110 transition-all duration-300">
+        <Code2 className="text-primary group-hover:rotate-12 transition-transform duration-300" size={32} />
       </div>
 
       <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors duration-300">

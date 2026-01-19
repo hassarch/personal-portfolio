@@ -74,12 +74,31 @@
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 100px;
+  }
+
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Improve performance for animations */
+  .glass-card,
+  .hover-glow,
+  [class*="animate-"] {
+    will-change: transform, opacity;
+  }
+
+  /* Smooth transitions for all interactive elements */
+  a, button {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
 @layer components {
   .glass-card {
     @apply bg-card/60 backdrop-blur-xl border border-border/30 rounded-xl;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .gradient-text {
@@ -100,6 +119,7 @@
 
   .hover-glow:hover {
     box-shadow: 0 0 30px hsl(var(--primary) / 0.4), 0 0 60px hsl(var(--primary) / 0.2);
+    transform: translateY(-4px);
   }
 
   .text-glow {
@@ -123,6 +143,14 @@
   .animate-gradient {
     background-size: 200% 200%;
     animation: gradient-shift 8s ease infinite;
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.5s ease-out forwards;
   }
 }
 
@@ -233,5 +261,27 @@
   100% {
     transform: translate(var(--dx, 400px), var(--dy, 0px)) rotate(var(--angle, 0deg));
     opacity: 0;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }

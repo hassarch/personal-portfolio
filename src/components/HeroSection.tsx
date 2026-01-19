@@ -1,13 +1,35 @@
 import { ArrowDown, Github, Linkedin, Mail } from 'lucide-react';
 import { Button } from './ui/button';
+import { useEffect, useState } from 'react';
+import { useTypingEffect } from '@/hooks/useTypingEffect';
 
 const HeroSection = () => {
+  const [scrollY, setScrollY] = useState(0);
+  const typedText = useTypingEffect(
+    ['Full Stack Developer', 'Problem Solver', 'Tech Enthusiast', 'UI/UX Lover'],
+    100,
+    50,
+    2000
+  );
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const scrollToAbout = () => {
     document.querySelector('#about')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-6 pt-20">
+    <section 
+      className="relative min-h-screen flex items-center justify-center px-6 pt-20"
+      style={{ transform: `translateY(${scrollY * 0.3}px)` }}
+    >
       <div className="max-w-4xl mx-auto text-center z-10">
         <p
           className="text-white font-mono font-bold text-base md:text-lg mb-4 opacity-0 animate-scale-in-strong"
@@ -24,10 +46,11 @@ const HeroSection = () => {
         </h1>
 
         <h2
-          className="text-2xl md:text-4xl lg:text-5xl font-semibold text-muted-foreground mb-6 opacity-0 animate-scale-in-strong"
+          className="text-2xl md:text-4xl lg:text-5xl font-semibold text-muted-foreground mb-6 opacity-0 animate-scale-in-strong min-h-[3rem] md:min-h-[4rem]"
           style={{ animationDelay: '0.6s' }}
         >
-          
+          <span className="gradient-text">{typedText}</span>
+          <span className="animate-pulse text-primary">|</span>
         </h2>
 
         <p
@@ -108,7 +131,7 @@ const SocialLink = ({
     target="_blank"
     rel="noopener noreferrer"
     aria-label={label}
-    className="p-3 rounded-full glass-card text-muted-foreground hover:text-primary hover:border-primary/50 hover-glow transition-all duration-300"
+    className="p-3 rounded-full glass-card text-muted-foreground hover:text-primary hover:border-primary/50 hover:scale-110 hover-glow transition-all duration-300"
   >
     {icon}
   </a>

@@ -8,6 +8,7 @@ import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Label } from './ui/label';
 import { useToast } from '@/hooks/use-toast';
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
 const contactFormSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -20,6 +21,8 @@ type ContactFormValues = z.infer<typeof contactFormSchema>;
 const ContactSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
+  const { ref: contentRef, isVisible: contentVisible } = useScrollAnimation();
 
   const {
     register,
@@ -92,7 +95,12 @@ const ContactSection = () => {
   return (
     <section id="contact" className="relative py-24 px-6 scroll-mt-28 sm:scroll-mt-32">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
+        <div 
+          ref={headerRef}
+          className={`text-center mb-16 transition-all duration-700 ${
+            headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+          }`}
+        >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             <span className="gradient-text">Get In Touch</span>
           </h2>
@@ -103,7 +111,12 @@ const ContactSection = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12">
+        <div 
+          ref={contentRef}
+          className={`grid md:grid-cols-2 gap-12 transition-all duration-700 delay-200 ${
+            contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+          }`}
+        >
           <div className="space-y-8">
             <h3 className="text-2xl font-semibold mb-6">Let's Connect</h3>
             
@@ -232,7 +245,7 @@ const ContactItem = ({
   href?: string;
 }) => (
   <div className="flex items-center gap-4 group">
-    <div className="p-3 rounded-xl glass-card group-hover:border-primary/50 transition-all duration-300">
+    <div className="p-3 rounded-xl glass-card group-hover:border-primary/50 group-hover:scale-110 transition-all duration-300">
       {icon}
     </div>
     <div>
@@ -265,7 +278,7 @@ const SocialLink = ({
     target="_blank"
     rel="noopener noreferrer"
     aria-label={label}
-    className="p-3 rounded-xl glass-card text-muted-foreground hover:text-primary hover:border-primary/50 hover-glow transition-all duration-300"
+    className="p-3 rounded-xl glass-card text-muted-foreground hover:text-primary hover:border-primary/50 hover:scale-110 hover-glow transition-all duration-300"
   >
     {icon}
   </a>
