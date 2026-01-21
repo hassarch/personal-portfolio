@@ -77,7 +77,7 @@ const Navbar = () => {
               </a>
             ))}
             <Button variant="glass" size="sm" asChild>
-              <a href="https://drive.google.com/file/d/1d1mhEUlHwBxUA0SH9Y-KpibNxHNchOWF/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
+              <a href="https://drive.google.com/file/d/1-IKwqW_e3AOs8S9IX7M4E1I7cAagKeZP/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
                 Resume
               </a>
             </Button>
