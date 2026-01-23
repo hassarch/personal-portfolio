@@ -15,7 +15,8 @@ const StarBackground = () => {
 
   const generateStars = useCallback(() => {
     const newStars: Star[] = [];
-    const count = window.innerWidth < 768 ? 180 : 360;
+    const isMobile = window.innerWidth < 768;
+    const count = isMobile ? 50 : 400;
 
     for (let i = 0; i < count; i++) {
       newStars.push({
@@ -53,6 +54,7 @@ const StarBackground = () => {
             ['--duration' as any]: `${star.duration}s`,
             ['--delay' as any]: `${star.delay}s`,
             opacity: star.opacity,
+            transform: 'translate3d(0,0,0)', // GPU acceleration
           } as React.CSSProperties}
         />
       ))}
@@ -79,6 +81,10 @@ function ShootingStars({ max = 4 }: { max?: number }) {
   const now = () => Date.now();
 
   useEffect(() => {
+    // Disable shooting stars on mobile for performance
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) return;
+
     const tickMs = 100; // fast tick for probability spawning
     const baseProb = 0.15; // increased spawn chance per tick
     const burstChance = 0.08; // increased chance to temporarily boost spawn rate

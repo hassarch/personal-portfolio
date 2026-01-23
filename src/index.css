@@ -187,17 +187,19 @@
 @keyframes twinkle {
   0%, 100% {
     opacity: 0.3;
-    transform: scale(1);
+    transform: scale3d(1, 1, 1);
   }
   50% {
     opacity: 1;
-    transform: scale(1.2);
+    transform: scale3d(1.2, 1.2, 1);
   }
 }
 
 .star {
   animation: twinkle var(--duration) ease-in-out infinite;
   animation-delay: var(--delay);
+  will-change: opacity, transform;
+  backface-visibility: hidden;
 }
 
 /* Marquee utilities for Skills section */
@@ -238,6 +240,8 @@
     box-shadow: 0 0 10px 3px hsl(var(--star-color) / 0.95);
     transform: rotate(var(--angle, 0deg));
     animation: shoot var(--shoot-duration, 1500ms) linear forwards;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
   }
   .shooting-star::after {
     content: "";
@@ -255,11 +259,11 @@
 
 @keyframes shoot {
   0% {
-    transform: translate(0, 0) rotate(var(--angle, 0deg));
+    transform: translate3d(0, 0, 0) rotate(var(--angle, 0deg));
     opacity: 1;
   }
   100% {
-    transform: translate(var(--dx, 400px), var(--dy, 0px)) rotate(var(--angle, 0deg));
+    transform: translate3d(var(--dx, 400px), var(--dy, 0px), 0) rotate(var(--angle, 0deg));
     opacity: 0;
   }
 }
