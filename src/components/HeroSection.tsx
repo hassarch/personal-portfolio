@@ -1,16 +1,9 @@
 import { ArrowDown, Github, Linkedin, Mail } from 'lucide-react';
 import { Button } from './ui/button';
 import { useEffect, useState } from 'react';
-import { useTypingEffect } from '@/hooks/useTypingEffect';
 
 const HeroSection = () => {
   const [scrollY, setScrollY] = useState(0);
-  const typedText = useTypingEffect(
-    ['Full Stack Developer', 'Problem Solver', 'Tech Enthusiast'],
-    100,
-    50,
-    2000
-  );
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,11 +39,10 @@ const HeroSection = () => {
         </h1>
 
         <h2
-          className="text-2xl md:text-4xl lg:text-5xl font-semibold text-muted-foreground mb-6 opacity-0 animate-scale-in-strong min-h-[3rem] md:min-h-[4rem]"
+          className="text-2xl md:text-4xl lg:text-5xl font-semibold text-muted-foreground mb-6 opacity-0 animate-scale-in-strong"
           style={{ animationDelay: '0.6s' }}
         >
-          <span className="gradient-text">{typedText}</span>
-          <span className="animate-pulse text-primary">|</span>
+          <span className="gradient-text"></span>
         </h2>
 
         <p
