@@ -35,7 +35,7 @@ const HeroSection = () => {
           className="text-4xl md:text-6xl lg:text-7xl font-display font-semibold mb-4 opacity-0 animate-scale-in-strong"
           style={{ animationDelay: '0.4s' }}
         >
-          <span className="gradient-text text-glow">Mohammed Hassan</span>
+          <span className="gradient-text text-glow">Hassan</span>
         </h1>
 
         <h2

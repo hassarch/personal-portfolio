@@ -98,8 +98,8 @@ function Marquee({
 function SkillPill({ label }: { label: string }) {
   const icon = getIconForSkill(label);
   return (
-    <div className="px-6 py-3.5 rounded-full border border-border/40 bg-muted/30 text-lg md:text-xl text-muted-foreground hover:text-foreground hover:border-primary/50 hover:scale-105 transition-all duration-300 whitespace-nowrap flex items-center gap-4">
-      {icon}
+    <div className="group px-6 py-3.5 rounded-full border border-border/40 bg-muted/30 text-lg md:text-xl text-muted-foreground hover:text-foreground hover:border-primary/50 transition-all duration-300 whitespace-nowrap flex items-center gap-4">
+      <span className="group-hover:scale-110 transition-transform duration-300">{icon}</span>
       <span>{label}</span>
     </div>
   );
