@@ -141,6 +141,60 @@ yarn preview
 bun run preview
 ```
 
+## 🐳 Docker Deployment
+
+The project includes Docker support for easy containerized deployment.
+
+### Using Docker Compose (Recommended)
+
+```bash
+# Build and run the container
+docker-compose up -d
+
+# Stop the container
+docker-compose down
+```
+
+The application will be available at `http://localhost:3000`
+
+### Using Docker Directly
+
+```bash
+# Build the image
+docker build -t portfolio-app .
+
+# Run the container
+docker run -p 3000:80 portfolio-app
+
+# Run in detached mode
+docker run -d -p 3000:80 --name portfolio portfolio-app
+
+# Stop the container
+docker stop portfolio
+```
+
+### Docker Configuration
+
+The Docker setup includes:
+- **Multi-stage build** - Optimized image size (~50MB)
+- **Nginx server** - Fast static file serving
+- **Gzip compression** - Reduced bandwidth usage
+- **SPA routing** - Proper handling of client-side routes
+- **Security headers** - Enhanced security configuration
+- **Asset caching** - Optimized performance
+
+### Environment Variables in Docker
+
+To use environment variables with Docker:
+
+```bash
+# Using docker-compose
+docker-compose up -d --env-file .env.production
+
+# Using docker run
+docker run -p 3000:80 --env-file .env.production portfolio-app
+```
+
 ## 🌐 Deployment
 
 Deploy to any static hosting platform:
