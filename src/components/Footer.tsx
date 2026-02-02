@@ -5,10 +5,12 @@ const Footer = () => {
     <footer className="relative py-8 px-6 border-t border-border/50">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="h-6" />
+          <p className="text-xs text-muted-foreground/60 italic">
+            Pssssssst... Don't touch the UFO!!!
+          </p>
 
           <p className="text-sm text-muted-foreground">
-            © {currentYear} Mohammed Hassan. All rights reserved.
+            © {currentYear} Hassan. All rights reserved.
           </p>
 
           <div className="flex gap-6 text-sm">
