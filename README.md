@@ -294,7 +294,7 @@ Contributions, issues, and feature requests are welcome!
 ## 👨‍💻 Author
 
 **Mohammed Hassan**
-- Website: [hassann.in](https://hassann.in/)
+- Website: [hassancodes.in](https://hassancodes.in/)
 - GitHub: [@hassarch](https://github.com/hassarch)
 - LinkedIn: [hassan0777](https://www.linkedin.com/in/hassan0777/)
 
