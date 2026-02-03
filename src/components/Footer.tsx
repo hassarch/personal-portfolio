@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs text-muted-foreground/60 italic">
-            Pssssssst... Don't touch the UFO!!!
+            Pssssssst... Don't click on the UFO!!!
           </p>
 
           <p className="text-sm text-muted-foreground">
