@@ -1,5 +1,6 @@
 import { ArrowDown, Github, Linkedin, Mail } from 'lucide-react';
 import { Button } from './ui/button';
+import BlurText from './BlurText';
 
 const HeroSection = () => {
   const scrollToAbout = () => {
@@ -22,9 +23,13 @@ const HeroSection = () => {
           Hi, I'm
         </p>
 
-        <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold mb-8 text-foreground tracking-tight animate-scale-in opacity-0 leading-tight" style={{ animationDelay: '0.4s', animationFillMode: 'forwards' }}>
-          Hassan
-        </h1>
+        <BlurText
+          text="Hassan"
+          delay={250}
+          animateBy="characters"
+          stepDuration={0.6}
+          className="text-6xl md:text-7xl lg:text-8xl font-bold mb-8 text-foreground tracking-tight leading-tight justify-center"
+        />
 
         <h2 className="text-xl md:text-2xl lg:text-3xl text-muted-foreground mb-10 font-light animate-fade-in-up opacity-0" style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}>
           Computer Science Student & Developer
