@@ -2,11 +2,11 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative py-8 px-6 border-t border-border/50">
+    <footer className="relative py-8 px-6 border-t border-border">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-muted-foreground/60 italic">
-            Pssssssst... Don't click on the UFO!!!
+          <p className="text-xs text-muted-foreground italic">
+            Pssssssst... Click the UFO to toggle theme & play music!!!
           </p>
 
           <p className="text-sm text-muted-foreground">

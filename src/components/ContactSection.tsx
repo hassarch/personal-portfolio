@@ -39,9 +39,6 @@ const ContactSection = () => {
     try {
       const formspreeEndpoint = import.meta.env.VITE_FORMSPREE_ENDPOINT;
       
-      // Debug logging (remove in production)
-      console.log('Formspree endpoint:', formspreeEndpoint);
-      
       if (!formspreeEndpoint || formspreeEndpoint.includes('YOUR_FORM_ID') || !formspreeEndpoint.startsWith('https://formspree.io')) {
         toast({
           title: 'Form Not Configured',
@@ -93,19 +90,20 @@ const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="relative py-24 px-6 scroll-mt-28 sm:scroll-mt-32">
+    <section id="contact" className="relative py-32 md:py-40 px-6 scroll-mt-28 sm:scroll-mt-32">
       <div className="max-w-6xl mx-auto">
         <div 
           ref={headerRef}
-          className={`text-center mb-16 transition-all duration-700 ${
+          className={`text-center mb-20 transition-all duration-1000 ${
             headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            <span className="gradient-text">Get In Touch</span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-foreground relative inline-block">
+            Get In Touch
+            <span className="absolute inset-0 animate-shimmer pointer-events-none"></span>
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full" />
-          <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
+          <div className="w-20 h-1 bg-foreground mx-auto rounded-full mb-8" />
+          <p className="text-muted-foreground text-lg md:text-xl max-w-3xl mx-auto">
             I'm currently open to new opportunities. Whether you have a question 
             or just want to say hi, I'll get back to you!
           </p>
@@ -113,44 +111,44 @@ const ContactSection = () => {
 
         <div 
           ref={contentRef}
-          className={`grid md:grid-cols-2 gap-12 transition-all duration-700 delay-200 ${
+          className={`grid md:grid-cols-2 gap-16 transition-all duration-1000 delay-200 ${
             contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >
-          <div className="space-y-8">
-            <h3 className="text-2xl font-semibold mb-6">Let's Connect</h3>
+          <div className="space-y-10">
+            <h3 className="text-2xl md:text-3xl font-semibold mb-8">Let's Connect</h3>
             
-            <div className="space-y-6">
+            <div className="space-y-8">
               <ContactItem
-                icon={<Mail className="text-primary" size={24} />}
+                icon={<Mail size={20} />}
                 label="Email"
                 value="hassanrj245@gmail.com"
                 href="mailto:hassanrj245@gmail.com"
               />
               <ContactItem
-                icon={<Phone className="text-primary" size={24} />}
+                icon={<Phone size={20} />}
                 label="Phone"
                 value="+91 8710030521"
                 href="tel:+918710030521"
               />
               <ContactItem
-                icon={<MapPin className="text-primary" size={24} />}
+                icon={<MapPin size={20} />}
                 label="Location"
                 value="India"
               />
             </div>
 
-            <div className="pt-6">
-              <h4 className="text-lg font-medium mb-4">Find me on</h4>
-              <div className="flex gap-4">
+            <div className="pt-8">
+              <h4 className="text-lg md:text-xl font-medium mb-6">Find me on</h4>
+              <div className="flex gap-5">
                 <SocialLink
                   href="https://www.linkedin.com/in/hassan0777/"
-                  icon={<Linkedin size={22} />}
+                  icon={<Linkedin size={20} />}
                   label="LinkedIn"
                 />
                 <SocialLink
                   href="https://github.com/hassarch"
-                  icon={<Github size={22} />}
+                  icon={<Github size={20} />}
                   label="GitHub"
                 />
                 <SocialLink
@@ -158,7 +156,7 @@ const ContactSection = () => {
                   icon={
                     <svg
                       viewBox="0 0 24 24"
-                      className="h-[22px] w-[22px]"
+                      className="h-5 w-5"
                       fill="currentColor"
                       aria-hidden="true"
                     >
@@ -171,7 +169,7 @@ const ContactSection = () => {
             </div>
           </div>
 
-          <div className="glass-card p-8 rounded-2xl hover-glow transition-all duration-500">
+          <div className="bg-card border border-border p-8 rounded-lg hover:shadow-lg hover:border-foreground/50 transition-all duration-300 animate-pulse-slow">
             <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
               <div>
                 <Label htmlFor="name" className="mb-2">
@@ -180,7 +178,7 @@ const ContactSection = () => {
                 <Input
                   id="name"
                   {...register('name')}
-                  className="bg-secondary/50 border-border focus:border-primary focus:ring-primary"
+                  className="bg-background"
                   placeholder="Your name"
                   disabled={isSubmitting}
                 />
@@ -196,7 +194,7 @@ const ContactSection = () => {
                   id="email"
                   type="email"
                   {...register('email')}
-                  className="bg-secondary/50 border-border focus:border-primary focus:ring-primary"
+                  className="bg-background"
                   placeholder="your@email.com"
                   disabled={isSubmitting}
                 />
@@ -212,7 +210,7 @@ const ContactSection = () => {
                   id="message"
                   {...register('message')}
                   rows={5}
-                  className="bg-secondary/50 border-border focus:border-primary focus:ring-primary resize-none"
+                  className="bg-background resize-none"
                   placeholder="Your message..."
                   disabled={isSubmitting}
                 />
@@ -221,9 +219,9 @@ const ContactSection = () => {
                 )}
               </div>
               <Button 
-                variant="hero" 
+                variant="default" 
                 size="lg" 
-                className="w-full group" 
+                className="w-full hover:scale-105 transition-transform duration-300" 
                 type="submit"
                 disabled={isSubmitting}
               >
@@ -235,7 +233,7 @@ const ContactSection = () => {
                 ) : (
                   <>
                     Send Message
-                    <Send className="ml-2 group-hover:translate-x-1 transition-transform duration-300" size={18} />
+                    <Send className="ml-2" size={16} />
                   </>
                 )}
               </Button>
@@ -259,7 +257,7 @@ const ContactItem = ({
   href?: string;
 }) => (
   <div className="flex items-center gap-4 group">
-    <div className="p-3 rounded-xl glass-card group-hover:border-primary/50 group-hover:scale-110 transition-all duration-300">
+    <div className="p-3 rounded-lg border border-border text-foreground group-hover:border-foreground group-hover:scale-110 group-hover:shadow-md transition-all duration-300">
       {icon}
     </div>
     <div>
@@ -267,7 +265,7 @@ const ContactItem = ({
       {href ? (
         <a
           href={href}
-          className="text-foreground hover:text-primary transition-colors duration-300"
+          className="text-foreground hover:underline transition-all duration-300"
         >
           {value}
         </a>
@@ -292,7 +290,7 @@ const SocialLink = ({
     target="_blank"
     rel="noopener noreferrer"
     aria-label={label}
-    className="p-3 rounded-xl glass-card text-muted-foreground hover:text-primary hover:border-primary/50 hover:scale-110 hover-glow transition-all duration-300"
+    className="p-3 rounded-lg border border-border text-muted-foreground hover:text-foreground hover:border-foreground hover:scale-110 hover:shadow-md transition-all duration-300"
   >
     {icon}
   </a>

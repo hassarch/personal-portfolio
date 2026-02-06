@@ -28,12 +28,12 @@ const BackToTop = () => {
   return (
     <button
       onClick={scrollToTop}
-      className={`fixed bottom-8 right-8 z-50 p-3 rounded-full glass-card hover:scale-110 hover-glow transition-all duration-300 ${
+      className={`fixed bottom-8 right-8 z-50 p-3 rounded-full bg-card border border-border hover:scale-110 hover:shadow-xl hover:border-foreground transition-all duration-300 ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'
       }`}
       aria-label="Back to top"
     >
-      <ArrowUp className="text-primary" size={24} />
+      <ArrowUp className="text-foreground" size={24} />
     </button>
   );
 };

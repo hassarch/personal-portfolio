@@ -1,82 +1,59 @@
 import { ArrowDown, Github, Linkedin, Mail } from 'lucide-react';
 import { Button } from './ui/button';
-import { useEffect, useState } from 'react';
 
 const HeroSection = () => {
-  const [scrollY, setScrollY] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   const scrollToAbout = () => {
-    document.querySelector('#about')?.scrollIntoView({ behavior: 'smooth' });
+    const element = document.querySelector('#about');
+    if (element) {
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = elementPosition - (window.innerHeight / 2) + (element.clientHeight / 2);
+      
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
   };
 
   return (
-    <section 
-      className="relative min-h-screen flex items-center justify-center px-6 pt-20"
-      style={{ transform: `translateY(${scrollY * 0.3}px)` }}
-    >
-      <div className="max-w-4xl mx-auto text-center z-10">
-        <p
-          className="text-white font-mono font-bold text-base md:text-lg mb-4 opacity-0 animate-scale-in-strong"
-          style={{ animationDelay: '0.2s' }}
-        >
+    <section className="relative min-h-screen flex items-center justify-center px-6 py-32 md:py-40">
+      <div className="max-w-5xl mx-auto text-center">
+        <p className="text-muted-foreground font-mono text-sm md:text-base mb-8 tracking-widest uppercase animate-fade-in-up opacity-0" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
           Hi, I'm
         </p>
 
-        <h1
-          className="text-4xl md:text-6xl lg:text-7xl font-display font-semibold mb-4 opacity-0 animate-scale-in-strong"
-          style={{ animationDelay: '0.4s' }}
-        >
-          <span className="gradient-text text-glow">Hassan</span>
+        <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold mb-8 text-foreground tracking-tight animate-scale-in opacity-0 leading-tight" style={{ animationDelay: '0.4s', animationFillMode: 'forwards' }}>
+          Hassan
         </h1>
 
-        <h2
-          className="text-2xl md:text-4xl lg:text-5xl font-semibold text-muted-foreground mb-6 opacity-0 animate-scale-in-strong"
-          style={{ animationDelay: '0.6s' }}
-        >
-          <span className="gradient-text"></span>
+        <h2 className="text-xl md:text-2xl lg:text-3xl text-muted-foreground mb-10 font-light animate-fade-in-up opacity-0" style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}>
+          Computer Science Student & Developer
         </h2>
 
-        <p
-          className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed opacity-0 animate-scale-in-strong"
-          style={{ animationDelay: '0.8s' }}
-        >
-          A Computer Science undergraduate, passionate about building clean, user-centric web apps. I enjoy turning ideas into real products using modern frontend tech and solving meaningful problems.
+        <p className="text-muted-foreground text-base md:text-lg max-w-3xl mx-auto mb-14 leading-relaxed animate-fade-in-up opacity-0" style={{ animationDelay: '0.8s', animationFillMode: 'forwards' }}>
+          A Computer Science undergraduate, passionate about building clean, user-centric web apps. 
+          I enjoy turning ideas into real products using modern frontend tech and solving meaningful problems.
         </p>
 
-        <div
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12 opacity-0 animate-fade-in"
-          style={{ animationDelay: '1s' }}
-        >
-          <Button variant="hero" size="xl" asChild>
+        <div className="flex flex-col sm:flex-row gap-5 justify-center items-center mb-20 animate-fade-in-up opacity-0" style={{ animationDelay: '1s', animationFillMode: 'forwards' }}>
+          <Button variant="default" size="lg" className="min-w-[180px]" asChild>
             <a href="#contact">Get In Touch</a>
           </Button>
-          <Button variant="glass" size="xl" asChild>
+          <Button variant="outline" size="lg" className="min-w-[180px]" asChild>
             <a href="https://drive.google.com/file/d/1-IKwqW_e3AOs8S9IX7M4E1I7cAagKeZP/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
               View Resume
             </a>
           </Button>
         </div>
 
-        <div
-          className="flex justify-center gap-6 mb-16 opacity-0 animate-fade-in"
-          style={{ animationDelay: '1.2s' }}
-        >
-          <SocialLink href="https://github.com/hassarch" icon={<Github size={22} />} label="GitHub" />
+        <div className="flex justify-center gap-5 mb-20 animate-fade-in-up opacity-0" style={{ animationDelay: '1.2s', animationFillMode: 'forwards' }}>
+          <SocialLink href="https://github.com/hassarch" icon={<Github size={20} />} label="GitHub" />
           <SocialLink
             href="https://x.com/sanxshade"
             icon={
               <svg
                 viewBox="0 0 24 24"
-                className="h-[22px] w-[22px]"
+                className="h-5 w-5"
                 fill="currentColor"
                 aria-hidden="true"
               >
@@ -90,7 +67,7 @@ const HeroSection = () => {
             icon={
               <span
                 aria-hidden
-                className="inline-block h-[22px] w-[22px]"
+                className="inline-block h-5 w-5"
                 style={{
                   backgroundColor: 'currentColor',
                   WebkitMaskImage: 'url(https://cdn.simpleicons.org/leetcode/000000)',
@@ -106,17 +83,17 @@ const HeroSection = () => {
             }
             label="LeetCode"
           />
-          <SocialLink href="https://www.linkedin.com/in/hassan0777/" icon={<Linkedin size={22} />} label="LinkedIn" />
-          <SocialLink href="mailto:hassanrj245@gmail.com" icon={<Mail size={22} />} label="Email" />
+          <SocialLink href="https://www.linkedin.com/in/hassan0777/" icon={<Linkedin size={20} />} label="LinkedIn" />
+          <SocialLink href="mailto:hassanrj245@gmail.com" icon={<Mail size={20} />} label="Email" />
         </div>
 
         <button
           onClick={scrollToAbout}
-          className="opacity-0 animate-fade-in animate-float"
-          style={{ animationDelay: '1.4s' }}
+          className="animate-bounce-slow opacity-0 animate-fade-in-up"
+          style={{ animationDelay: '1.4s', animationFillMode: 'forwards' }}
           aria-label="Scroll to about section"
         >
-          <ArrowDown className="text-muted-foreground hover:text-primary transition-colors duration-300" size={28} />
+          <ArrowDown className="text-muted-foreground hover:text-foreground transition-colors duration-300" size={28} />
         </button>
       </div>
     </section>
@@ -137,7 +114,7 @@ const SocialLink = ({
     target="_blank"
     rel="noopener noreferrer"
     aria-label={label}
-    className="p-3 rounded-full glass-card text-muted-foreground hover:text-primary hover:border-primary/50 hover:scale-110 hover-glow transition-all duration-300"
+    className="p-3 rounded-full border border-border text-muted-foreground hover:text-foreground hover:border-foreground hover:scale-110 hover:shadow-lg transition-all duration-300"
   >
     {icon}
   </a>

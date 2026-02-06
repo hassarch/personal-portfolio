@@ -1,4 +1,4 @@
-import { ExternalLink, Github, Code2 } from 'lucide-react';
+import { ExternalLink, Github } from 'lucide-react';
 import { Button } from './ui/button';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
@@ -30,55 +30,56 @@ const projects: Project[] = [
     description: 'A productivity-focused Chrome extension that helps users stay focused by tracking time spent on distracting websites and automatically blocking them when daily limits are reached. It features real-time tracking, instant blocking, live countdowns, usage stats, and a clean, minimal interface.',
     technologies:['JavaScript', 'Chrome Extension APIs', 'Node.js', 'Express', 'MongoDB', 'HTML', 'CSS'],
     githubUrl:'https://github.com/hassarch/zone.git',
-},
-  
+  },
   {
     title: 'Expenso',
     description: 'An intelligent budget tracking application designed to help users monitor expenses, analyze spending trends through interactive visuals, and forecast future costs with predictive insights, making personal finance management simpler and more effective.',
     technologies: ['React', 'TypeScript', 'Google OAuth','Vite', 'Tailwind CSS'],
     githubUrl: 'https://github.com/hassarch/budget-tracker.git',
     liveUrl: 'https://expenso-alpha.vercel.app/',
-  },{
+  },
+  {
     title: 'Daily News Summarizer',
     description: 'An automated AI-powered news summarization service that fetches the latest headlines, generates concise summaries using a self-hosted language model, and delivers a daily top-news digest automatically.',
     technologies: ['Python', 'FastAPI', 'Ollama', 'LangChain', 'APScheduler'],
     githubUrl: 'https://github.com/hassarch/daily-news-summary-bot.git',
-},{
-  title:'AutoDoc CLI',
-  description: 'An AI-powered command-line tool that scans your project structure and automatically generates clean, well-organized documentation. It helps developers save time by creating professional READMEs with features, setup steps, and usage instructions instantly.',
-  technologies: ['Node.js','JavaScript','OpenAI API','Commander.js','File System','Npm'],
-  githubUrl: 'https://github.com/hassarch/autodoc-cli.git',
-}
+  },
+  {
+    title:'AutoDoc CLI',
+    description: 'An AI-powered command-line tool that scans your project structure and automatically generates clean, well-organized documentation. It helps developers save time by creating professional READMEs with features, setup steps, and usage instructions instantly.',
+    technologies: ['Node.js','JavaScript','OpenAI API','Commander.js','File System','Npm'],
+    githubUrl: 'https://github.com/hassarch/autodoc-cli.git',
+  }
 ];
 
 const ProjectsSection = () => {
-  // Display only the 4 most recent projects (last 4 in the array)
   const displayedProjects = projects.slice(-4).reverse();
   const githubReposUrl = 'https://github.com/hassarch?tab=repositories';
   const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
   const { ref: gridRef, isVisible: gridVisible } = useScrollAnimation();
 
   return (
-    <section id="projects" className="relative py-24 px-6 scroll-mt-28 sm:scroll-mt-32">
+    <section id="projects" className="relative py-32 md:py-40 px-6 scroll-mt-28 sm:scroll-mt-32 bg-secondary/30">
       <div className="max-w-6xl mx-auto">
         <div 
           ref={headerRef}
-          className={`text-center mb-16 transition-all duration-700 ${
+          className={`text-center mb-20 transition-all duration-1000 ${
             headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            <span className="gradient-text">Featured Projects</span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-foreground relative inline-block">
+            Featured Projects
+            <span className="absolute inset-0 animate-shimmer pointer-events-none"></span>
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full" />
-          <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
+          <div className="w-20 h-1 bg-foreground mx-auto rounded-full mb-8" />
+          <p className="text-muted-foreground text-lg md:text-xl max-w-3xl mx-auto">
             A collection of projects I've worked on, showcasing my skills and experience
           </p>
         </div>
 
         <div 
           ref={gridRef}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto"
+          className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto"
         >
           {displayedProjects.map((project, index) => (
             <ProjectCard key={index} project={project} index={index} isVisible={gridVisible} />
@@ -86,11 +87,11 @@ const ProjectsSection = () => {
         </div>
 
         {projects.length > 4 && (
-          <div className="flex justify-center mt-12">
+          <div className="flex justify-center mt-16">
             <Button
-              variant="hero"
+              variant="outline"
               size="lg"
-              className="group/btn"
+              className="min-w-[200px]"
               asChild
             >
               <a
@@ -100,7 +101,7 @@ const ProjectsSection = () => {
                 className="flex items-center gap-2"
               >
                 See More Projects
-                <ExternalLink size={18} className="group-hover/btn:translate-x-1 transition-transform duration-300" />
+                <ExternalLink size={18} />
               </a>
             </Button>
           </div>
@@ -113,20 +114,16 @@ const ProjectsSection = () => {
 const ProjectCard = ({ project, index, isVisible }: { project: Project; index: number; isVisible: boolean }) => {
   return (
     <div 
-      className={`glass-card p-6 rounded-2xl hover-glow transition-all duration-700 group flex flex-col h-full ${
+      className={`bg-card border border-border p-6 rounded-lg hover:shadow-2xl hover:scale-[1.03] hover:border-foreground/50 hover:-translate-y-1 transition-all duration-500 flex flex-col h-full group ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
       }`}
-      style={{ transitionDelay: `${index * 20}ms` }}
+      style={{ transitionDelay: `${index * 100}ms` }}
     >
-      <div className="mb-4 flex items-center justify-center h-16 w-16 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 group-hover:from-primary/30 group-hover:to-accent/30 group-hover:scale-110 transition-all duration-300">
-        <Code2 className="text-primary group-hover:rotate-12 transition-transform duration-300" size={32} />
-      </div>
-
-      <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors duration-300">
+      <h3 className="text-xl font-semibold mb-3 text-foreground group-hover:text-foreground transition-colors duration-300 text-left">
         {project.title}
       </h3>
 
-      <p className="text-muted-foreground text-sm mb-4 flex-grow leading-relaxed">
+      <p className="text-muted-foreground text-sm mb-4 flex-grow leading-relaxed text-left">
         {project.description}
       </p>
 
@@ -134,7 +131,7 @@ const ProjectCard = ({ project, index, isVisible }: { project: Project; index: n
         {project.technologies.map((tech, index) => (
           <span
             key={index}
-            className="px-2 py-1 text-xs rounded-md bg-secondary/50 text-muted-foreground border border-border/50 group-hover:border-primary/30 transition-colors duration-300"
+            className="px-2 py-1 text-xs rounded border border-border text-muted-foreground group-hover:border-foreground/30 group-hover:scale-105 transition-all duration-300"
           >
             {tech}
           </span>
@@ -146,7 +143,7 @@ const ProjectCard = ({ project, index, isVisible }: { project: Project; index: n
           <Button
             variant="outline"
             size="sm"
-            className="flex-1 group/btn"
+            className="flex-1"
             asChild
           >
             <a
@@ -162,9 +159,9 @@ const ProjectCard = ({ project, index, isVisible }: { project: Project; index: n
         )}
         {project.liveUrl && (
           <Button
-            variant="hero"
+            variant="default"
             size="sm"
-            className="flex-1 group/btn"
+            className="flex-1"
             asChild
           >
             <a

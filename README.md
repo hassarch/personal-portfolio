@@ -1,33 +1,25 @@
-# ✨ Starlight Portfolio
+# ✨ Hassan's Portfolio
 
 **Live Demo:** [https://hassancodes.in/](https://hassancodes.in/)
 
-A stunning, modern portfolio website featuring smooth animations, dynamic effects, and an immersive space-themed design. Built with React, TypeScript, and Tailwind CSS.
+A clean, minimalist portfolio website featuring smooth animations and a professional design. Built with React, TypeScript, and Tailwind CSS.
 
 ## 🌟 Features
 
-### Visual Effects
-- 🌠 **Enhanced Meteor Shower** - Beautiful shooting stars with varied colors, trails, and directions
-- ⭐ **Animated Star Field** - Twinkling stars with ambient glow effects
-- ✨ **Typing Animation** - Dynamic hero subtitle that cycles through multiple roles
-- 🎨 **Glass Morphism** - Modern frosted glass effects throughout
-- 🌈 **Gradient Animations** - Smooth color transitions and glows
-- 🎯 **Scroll Animations** - Elements fade in and slide up as you scroll
-- 🔝 **Back to Top Button** - Smooth scroll navigation
-
 ### Design & UX
+- 🎨 **Minimalist Design** - Clean lines, ample whitespace, and restrained color palette
 - 📱 **Fully Responsive** - Optimized for all screen sizes
-- 🎭 **Smooth Transitions** - Polished micro-interactions everywhere
-- 🖱️ **Hover Effects** - Interactive cards with scale and glow effects
-- 🎪 **Parallax Scrolling** - Hero section with depth effect
-- 📊 **Skills Marquee** - Infinite scrolling tech stack showcase
-- 💼 **Project Showcase** - Staggered card animations with tech tags
+- ✨ **Subtle Animations** - Smooth scroll-triggered animations
+- 🖱️ **Hover Effects** - Interactive elements with clean transitions
+- 💼 **Project Showcase** - Card-based layout with tech tags
+- 🎯 **Skills Display** - Clean pill-based tech stack showcase
 
 ### Functionality
 - 📧 **Contact Form** - Integrated with Formspree for email submissions
-- 🔗 **Social Links** - GitHub, LinkedIn, LeetCode, and Email
+- 🔗 **Social Links** - GitHub, LinkedIn, LeetCode, X (Twitter), and Email
 - 📄 **Resume Link** - Direct access to downloadable resume
 - 🎵 **Easter Egg** - Hidden UFO music feature
+- 🔝 **Back to Top Button** - Smooth scroll navigation
 
 ## 🛠️ Technologies
 
@@ -258,9 +250,9 @@ starlight-portfolio/
 Edit `src/index.css` to change the color scheme:
 ```css
 :root {
-  --primary: 271 91% 65%;    /* Purple */
-  --accent: 330 86% 70%;     /* Pink */
-  --background: 0 0% 0%;     /* Black */
+  --background: 0 0% 100%;   /* White */
+  --foreground: 0 0% 10%;    /* Near Black */
+  --muted-foreground: 0 0% 45%; /* Gray */
 }
 ```
 
@@ -272,9 +264,8 @@ Edit `src/index.css` to change the color scheme:
 - **Contact:** Edit `src/components/ContactSection.tsx`
 
 ### Animations
-- **Typing Text:** Modify the array in `HeroSection.tsx`
-- **Meteor Settings:** Adjust values in `StarBackground.tsx`
-- **Scroll Delays:** Change `transitionDelay` in component files
+- **Scroll Animations:** Change `transitionDelay` in component files
+- **Hover Effects:** Adjust transition durations in Tailwind classes
 
 ## 🎯 Performance
 
@@ -300,10 +291,9 @@ Contributions, issues, and feature requests are welcome!
 
 ## 🙏 Acknowledgments
 
-- Design inspiration from modern portfolio trends
+- Design inspired by minimalist portfolio trends
 - Icons by [Lucide](https://lucide.dev/)
 - UI components by [shadcn/ui](https://ui.shadcn.com/)
-- Animations inspired by space and astronomy
 
 ---
 
