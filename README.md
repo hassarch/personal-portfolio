@@ -84,7 +84,7 @@ yarn dev
 bun dev
 ```
 
-The application will be available at `http://localhost:5173`
+The application will be available at `http://localhost:8080`
 
 ## 📧 Contact Form Setup
 
@@ -122,6 +122,14 @@ bun run build
 ```
 
 Built files will be in the `dist` directory.
+
+### Other scripts
+
+| Script        | Description                    |
+|---------------|--------------------------------|
+| `npm run lint`| Run ESLint                     |
+| `npm run build:dev` | Build in development mode |
+| `npm run preview`   | Preview production build  |
 
 ### Preview Production Build
 
@@ -214,34 +222,57 @@ npm run build
 - Build command: `npm run build`
 - Output directory: `dist`
 
+## 🔧 CI
+
+GitHub Actions runs on every push and pull request to `main` / `master`:
+
+- **Lint** – ESLint
+- **Build** – `npm run build`
+
+Workflow: [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
+
 ## 📁 Project Structure
 
 ```
 starlight-portfolio/
+├── .github/
+│   └── workflows/
+│       └── ci.yml        # GitHub Actions CI
 ├── src/
-│   ├── components/        # React components
+│   ├── components/       # React components
 │   │   ├── ui/           # shadcn/ui components
 │   │   ├── AboutSection.tsx
+│   │   ├── AnimatedBackground.tsx
+│   │   ├── BackToTop.tsx
+│   │   ├── BlurText.tsx
 │   │   ├── ContactSection.tsx
+│   │   ├── Footer.tsx
+│   │   ├── Galaxy.tsx
 │   │   ├── HeroSection.tsx
 │   │   ├── Navbar.tsx
 │   │   ├── ProjectsSection.tsx
 │   │   ├── SkillsSection.tsx
 │   │   ├── StarBackground.tsx
-│   │   ├── BackToTop.tsx
-│   │   └── Footer.tsx
-│   ├── hooks/            # Custom React hooks
+│   │   └── UfoIcon.tsx
+│   ├── contexts/
+│   │   └── ThemeContext.tsx
+│   ├── hooks/
 │   │   ├── useScrollAnimation.ts
 │   │   ├── useTypingEffect.ts
 │   │   └── use-toast.ts
-│   ├── lib/              # Utility functions
-│   ├── pages/            # Page components
-│   ├── App.tsx           # Main app component
-│   ├── index.css         # Global styles
-│   └── main.tsx          # Entry point
+│   ├── lib/
+│   │   ├── ufoMusic.ts
+│   │   └── utils.ts
+│   ├── pages/
+│   │   ├── Index.tsx
+│   │   └── NotFound.tsx
+│   ├── App.tsx
+│   ├── index.css
+│   └── main.tsx
 ├── public/               # Static assets
-├── .env                  # Environment variables
-└── package.json          # Dependencies
+├── Dockerfile
+├── docker-compose.yml
+└── package.json
 ```
 
 ## 🎨 Customization
