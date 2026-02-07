@@ -3,8 +3,8 @@ import { Network, GitBranch, Beaker } from 'lucide-react';
 
 const skills = {
   frontend: ['React', 'TypeScript', 'Next.js', 'Vue.js', 'Tailwind CSS', 'HTML/CSS'],
-  backend: ['Node.js', 'Python', 'PostgreSQL', 'MongoDB', 'REST APIs', 'GraphQL'],
-  tools: ['Git', 'Docker', 'AWS', 'Figma', 'CI/CD', 'Testing'],
+  backend: ['Node.js', 'Python', 'PostgreSQL', 'MongoDB', 'Supabase', 'REST APIs', 'GraphQL'],
+  tools: ['Git', 'Docker', 'Kubernetes', 'AWS', 'Figma', 'CI/CD', 'Testing'],
 };
 
 const allSkills = [
@@ -95,6 +95,8 @@ function getIconForSkill(label: string): React.ReactNode {
   if (l.includes('graphql')) return img('graphql', 'plain');
   if (l === 'git') return img('git');
   if (l.includes('docker')) return img('docker');
+  if (l.includes('kubernetes')) return img('kubernetes', 'plain');
+  if (l.includes('supabase')) return img('supabase', 'original');
   if (l === 'aws' || l.includes('amazon')) return img('amazonwebservices', 'original-wordmark');
   if (l.includes('figma')) return img('figma');
 
