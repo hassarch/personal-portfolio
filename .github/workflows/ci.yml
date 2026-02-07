@@ -27,3 +27,6 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          CI: true
+          NODE_ENV: production

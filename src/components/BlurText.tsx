@@ -1,9 +1,10 @@
 import { motion } from 'motion/react';
 import { useEffect, useRef, useState, useMemo } from 'react';
 
-const buildKeyframes = (from: Record<string, any>, steps: Record<string, any>[]) => {
+type KeyframeValue = string | number;
+const buildKeyframes = (from: Record<string, KeyframeValue>, steps: Record<string, KeyframeValue>[]) => {
   const keys = new Set([...Object.keys(from), ...steps.flatMap(s => Object.keys(s))]);
-  const keyframes: Record<string, any[]> = {};
+  const keyframes: Record<string, KeyframeValue[]> = {};
   keys.forEach(k => {
     keyframes[k] = [from[k], ...steps.map(s => s[k])];
   });
@@ -18,8 +19,8 @@ interface BlurTextProps {
   direction?: 'top' | 'bottom';
   threshold?: number;
   rootMargin?: string;
-  animationFrom?: Record<string, any>;
-  animationTo?: Record<string, any>[];
+  animationFrom?: Record<string, KeyframeValue>;
+  animationTo?: Record<string, KeyframeValue>[];
   easing?: (t: number) => number;
   onAnimationComplete?: () => void;
   stepDuration?: number;

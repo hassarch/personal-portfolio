@@ -44,7 +44,9 @@ const Navbar = () => {
     toggleTheme();
     try {
       import('@/lib/ufoMusic').then(m => m.toggleUfoMusic());
-    } catch {}
+    } catch {
+      // Dynamic import can fail in some environments; ignore
+    }
   };
 
   return (

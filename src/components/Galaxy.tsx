@@ -34,7 +34,16 @@ const Galaxy = ({
     const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
-    let stars: any[] = [];
+    interface Star {
+      x: number;
+      y: number;
+      z: number;
+      size: number;
+      opacity: number;
+      twinkle: number;
+      twinkleSpeed: number;
+    }
+    let stars: Star[] = [];
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;

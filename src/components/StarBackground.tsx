@@ -51,8 +51,8 @@ const StarBackground = () => {
             top: `${star.y}%`,
             width: `${star.size}px`,
             height: `${star.size}px`,
-            ['--duration' as any]: `${star.duration}s`,
-            ['--delay' as any]: `${star.delay}s`,
+            ['--duration' as string]: `${star.duration}s`,
+            ['--delay' as string]: `${star.delay}s`,
             opacity: star.opacity,
             transform: 'translate3d(0,0,0)', // GPU acceleration
           } as React.CSSProperties}
@@ -149,11 +149,11 @@ function ShootingStars({ max = 4 }: { max?: number }) {
             top: `${s.y}%`,
             width: `${s.size}px`,
             height: `${s.size}px`,
-            ['--dx' as any]: `${s.dx}px`,
-            ['--dy' as any]: `${s.dy}px`,
-            ['--shoot-duration' as any]: `${s.duration}ms`,
-            ['--angle' as any]: `${s.angle}deg`,
-          }}
+            ['--dx' as string]: `${s.dx}px`,
+            ['--dy' as string]: `${s.dy}px`,
+            ['--shoot-duration' as string]: `${s.duration}ms`,
+            ['--angle' as string]: `${s.angle}deg`,
+          } as React.CSSProperties}
         />
       ))}
     </>
