@@ -22,9 +22,10 @@ const SkillsSection = () => {
       <div className="max-w-6xl mx-auto">
         <div 
           ref={headerRef}
-          className={`text-center mb-20 transition-all duration-1000 ${
+          className={`text-center mb-20 transition-all duration-1000 ease-out ${
             headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
+          style={{ willChange: 'opacity, transform' }}
         >
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-foreground relative inline-block">
             Skills & Expertise
@@ -38,9 +39,10 @@ const SkillsSection = () => {
 
         <div 
           ref={contentRef}
-          className={`transition-all duration-1000 delay-200 ${
+          className={`transition-all duration-1000 ease-out delay-200 ${
             contentVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
           }`}
+          style={{ willChange: 'opacity, transform' }}
         >
           <div className="flex flex-wrap justify-center gap-4 max-w-5xl mx-auto">
             {allSkills.map((skill, index) => (
@@ -58,13 +60,14 @@ function SkillPill({ label, index }: { label: string; index: number }) {
   
   return (
     <div 
-      className="px-5 py-2.5 rounded-full border border-border bg-card text-sm md:text-base text-foreground hover:border-foreground hover:shadow-lg hover:scale-110 hover:-translate-y-1 transition-all duration-300 flex items-center gap-2 cursor-default opacity-0 animate-fade-in-up group"
+      className="px-5 py-2.5 rounded-full border border-border bg-card text-sm md:text-base text-foreground hover:border-foreground hover:shadow-lg hover:scale-110 hover:-translate-y-1 transition-all duration-300 ease-out flex items-center gap-2 cursor-default opacity-0 animate-fade-in-up group"
       style={{ 
         animationDelay: `${index * 0.05}s`,
-        animationFillMode: 'forwards'
+        animationFillMode: 'forwards',
+        willChange: 'transform, opacity'
       }}
     >
-      <span className="group-hover:scale-110 transition-transform duration-300">{icon}</span>
+      <span className="group-hover:scale-110 transition-transform duration-300 ease-out" style={{ willChange: 'transform' }}>{icon}</span>
       <span>{label}</span>
     </div>
   );

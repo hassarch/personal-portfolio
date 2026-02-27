@@ -5,7 +5,23 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: portfolio-app
     ports:
       - "3000:80"
     restart: unless-stopped
-    container_name: portfolio-app
+    environment:
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/index.html"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    networks:
+      - portfolio-network
+    labels:
+      - "com.example.description=Hassan's Portfolio Application"
+
+networks:
+  portfolio-network:
+    driver: bridge

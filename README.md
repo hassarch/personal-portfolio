@@ -143,13 +143,16 @@ bun run preview
 
 ## 🐳 Docker Deployment
 
-The project includes Docker support for easy containerized deployment.
+The project includes production-ready Docker support for easy containerized deployment.
 
-### Using Docker Compose (Recommended)
+### Quick Start with Docker Compose
 
 ```bash
 # Build and run the container
 docker-compose up -d
+
+# View logs
+docker-compose logs -f
 
 # Stop the container
 docker-compose down
@@ -166,33 +169,84 @@ docker build -t portfolio-app .
 # Run the container
 docker run -p 3000:80 portfolio-app
 
-# Run in detached mode
+# Run in detached mode with a name
 docker run -d -p 3000:80 --name portfolio portfolio-app
+
+# View logs
+docker logs -f portfolio
 
 # Stop the container
 docker stop portfolio
+
+# Remove the container
+docker rm portfolio
 ```
 
-### Docker Configuration
+### Docker Features
 
-The Docker setup includes:
-- **Multi-stage build** - Optimized image size (~50MB)
-- **Nginx server** - Fast static file serving
-- **Gzip compression** - Reduced bandwidth usage
-- **SPA routing** - Proper handling of client-side routes
-- **Security headers** - Enhanced security configuration
-- **Asset caching** - Optimized performance
+- **Multi-stage Build** - Optimized image size (~50MB)
+- **Nginx Server** - Fast static file serving with gzip compression
+- **Health Checks** - Automatic container health monitoring
+- **Security** - Non-root user, minimal attack surface
+- **SPA Routing** - Proper handling of client-side routes
+- **Performance** - Asset caching headers and compression
+- **Networking** - Isolated network for multi-container setups
 
-### Environment Variables in Docker
+### Environment Variables
 
-To use environment variables with Docker:
+To pass environment variables to the Docker container:
 
 ```bash
-# Using docker-compose
+# Using docker-compose with .env file
 docker-compose up -d --env-file .env.production
 
 # Using docker run
 docker run -p 3000:80 --env-file .env.production portfolio-app
+
+# Or pass individual variables
+docker run -p 3000:80 -e VITE_FORMSPREE_ENDPOINT=https://formspree.io/f/YOUR_ID portfolio-app
+```
+
+### Docker Compose Advanced Usage
+
+**Scale the service:**
+```bash
+docker-compose up -d --scale web=3
+```
+
+**Use a custom port:**
+```bash
+# Edit docker-compose.yml or override via command
+docker-compose -f docker-compose.yml up -d -e "PORT=8080"
+```
+
+**View container status:**
+```bash
+docker-compose ps
+```
+
+### Troubleshooting
+
+**Container exits immediately:**
+```bash
+docker logs portfolio-app
+```
+
+**Port already in use:**
+```bash
+# Change port in docker-compose.yml or use:
+docker run -p 8080:80 portfolio-app
+```
+
+**Rebuild without cache:**
+```bash
+docker-compose build --no-cache
+docker-compose up -d
+```
+
+**Check container health:**
+```bash
+docker ps --format "table {{.Names}}\t{{.Status}}"
 ```
 
 ## 🌐 Deployment
