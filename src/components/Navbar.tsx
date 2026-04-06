@@ -53,12 +53,13 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background border-b-4 border-foreground">
       <div className="max-w-6xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-8 h-8 border-2 border-foreground flex items-center justify-center">
-              <div className="w-4 h-4 border border-foreground"></div>
-            </div>
-            <span className="font-bold text-sm hidden sm:inline">Portfolio</span>
-          </div>
+          <button
+            onClick={handleUfoClick}
+            className="group relative text-xl font-bold hover:opacity-80 transition-all duration-300"
+            aria-label="Toggle theme"
+          >
+            <UfoIcon className="text-foreground transition-all duration-300 group-hover:scale-125 group-hover:rotate-12" size={40} />
+          </button>
 
           <div className="hidden md:flex items-center gap-6">
             {navLinks.map((link) => (
