@@ -50,35 +50,28 @@ const Navbar = () => {
   };
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-background/95 backdrop-blur-sm border-b border-border shadow-sm'
-          : 'bg-transparent'
-      }`}
-    >
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background border-b-4 border-foreground">
       <div className="max-w-6xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <button
-            onClick={handleUfoClick}
-            className="group relative text-xl font-bold hover:opacity-80 transition-all duration-300"
-            aria-label="Toggle theme"
-          >
-            <UfoIcon className="text-foreground transition-all duration-300 group-hover:scale-125 group-hover:rotate-12" size={40} />
-          </button>
+          <div className="flex items-center gap-4">
+            <div className="w-8 h-8 border-2 border-foreground flex items-center justify-center">
+              <div className="w-4 h-4 border border-foreground"></div>
+            </div>
+            <span className="font-bold text-sm hidden sm:inline">Portfolio</span>
+          </div>
 
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-6">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
-                className="text-muted-foreground hover:text-foreground hover:scale-105 transition-all duration-300 text-sm font-medium"
+                className="text-foreground hover:bg-foreground hover:text-background px-2 py-1 transition-all text-sm font-bold border border-transparent hover:border-foreground"
               >
                 {link.name}
               </a>
             ))}
-            <Button variant="outline" size="sm" className="hover:scale-105 transition-transform duration-300" asChild>
+            <Button variant="outline" size="sm" className="retro-button text-xs" asChild>
               <a href="https://drive.google.com/file/d/1-IKwqW_e3AOs8S9IX7M4E1I7cAagKeZP/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
                 Resume
               </a>
@@ -88,7 +81,7 @@ const Navbar = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden"
+            className="md:hidden border-2 border-foreground"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -96,19 +89,19 @@ const Navbar = () => {
         </div>
 
         {isMobileMenuOpen && (
-          <div className="md:hidden mt-4 pb-4">
-            <div className="flex flex-col gap-4">
+          <div className="md:hidden mt-4 pb-4 border-t-2 border-foreground pt-4">
+            <div className="flex flex-col gap-2">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className="text-muted-foreground hover:text-foreground transition-colors duration-300 py-2 text-sm font-medium"
+                  className="text-foreground hover:bg-foreground hover:text-background px-2 py-2 transition-all text-sm font-bold border border-foreground"
                 >
                   {link.name}
                 </a>
               ))}
-              <Button variant="outline" size="sm" className="w-fit hover:scale-105 transition-transform duration-300" asChild>
+              <Button variant="outline" size="sm" className="retro-button text-xs w-full" asChild>
                 <a href="https://drive.google.com/file/d/1-IKwqW_e3AOs8S9IX7M4E1I7cAagKeZP/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
                   Resume
                 </a>

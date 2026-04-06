@@ -59,27 +59,25 @@ const ProjectsSection = () => {
   const { ref: gridRef, isVisible: gridVisible } = useScrollAnimation();
 
   return (
-    <section id="projects" className="relative py-32 md:py-40 px-6 scroll-mt-28 sm:scroll-mt-32 bg-secondary/30">
+    <section id="projects" className="relative py-32 md:py-40 px-6 scroll-mt-28 sm:scroll-mt-32 border-b-4 border-foreground bg-background">
       <div className="max-w-6xl mx-auto">
         <div 
           ref={headerRef}
-          className={`text-center mb-20 transition-all duration-1000 ${
+          className={`mb-20 transition-all duration-1000 ${
             headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-foreground relative inline-block">
-            Featured Projects
-            <span className="absolute inset-0 animate-shimmer pointer-events-none"></span>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
+            Projects
           </h2>
-          <div className="w-20 h-1 bg-foreground mx-auto rounded-full mb-8" />
-          <p className="text-muted-foreground text-lg md:text-xl max-w-3xl mx-auto">
+          <p className="text-foreground text-sm md:text-base max-w-3xl font-mono">
             A collection of projects I've worked on, showcasing my skills and experience
           </p>
         </div>
 
         <div 
           ref={gridRef}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto"
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto"
         >
           {displayedProjects.map((project, index) => (
             <ProjectCard key={index} project={project} index={index} isVisible={gridVisible} />
@@ -89,9 +87,7 @@ const ProjectsSection = () => {
         {projects.length > 4 && (
           <div className="flex justify-center mt-16">
             <Button
-              variant="outline"
-              size="lg"
-              className="min-w-[200px]"
+              className="retro-button text-sm"
               asChild
             >
               <a
@@ -101,7 +97,7 @@ const ProjectsSection = () => {
                 className="flex items-center gap-2"
               >
                 See More Projects
-                <ExternalLink size={18} />
+                <ExternalLink size={16} />
               </a>
             </Button>
           </div>
@@ -114,16 +110,16 @@ const ProjectsSection = () => {
 const ProjectCard = ({ project, index, isVisible }: { project: Project; index: number; isVisible: boolean }) => {
   return (
     <div 
-      className={`bg-card border border-border p-6 rounded-lg hover:shadow-2xl hover:scale-[1.03] hover:border-foreground/50 hover:-translate-y-1 transition-all duration-500 flex flex-col h-full group ${
+      className={`bg-card border-2 border-foreground p-6 hover:shadow-lg hover:translate-x-1 hover:translate-y-1 transition-all duration-200 flex flex-col h-full group ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
       }`}
       style={{ transitionDelay: `${index * 100}ms` }}
     >
-      <h3 className="text-xl font-semibold mb-3 text-foreground group-hover:text-foreground transition-colors duration-300 text-left">
+      <h3 className="text-lg font-bold mb-3 text-foreground text-left">
         {project.title}
       </h3>
 
-      <p className="text-muted-foreground text-sm mb-4 flex-grow leading-relaxed text-left">
+      <p className="text-foreground text-xs mb-4 flex-grow leading-relaxed text-left font-mono">
         {project.description}
       </p>
 
@@ -131,7 +127,7 @@ const ProjectCard = ({ project, index, isVisible }: { project: Project; index: n
         {project.technologies.map((tech, index) => (
           <span
             key={index}
-            className="px-2 py-1 text-xs rounded border border-border text-muted-foreground group-hover:border-foreground/30 group-hover:scale-105 transition-all duration-300"
+            className="px-2 py-1 text-xs border border-foreground text-foreground font-mono"
           >
             {tech}
           </span>
@@ -141,9 +137,7 @@ const ProjectCard = ({ project, index, isVisible }: { project: Project; index: n
       <div className="flex gap-2 mt-auto">
         {project.githubUrl && (
           <Button
-            variant="outline"
-            size="sm"
-            className="flex-1"
+            className="retro-button flex-1 text-xs"
             asChild
           >
             <a
@@ -152,16 +146,14 @@ const ProjectCard = ({ project, index, isVisible }: { project: Project; index: n
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2"
             >
-              <Github size={16} />
+              <Github size={14} />
               Code
             </a>
           </Button>
         )}
         {project.liveUrl && (
           <Button
-            variant="default"
-            size="sm"
-            className="flex-1"
+            className="retro-button-filled flex-1 text-xs"
             asChild
           >
             <a
@@ -170,8 +162,8 @@ const ProjectCard = ({ project, index, isVisible }: { project: Project; index: n
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2"
             >
-              <ExternalLink size={16} />
-              Live Demo
+              <ExternalLink size={14} />
+              Live
             </a>
           </Button>
         )}
