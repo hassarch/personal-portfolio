@@ -66,8 +66,8 @@ const AnimatedBackground = () => {
         className="absolute inset-0 pointer-events-none"
         style={{
           backgroundImage: `
-            linear-gradient(0deg, transparent 24%, rgba(0, 0, 0, 0.02) 25%, rgba(0, 0, 0, 0.02) 26%, transparent 27%, transparent 74%, rgba(0, 0, 0, 0.02) 75%, rgba(0, 0, 0, 0.02) 76%, transparent 77%, transparent),
-            linear-gradient(90deg, transparent 24%, rgba(0, 0, 0, 0.02) 25%, rgba(0, 0, 0, 0.02) 26%, transparent 27%, transparent 74%, rgba(0, 0, 0, 0.02) 75%, rgba(0, 0, 0, 0.02) 76%, transparent 77%, transparent)
+            linear-gradient(0deg, transparent 24%, rgba(120, 100, 80, 0.01) 25%, rgba(120, 100, 80, 0.01) 26%, transparent 27%, transparent 74%, rgba(120, 100, 80, 0.01) 75%, rgba(120, 100, 80, 0.01) 76%, transparent 77%, transparent),
+            linear-gradient(90deg, transparent 24%, rgba(120, 100, 80, 0.01) 25%, rgba(120, 100, 80, 0.01) 26%, transparent 27%, transparent 74%, rgba(120, 100, 80, 0.01) 75%, rgba(120, 100, 80, 0.01) 76%, transparent 77%, transparent)
           `,
           backgroundSize: '60px 60px',
           opacity: 0.1,
@@ -78,7 +78,7 @@ const AnimatedBackground = () => {
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.15) 100%)',
+          background: 'radial-gradient(ellipse at center, transparent 0%, rgba(120, 100, 80, 0.1) 100%)',
           opacity: 0.06,
         }} 
       />

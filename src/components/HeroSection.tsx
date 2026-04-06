@@ -17,7 +17,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-6 py-32 md:py-40">
+    <section className="relative min-h-screen flex items-center justify-center px-6 py-32 md:py-40 border-b-4 border-foreground">
       <div className="max-w-3xl mx-auto text-center">
         <p className="text-foreground font-bold text-sm mb-6 tracking-widest uppercase animate-fade-in-up opacity-0" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
           Hello.

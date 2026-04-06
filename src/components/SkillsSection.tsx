@@ -18,7 +18,7 @@ const SkillsSection = () => {
   const { ref: contentRef, isVisible: contentVisible } = useScrollAnimation();
 
   return (
-    <section id="skills" className="relative py-32 md:py-40 px-6 scroll-mt-28 sm:scroll-mt-32 border-b-4 border-foreground bg-background">
+    <section id="skills" className="relative py-32 md:py-40 px-6 scroll-mt-28 sm:scroll-mt-32 bg-background">
       <div className="max-w-6xl mx-auto">
         <div 
           ref={headerRef}
@@ -42,7 +42,7 @@ const SkillsSection = () => {
           }`}
           style={{ willChange: 'opacity, transform' }}
         >
-          <div className="flex flex-wrap justify-start gap-3 max-w-5xl mx-auto">
+          <div className="flex flex-wrap justify-center gap-3 max-w-5xl mx-auto">
             {allSkills.map((skill, index) => (
               <SkillPill key={index} label={skill} index={index} />
             ))}
