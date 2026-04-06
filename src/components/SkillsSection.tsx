@@ -18,11 +18,11 @@ const SkillsSection = () => {
   const { ref: contentRef, isVisible: contentVisible } = useScrollAnimation();
 
   return (
-    <section id="skills" className="relative py-32 md:py-40 px-6 scroll-mt-28 sm:scroll-mt-32 bg-background">
+    <section id="skills" className="relative py-32 md:py-40 px-6 scroll-mt-28 sm:scroll-mt-32 border-b-4 border-foreground bg-background">
       <div className="max-w-6xl mx-auto">
         <div 
           ref={headerRef}
-          className={`mb-20 transition-all duration-1000 ease-out ${
+          className={`mb-20 transition-all duration-1000 ease-out text-center ${
             headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
           style={{ willChange: 'opacity, transform' }}
@@ -30,7 +30,7 @@ const SkillsSection = () => {
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
             Skills
           </h2>
-          <p className="text-foreground text-sm md:text-base max-w-3xl font-mono">
+          <p className="text-foreground text-sm md:text-base max-w-3xl mx-auto font-mono">
             Technologies and tools I use to bring ideas to life
           </p>
         </div>

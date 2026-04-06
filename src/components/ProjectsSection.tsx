@@ -63,14 +63,14 @@ const ProjectsSection = () => {
       <div className="max-w-6xl mx-auto">
         <div 
           ref={headerRef}
-          className={`mb-20 transition-all duration-1000 ${
+          className={`mb-20 transition-all duration-1000 text-center ${
             headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
             Projects
           </h2>
-          <p className="text-foreground text-sm md:text-base max-w-3xl font-mono">
+          <p className="text-foreground text-sm md:text-base max-w-3xl mx-auto font-mono">
             A collection of projects I've worked on, showcasing my skills and experience
           </p>
         </div>

@@ -10,7 +10,7 @@ const AboutSection = () => {
       <div className="max-w-6xl mx-auto">
         <div 
           ref={headerRef}
-          className={`mb-20 transition-all duration-1000 ${
+          className={`mb-20 transition-all duration-1000 text-center ${
             headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >
@@ -21,7 +21,7 @@ const AboutSection = () => {
 
         <div 
           ref={contentRef}
-          className="max-w-4xl mx-auto"
+          className="max-w-4xl mx-auto text-center"
         >
           <div className="space-y-6 mb-16">
             <div className={`space-y-4 transition-all duration-1000 delay-200 ${

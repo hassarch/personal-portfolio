@@ -88,31 +88,33 @@ const BlurText = ({
   const times = Array.from({ length: stepCount }, (_, i) => (stepCount === 1 ? 0 : i / (stepCount - 1)));
 
   return (
-    <p ref={ref} className={className} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
-      {elements.map((segment, index) => {
-        const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots);
-        const spanTransition = {
-          duration: totalDuration,
-          times,
-          delay: (index * delay) / 1000
-        };
-        spanTransition.ease = easing;
+    <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+      <p ref={ref} className={className} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+        {elements.map((segment, index) => {
+          const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots);
+          const spanTransition = {
+            duration: totalDuration,
+            times,
+            delay: (index * delay) / 1000
+          };
+          spanTransition.ease = easing;
 
-        return (
-          <motion.span
-            className="inline-block will-change-[transform,filter,opacity]"
-            key={index}
-            initial={fromSnapshot}
-            animate={inView ? animateKeyframes : fromSnapshot}
-            transition={spanTransition}
-            onAnimationComplete={index === elements.length - 1 ? onAnimationComplete : undefined}
-          >
-            {segment === ' ' ? '\u00A0' : segment}
-            {animateBy === 'words' && index < elements.length - 1 && '\u00A0'}
-          </motion.span>
-        );
-      })}
-    </p>
+          return (
+            <motion.span
+              className="inline-block will-change-[transform,filter,opacity]"
+              key={index}
+              initial={fromSnapshot}
+              animate={inView ? animateKeyframes : fromSnapshot}
+              transition={spanTransition}
+              onAnimationComplete={index === elements.length - 1 ? onAnimationComplete : undefined}
+            >
+              {segment === ' ' ? '\u00A0' : segment}
+              {animateBy === 'words' && index < elements.length - 1 && '\u00A0'}
+            </motion.span>
+          );
+        })}
+      </p>
+    </div>
   );
 };
 
