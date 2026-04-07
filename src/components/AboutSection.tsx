@@ -37,7 +37,7 @@ const AboutSection = () => {
                 I'm interested in software development, machine learning, and problem solving.
               </p>
               <p className="text-sm md:text-base text-foreground leading-relaxed font-mono">
-                I enjoy turning concepts into real, working applications.
+                I enjoy turning concepts into real and working applications.
               </p>
             </div>
 
