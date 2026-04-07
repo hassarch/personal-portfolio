@@ -9,6 +9,7 @@ import { Textarea } from './ui/textarea';
 import { Label } from './ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import { LeetCodeIcon } from './LeetCodeIcon';
 
 const contactFormSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -145,6 +146,11 @@ const ContactSection = () => {
                   href="https://github.com/hassarch"
                   icon={<Github size={18} />}
                   label="GitHub"
+                />
+                <SocialLink
+                  href="https://leetcode.com"
+                  icon={<LeetCodeIcon />}
+                  label="LeetCode"
                 />
                 <SocialLink
                   href="https://x.com/sanxshade"
