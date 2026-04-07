@@ -200,9 +200,9 @@ const SpotifyPlayer = () => {
   const progressPercent = (track.progress / track.duration) * 100;
 
   return (
-    <div className="w-96 bg-card border-2 border-foreground overflow-hidden hover:shadow-lg hover:translate-x-1 hover:translate-y-1 transition-all duration-200 flex">
+    <div className="w-72 sm:w-80 md:w-96 bg-card border-2 border-foreground overflow-hidden hover:shadow-lg hover:translate-x-1 hover:translate-y-1 transition-all duration-200 flex">
       {/* Album Art - Left */}
-      <div className="w-24 h-24 flex-shrink-0 border-r-2 border-foreground overflow-hidden">
+      <div className="w-20 sm:w-24 h-20 sm:h-24 flex-shrink-0 border-r-2 border-foreground overflow-hidden">
         <img 
           src={track.imageUrl} 
           alt={track.album}
@@ -211,10 +211,10 @@ const SpotifyPlayer = () => {
       </div>
 
       {/* Content - Right */}
-      <div className="flex-1 px-3 py-2 flex flex-col justify-between">
+      <div className="flex-1 px-2 sm:px-3 py-1.5 sm:py-2 flex flex-col justify-between">
         {/* Track Info */}
         <div className="min-h-0">
-          <h3 className="text-sm font-bold text-foreground truncate leading-tight">
+          <h3 className="text-xs sm:text-sm font-bold text-foreground truncate leading-tight">
             {track.name}
           </h3>
           <p className="text-xs text-foreground font-mono truncate leading-tight">
@@ -223,7 +223,7 @@ const SpotifyPlayer = () => {
         </div>
 
         {/* Progress Bar */}
-        <div className="my-1">
+        <div className="my-0.5 sm:my-1">
           <div className="w-full h-0.5 border border-foreground bg-background overflow-hidden">
             <div 
               className="h-full bg-foreground transition-all duration-300"
@@ -238,13 +238,13 @@ const SpotifyPlayer = () => {
 
         {/* Controls */}
         <div className="flex items-center justify-between">
-          <div className="flex gap-1">
+          <div className="flex gap-0.5 sm:gap-1">
             <button
               onClick={() => handleSkip('previous')}
               className="p-0.5 hover:bg-foreground hover:text-background transition-all duration-200 cursor-pointer"
               title="Previous"
             >
-              <SkipBack size={14} className="text-foreground" />
+              <SkipBack size={12} className="text-foreground" />
             </button>
             <button
               onClick={handlePlayPause}
@@ -252,9 +252,9 @@ const SpotifyPlayer = () => {
               title={track.isPlaying ? 'Pause' : 'Play'}
             >
               {track.isPlaying ? (
-                <Pause size={14} className="text-foreground" />
+                <Pause size={12} className="text-foreground" />
               ) : (
-                <Play size={14} className="text-foreground fill-foreground" />
+                <Play size={12} className="text-foreground fill-foreground" />
               )}
             </button>
             <button
@@ -262,7 +262,7 @@ const SpotifyPlayer = () => {
               className="p-0.5 hover:bg-foreground hover:text-background transition-all duration-200 cursor-pointer"
               title="Next"
             >
-              <SkipForward size={14} className="text-foreground" />
+              <SkipForward size={12} className="text-foreground" />
             </button>
           </div>
           <button
@@ -270,7 +270,7 @@ const SpotifyPlayer = () => {
             className="p-0.5 hover:bg-foreground hover:text-background transition-all duration-200 cursor-pointer"
             title="Like"
           >
-            <Heart size={14} className="text-foreground" />
+            <Heart size={12} className="text-foreground" />
           </button>
         </div>
       </div>
