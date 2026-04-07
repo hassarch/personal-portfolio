@@ -20,7 +20,7 @@ const HeroSection = () => {
   return (
     <section className="relative flex items-center justify-center min-h-screen px-4 md:px-6 py-16 md:py-20 border-b-4 border-foreground">
       <div className="max-w-2xl mx-auto w-full">
-        <p className="text-foreground font-bold text-xs mb-3 md:mb-5 tracking-[0.2em] uppercase animate-fade-in-up opacity-0" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
+        <p className="text-foreground font-bold text-xs mb-3 md:mb-5 tracking-[0.2em] uppercase animate-fade-in-up opacity-0 text-center" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
           Hello.
         </p>
 
@@ -29,10 +29,10 @@ const HeroSection = () => {
           delay={250}
           animateBy="characters"
           stepDuration={0.6}
-          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-5 text-foreground tracking-tight leading-tight"
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-5 text-foreground tracking-tight leading-tight text-center"
         />
 
-        <p className="text-foreground text-xs sm:text-sm max-w-lg mx-auto mb-6 md:mb-8 leading-relaxed font-mono animate-fade-in-up opacity-0" style={{ animationDelay: '0.8s', animationFillMode: 'forwards' }}>
+        <p className="text-foreground text-xs sm:text-sm max-w-lg mx-auto mb-6 md:mb-8 leading-relaxed font-mono animate-fade-in-up opacity-0 text-center" style={{ animationDelay: '0.8s', animationFillMode: 'forwards' }}>
           Computer Science student & developer. I build clean, user centric web apps using modern frontend tech.
         </p>
 
