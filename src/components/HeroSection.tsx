@@ -33,7 +33,7 @@ const HeroSection = () => {
         />
 
         <p className="text-foreground text-sm max-w-lg mx-auto mb-8 leading-relaxed font-mono animate-fade-in-up opacity-0" style={{ animationDelay: '0.8s', animationFillMode: 'forwards' }}>
-          Computer Science student & developer. I build clean, user-centric web apps using modern frontend tech.
+          Computer Science student & developer. I build clean, user centric web apps using modern frontend tech.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8 animate-fade-in-up opacity-0" style={{ animationDelay: '1s', animationFillMode: 'forwards' }}>
@@ -65,20 +65,6 @@ const HeroSection = () => {
           />
           <SocialLink href="https://www.linkedin.com/in/hassan0777/" icon={<Linkedin size={16} />} label="LinkedIn" />
           <SocialLink href="mailto:hassanrj245@gmail.com" icon={<Mail size={16} />} label="Email" />
-          <SocialLink
-            href="https://leetcode.com/u/has_san/"
-            icon={
-              <svg
-                viewBox="0 0 24 24"
-                className="h-4 w-4"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path d="M13.483 0a1.374 1.374 0 0 0-.741.281L7.129 4.188C4.134 6.272 2.86 8.701 2.3 11.26c-.308 1.578-.397 2.568.097 3.551.582 1.16 1.846 1.941 3.325 2.051 1.283.09 2.404-.394 3.551-1.567.174-.175.348-.506.522-.836.252-.478.502-.953.903-1.244l2.35-1.843c.079-.055.374.029.374.136-.285 2.015.166 3.751 1.26 4.853.558.564 1.356.812 2.21.679 1.663-.264 2.877-1.508 3.728-3.812.64-1.735.865-3.314.42-4.579-.626-1.776-2.173-3.079-4.28-3.647-.985-.266-2.083-.36-3.12-.266a18.8 18.8 0 0 0-2.05.31l-.054-.032c.384-.29.846-.638 1.25-.958 1.31-1.013 2.17-2.038 2.637-3.132.344-.809.406-1.573.18-2.313-.306-1.007-1.06-1.509-2.133-1.414z"/>
-              </svg>
-            }
-            label="LeetCode"
-          />
         </div>
 
         <div className="mt-10 flex justify-center animate-fade-in-up opacity-0" style={{ animationDelay: '1.3s', animationFillMode: 'forwards' }}>
