@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import AnimatedBackground from '@/components/AnimatedBackground';
+import MovingParticles from '@/components/MovingParticles';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
 import AboutSection from '@/components/AboutSection';
@@ -19,8 +20,9 @@ const Index = () => {
   return (
     <div className={`relative min-h-screen overflow-x-hidden bg-background transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
       <AnimatedBackground />
+      <MovingParticles />
       
-      <div className="relative z-10">
+      <div className="relative z-20">
         <Navbar />
         <main>
           <HeroSection />
