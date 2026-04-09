@@ -126,11 +126,11 @@
   }
 
   .retro-button {
-    @apply px-4 py-2 border-2 border-foreground bg-background text-foreground font-bold hover:bg-foreground hover:text-background transition-all;
+    @apply px-4 py-2 border-2 border-foreground bg-background text-foreground font-bold transition-all;
   }
 
   .retro-button-filled {
-    @apply px-4 py-2 border-2 border-foreground bg-foreground text-background font-bold hover:bg-background hover:text-foreground transition-all;
+    @apply px-4 py-2 border-2 border-foreground bg-foreground text-background font-bold transition-all;
   }
 
   .gradient-text {
