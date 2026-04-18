@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import AnimatedBackground from '@/components/AnimatedBackground';
-import MovingParticles from '@/components/MovingParticles';
+import { motion } from 'motion/react';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
 import AboutSection from '@/components/AboutSection';
@@ -18,13 +17,12 @@ const Index = () => {
   }, []);
 
   return (
-    <div className={`relative min-h-screen overflow-x-hidden bg-background transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
-      <AnimatedBackground />
-      <MovingParticles />
+    <div className={`page-wrapper ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+      <div className="fixed inset-0 z-0 bg-grid-pattern pointer-events-none" />
       
-      <div className="relative z-20">
+      <div className="main-container">
         <Navbar />
-        <main>
+        <main className="pt-24 pb-16">
           <HeroSection />
           <AboutSection />
           <SkillsSection />

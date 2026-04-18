@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
-import UfoIcon from './UfoIcon';
+import { Moon, Sun } from 'lucide-react';
+import { motion } from 'motion/react';
 import { Button } from './ui/button';
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -13,12 +13,11 @@ const navLinks = [
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { toggleTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 10);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -36,82 +35,46 @@ const Navbar = () => {
         top: offsetPosition,
         behavior: 'smooth'
       });
-      setIsMobileMenuOpen(false);
-    }
-  };
-
-  const handleUfoClick = () => {
-    toggleTheme();
-    try {
-      import('@/lib/ufoMusic').then(m => m.toggleUfoMusic());
-    } catch {
-      // Dynamic import can fail in some environments; ignore
     }
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background border-b-4 border-foreground">
-      <div className="max-w-6xl mx-auto px-6 py-4">
-        <div className="flex items-center justify-between">
+    <motion.nav 
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      className={`nav-bar ${isScrolled ? 'bg-background/90 backdrop-blur-md shadow-sm' : 'bg-transparent'}`}
+    >
+      <div className="nav-container">
+        <div className="nav-header">
           <button
-            onClick={handleUfoClick}
-            className="group relative text-xl font-bold hover:opacity-80 transition-all duration-300"
+            onClick={toggleTheme}
+            className="nav-theme-btn"
             aria-label="Toggle theme"
           >
-            <UfoIcon className="text-foreground transition-all duration-300 group-hover:scale-125 group-hover:rotate-12" size={40} />
+            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
 
-          <div className="hidden md:flex items-center gap-6">
+          <div className="nav-links">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
-                className="text-foreground hover:bg-foreground hover:text-background px-2 py-1 transition-all text-sm font-bold border border-transparent hover:border-foreground"
+                className="nav-link"
               >
                 {link.name}
               </a>
             ))}
-            <Button variant="outline" size="sm" className="retro-button text-xs" asChild>
+            <Button variant="outline" size="sm" className="retro-button text-xs py-1" asChild>
               <a href="https://drive.google.com/file/d/1-IKwqW_e3AOs8S9IX7M4E1I7cAagKeZP/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
                 Resume
               </a>
             </Button>
           </div>
-
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden border-2 border-foreground"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </Button>
         </div>
-
-        {isMobileMenuOpen && (
-          <div className="md:hidden mt-4 pb-4 border-t-2 border-foreground pt-4">
-            <div className="flex flex-col gap-2">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                  className="text-foreground hover:bg-foreground hover:text-background px-2 py-2 transition-all text-sm font-bold border border-foreground"
-                >
-                  {link.name}
-                </a>
-              ))}
-              <Button variant="outline" size="sm" className="retro-button text-xs w-full" asChild>
-                <a href="https://drive.google.com/file/d/1-IKwqW_e3AOs8S9IX7M4E1I7cAagKeZP/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
-                  Resume
-                </a>
-              </Button>
-            </div>
-          </div>
-        )}
       </div>
-    </nav>
+    </motion.nav>
   );
 };
 

@@ -1,55 +1,56 @@
 import { Code2, Lightbulb, Rocket } from 'lucide-react';
-import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import { motion } from 'motion/react';
 
 const AboutSection = () => {
-  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
-  const { ref: contentRef, isVisible: contentVisible } = useScrollAnimation();
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.2 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+  };
 
   return (
-    <section id="about" className="relative py-32 md:py-40 px-6 scroll-mt-28 sm:scroll-mt-32 border-b-4 border-foreground bg-background">
-      <div className="max-w-6xl mx-auto">
-        <div 
-          ref={headerRef}
-          className={`mb-20 transition-all duration-1000 text-center ${
-            headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-          }`}
+    <section id="about" className="relative py-24 md:py-32 px-6 scroll-mt-28 sm:scroll-mt-32 bg-background">
+      <div className="max-w-4xl mx-auto">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={containerVariants}
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
-            About
-          </h2>
-        </div>
+          <motion.div variants={itemVariants} className="mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold mb-4 text-foreground uppercase tracking-tight">
+              About
+            </h2>
+            <div className="h-2 w-24 bg-foreground mt-4"></div>
+          </motion.div>
 
-        <div 
-          ref={contentRef}
-          className="max-w-4xl mx-auto text-center"
-        >
-          <div className="space-y-6 mb-16">
-            <div className={`space-y-4 transition-all duration-1000 delay-200 ${
-              contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-            }`}>
-              <p className="text-sm md:text-base text-foreground leading-relaxed font-mono">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <motion.div variants={containerVariants} className="space-y-6 font-mono text-sm md:text-base text-foreground leading-relaxed border-l-2 border-foreground pl-6">
+              <motion.p variants={itemVariants}>
                 I'm a Computer Science and Data Science student who enjoys building projects and learning by doing.
-              </p>
-              <p className="text-sm md:text-base text-foreground leading-relaxed font-mono">
-                I like exploring new technologies and experimenting with ideas.
-              </p>
-              <p className="text-sm md:text-base text-foreground leading-relaxed font-mono">
-                I'm interested in software development, machine learning, and problem solving.
-              </p>
-              <p className="text-sm md:text-base text-foreground leading-relaxed font-mono">
+              </motion.p>
+              <motion.p variants={itemVariants}>
+                I like exploring new technologies and experimenting with ideas. I'm interested in software development, machine learning, and problem solving.
+              </motion.p>
+              <motion.p variants={itemVariants}>
                 I enjoy turning concepts into real and working applications.
-              </p>
-            </div>
+              </motion.p>
+            </motion.div>
 
-            <div className={`grid grid-cols-1 sm:grid-cols-3 gap-4 pt-8 transition-all duration-1000 delay-400 ${
-              contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-            }`}>
-              <StatCard icon={<Code2 size={24} />} value="10+" label="Projects" delay="0.5s" />
-              <StatCard icon={<Lightbulb size={24} />} value="1-2" label="Years Exp" delay="0.6s" />
-              <StatCard icon={<Rocket size={24} />} value="7+" label="Hackathons" delay="0.7s" />
-            </div>
+            <motion.div variants={containerVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <StatCard icon={<Code2 size={24} />} value="10+" label="Projects" variants={itemVariants} />
+              <StatCard icon={<Lightbulb size={24} />} value="1-2" label="Years Exp" variants={itemVariants} />
+              <StatCard icon={<Rocket size={24} />} value="7+" label="Hackathons" variants={itemVariants} className="sm:col-span-2" />
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -59,21 +60,23 @@ const StatCard = ({
   icon,
   value,
   label,
-  delay,
+  variants,
+  className = ""
 }: {
   icon: React.ReactNode;
   value: string;
   label: string;
-  delay?: string;
+  variants: any;
+  className?: string;
 }) => (
-  <div 
-    className="bg-card border-2 border-foreground p-4 text-center hover:shadow-lg hover:translate-x-1 hover:translate-y-1 transition-all duration-200 cursor-default"
-    style={{ animationDelay: delay }}
+  <motion.div
+    variants={variants}
+    className={`retro-card flex flex-col items-center justify-center p-6 text-center ${className}`}
   >
-    <div className="flex justify-center mb-2 text-foreground">{icon}</div>
-    <div className="text-2xl font-bold text-foreground mb-1">{value}</div>
-    <div className="text-xs text-foreground uppercase tracking-wide font-bold">{label}</div>
-  </div>
+    <div className="flex justify-center mb-4 text-foreground">{icon}</div>
+    <div className="text-3xl font-bold text-foreground mb-1">{value}</div>
+    <div className="text-[10px] text-foreground uppercase tracking-widest font-bold font-mono">{label}</div>
+  </motion.div>
 );
 
 export default AboutSection;

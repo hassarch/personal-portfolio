@@ -1,6 +1,6 @@
 import { ExternalLink, Github } from 'lucide-react';
+import { motion } from 'motion/react';
 import { Button } from './ui/button';
-import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
 interface Project {
   title: string;
@@ -8,136 +8,148 @@ interface Project {
   technologies: string[];
   githubUrl?: string;
   liveUrl?: string;
-  image?: string;
 }
 
 const projects: Project[] = [
   {
     title: 'Patient Portal',
     description: 'A comprehensive healthcare management system that allows patients to schedule appointments, view medical records, communicate with doctors, and manage their health information securely.',
-    technologies: ['React', 'Node.js', 'MongoDB', 'Express', 'Tailwind CSS', 'TypeScript','shadcn-ui' ],
+    technologies: ['React', 'Node.js', 'MongoDB', 'Express', 'Tailwind', 'TypeScript'],
     githubUrl: 'https://github.com/hassarch/patient-portal.git',
   },
   {
     title: 'Mind Pulse',
-    description:'MindPulse is an AI-powered web app that helps students track mood, sleep, stress, and study habits through quick daily check-ins, visual analytics, and burnout risk prediction, delivering personalized insights in a clean, privacy-focused interface',
-    technologies: ['React', 'TypeScript', 'Vite', 'shadcn/ui', 'Radix UI', 'Tailwind CSS', 'React Query', 'Zod', 'Recharts'],
+    description:'MindPulse is an AI-powered web app that helps students track mood, sleep, stress, and study habits through quick daily check-ins, visual analytics, and burnout risk prediction.',
+    technologies: ['React', 'TypeScript', 'Vite', 'Tailwind', 'React Query'],
     githubUrl: 'https://github.com/hassarch/habit-tracker.git',
     liveUrl: 'https://mind-pulse-ai.vercel.app/',
   },
   {
     title: 'Zone',
-    description: 'A productivity-focused Chrome extension that helps users stay focused by tracking time spent on distracting websites and automatically blocking them when daily limits are reached. It features real-time tracking, instant blocking, live countdowns, usage stats, and a clean, minimal interface.',
-    technologies:['JavaScript', 'Chrome Extension APIs', 'Node.js', 'Express', 'MongoDB', 'HTML', 'CSS'],
+    description: 'A productivity-focused Chrome extension that helps users stay focused by tracking time spent on distracting websites and automatically blocking them when daily limits are reached.',
+    technologies:['Js', 'Chrome API', 'Node.js', 'MongoDB'],
     githubUrl:'https://github.com/hassarch/zone.git',
   },
   {
     title: 'Expenso',
-    description: 'An intelligent budget tracking application designed to help users monitor expenses, analyze spending trends through interactive visuals, and forecast future costs with predictive insights, making personal finance management simpler and more effective.',
-    technologies: ['React', 'TypeScript', 'Google OAuth','Vite', 'Tailwind CSS'],
+    description: 'An intelligent budget tracking application designed to help users monitor expenses, analyze spending trends through interactive visuals, and forecast future costs.',
+    technologies: ['React', 'TypeScript', 'Google OAuth','Vite'],
     githubUrl: 'https://github.com/hassarch/budget-tracker.git',
     liveUrl: 'https://expenso-alpha.vercel.app/',
   },
-  {
-    title: 'Daily News Summarizer',
-    description: 'An automated AI-powered news summarization service that fetches the latest headlines, generates concise summaries using a self-hosted language model, and delivers a daily top-news digest automatically.',
-    technologies: ['Python', 'FastAPI', 'Ollama', 'LangChain', 'APScheduler'],
-    githubUrl: 'https://github.com/hassarch/daily-news-summary-bot.git',
-  },
-  {
-    title:'AutoDoc CLI',
-    description: 'An AI-powered command-line tool that scans your project structure and automatically generates clean, well-organized documentation. It helps developers save time by creating professional READMEs with features, setup steps, and usage instructions instantly.',
-    technologies: ['Node.js','JavaScript','OpenAI API','Commander.js','File System','Npm'],
-    githubUrl: 'https://github.com/hassarch/autodoc-cli.git',
-  }
 ];
 
 const ProjectsSection = () => {
-  const displayedProjects = projects.slice(-4).reverse();
+  const displayedProjects = [...projects].reverse();
   const githubReposUrl = 'https://github.com/hassarch?tab=repositories';
-  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
-  const { ref: gridRef, isVisible: gridVisible } = useScrollAnimation();
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { staggerChildren: 0.15 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+  };
 
   return (
-    <section id="projects" className="relative py-32 md:py-40 px-6 scroll-mt-28 sm:scroll-mt-32 border-b-4 border-foreground bg-background">
-      <div className="max-w-6xl mx-auto">
-        <div 
-          ref={headerRef}
-          className={`mb-20 transition-all duration-1000 text-center ${
-            headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-          }`}
+    <section id="projects" className="section-base">
+      <div className="section-content">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={{
+            hidden: { opacity: 0, y: 20 },
+            visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+          }}
+          className="section-header-wrapper"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
+          <h2 className="section-header">
             Projects
           </h2>
-          <p className="text-foreground text-sm md:text-base max-w-3xl mx-auto font-mono">
-            A collection of projects I've worked on, showcasing my skills and experience
+          <p className="section-subtitle">
+            [ Featured Work & Experiments ]
           </p>
-        </div>
+        </motion.div>
 
-        <div 
-          ref={gridRef}
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto"
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={containerVariants}
+          className="projects-grid"
         >
           {displayedProjects.map((project, index) => (
-            <ProjectCard key={index} project={project} index={index} isVisible={gridVisible} />
+            <ProjectCard key={index} project={project} variants={itemVariants} />
           ))}
-        </div>
+        </motion.div>
 
-        {projects.length > 4 && (
-          <div className="flex justify-center mt-16">
-            <Button
-              className="retro-button text-sm"
-              asChild
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.8 }}
+          className="flex justify-center mt-16"
+        >
+          <Button
+            className="retro-button text-sm py-6 px-8 rounded-none border-2 shadow-[4px_4px_0_0_currentColor]"
+            asChild
+          >
+            <a
+              href={githubReposUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2"
             >
-              <a
-                href={githubReposUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2"
-              >
-                See More Projects
-                <ExternalLink size={16} />
-              </a>
-            </Button>
-          </div>
-        )}
+              See More Projects
+              <ExternalLink size={16} />
+            </a>
+          </Button>
+        </motion.div>
       </div>
     </section>
   );
 };
 
-const ProjectCard = ({ project, index, isVisible }: { project: Project; index: number; isVisible: boolean }) => {
+const ProjectCard = ({ project, variants }: { project: Project; variants: any }) => {
   return (
-    <div 
-      className={`bg-card border-2 border-foreground p-6 hover:shadow-lg hover:translate-x-1 hover:translate-y-1 transition-all duration-200 flex flex-col h-full group ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-      }`}
-      style={{ transitionDelay: `${index * 100}ms` }}
+    <motion.div 
+      variants={variants}
+      className="retro-card flex flex-col h-full bg-card"
     >
-      <h3 className="text-lg font-bold mb-3 text-foreground text-left">
-        {project.title}
-      </h3>
+      <div className="project-header">
+        <h3 className="project-title">
+          {project.title}
+        </h3>
+        <div className="text-foreground">
+          <Github size={20} />
+        </div>
+      </div>
 
-      <p className="text-foreground text-xs mb-4 flex-grow leading-relaxed text-left font-mono">
+      <p className="project-description">
         {project.description}
       </p>
 
-      <div className="flex flex-wrap gap-2 mb-4">
+      <div className="project-tech-list">
         {project.technologies.map((tech, index) => (
           <span
             key={index}
-            className="px-2 py-1 text-xs border border-foreground text-foreground font-mono"
+            className="project-tech-pill"
           >
             {tech}
           </span>
         ))}
       </div>
 
-      <div className="flex gap-2 mt-auto">
+      <div className="project-actions">
         {project.githubUrl && (
           <Button
-            className="retro-button flex-1 text-xs"
+            className="retro-button flex-1 text-xs py-2 px-0 shadow-[2px_2px_0_0_currentColor]"
             asChild
           >
             <a
@@ -153,7 +165,7 @@ const ProjectCard = ({ project, index, isVisible }: { project: Project; index: n
         )}
         {project.liveUrl && (
           <Button
-            className="retro-button-filled flex-1 text-xs"
+            className="retro-button bg-foreground text-background hover:bg-background hover:text-foreground flex-1 text-xs py-2 px-0 shadow-[2px_2px_0_0_currentColor]"
             asChild
           >
             <a
@@ -168,7 +180,7 @@ const ProjectCard = ({ project, index, isVisible }: { project: Project; index: n
           </Button>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

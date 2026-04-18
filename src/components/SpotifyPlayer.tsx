@@ -165,12 +165,12 @@ const SpotifyPlayer = () => {
 
   if (loading) {
     return (
-      <div className="w-96 bg-card border-2 border-foreground overflow-hidden animate-pulse flex">
-        <div className="w-24 h-24 bg-muted"></div>
+      <div className="w-full bg-card border-2 border-foreground overflow-hidden animate-pulse flex h-24 shadow-[4px_4px_0_0_currentColor]">
+        <div className="w-24 h-full bg-foreground/20"></div>
         <div className="flex-1 p-4 flex flex-col justify-between">
           <div className="space-y-2">
-            <div className="h-4 bg-muted rounded w-3/4"></div>
-            <div className="h-3 bg-muted rounded w-1/2"></div>
+            <div className="h-4 bg-foreground/20 w-3/4"></div>
+            <div className="h-3 bg-foreground/20 w-1/2"></div>
           </div>
         </div>
       </div>
@@ -179,10 +179,10 @@ const SpotifyPlayer = () => {
 
   if (error) {
     return (
-      <div className="w-96 bg-card border-2 border-foreground p-4">
+      <div className="w-full bg-card border-2 border-foreground p-4 shadow-[4px_4px_0_0_currentColor]">
         <div className="text-xs text-foreground font-mono">
           <p className="font-bold">⚠️ Spotify Error</p>
-          <p className="text-red-600 text-xs">{error}</p>
+          <p className="text-red-600 text-[10px] mt-1">{error}</p>
         </div>
       </div>
     );
@@ -190,9 +190,9 @@ const SpotifyPlayer = () => {
 
   if (!track) {
     return (
-      <div className="w-96 bg-card border-2 border-foreground p-4 flex items-center gap-3">
-        <Music size={16} className="text-foreground" />
-        <span className="text-xs font-mono text-foreground">Not playing</span>
+      <div className="w-full bg-card border-2 border-foreground p-4 flex items-center justify-center gap-3 shadow-[4px_4px_0_0_currentColor] h-24">
+        <Music size={20} className="text-foreground opacity-50" />
+        <span className="text-xs font-mono font-bold text-foreground opacity-50 uppercase tracking-widest">[ Offline ]</span>
       </div>
     );
   }
@@ -200,9 +200,8 @@ const SpotifyPlayer = () => {
   const progressPercent = (track.progress / track.duration) * 100;
 
   return (
-    <div className="w-72 sm:w-80 md:w-96 bg-card border-2 border-foreground overflow-hidden hover:shadow-lg hover:translate-x-1 hover:translate-y-1 transition-all duration-200 flex">
-      {/* Album Art - Left */}
-      <div className="w-20 sm:w-24 h-20 sm:h-24 flex-shrink-0 border-r-2 border-foreground overflow-hidden">
+    <div className="w-full bg-card border-2 border-foreground overflow-hidden hover:-translate-y-1 hover:-translate-x-1 transition-transform duration-200 flex h-24 shadow-[6px_6px_0_0_currentColor]">
+      <div className="w-24 h-full flex-shrink-0 border-r-2 border-foreground overflow-hidden grayscale hover:grayscale-0 transition-all duration-500">
         <img 
           src={track.imageUrl} 
           alt={track.album}
@@ -210,67 +209,63 @@ const SpotifyPlayer = () => {
         />
       </div>
 
-      {/* Content - Right */}
-      <div className="flex-1 px-2 sm:px-3 py-1.5 sm:py-2 flex flex-col justify-between">
-        {/* Track Info */}
+      <div className="flex-1 px-4 py-2 flex flex-col justify-between">
         <div className="min-h-0">
-          <h3 className="text-xs sm:text-sm font-bold text-foreground truncate leading-tight">
+          <h3 className="text-sm font-bold text-foreground truncate uppercase tracking-tight">
             {track.name}
           </h3>
-          <p className="text-xs text-foreground font-mono truncate leading-tight">
+          <p className="text-[10px] text-foreground font-mono truncate uppercase font-bold opacity-75">
             {track.artist}
           </p>
         </div>
 
-        {/* Progress Bar */}
-        <div className="my-0.5 sm:my-1">
-          <div className="w-full h-0.5 border border-foreground bg-background overflow-hidden">
+        <div className="my-1">
+          <div className="w-full h-1 border border-foreground bg-background overflow-hidden">
             <div 
               className="h-full bg-foreground transition-all duration-300"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
-          <div className="flex justify-between text-xs text-foreground font-mono mt-0.5">
+          <div className="flex justify-between text-[10px] text-foreground font-mono font-bold mt-1">
             <span>{formatTime(track.progress)}</span>
             <span>{formatTime(track.duration)}</span>
           </div>
         </div>
 
-        {/* Controls */}
         <div className="flex items-center justify-between">
-          <div className="flex gap-0.5 sm:gap-1">
+          <div className="flex gap-2">
             <button
               onClick={() => handleSkip('previous')}
-              className="p-0.5 hover:bg-foreground hover:text-background transition-all duration-200 cursor-pointer"
+              className="text-foreground hover:scale-110 transition-transform"
               title="Previous"
             >
-              <SkipBack size={12} className="text-foreground" />
+              <SkipBack size={14} className="fill-foreground" />
             </button>
             <button
               onClick={handlePlayPause}
-              className="p-0.5 hover:bg-foreground hover:text-background transition-all duration-200 cursor-pointer"
+              className="text-foreground hover:scale-110 transition-transform"
               title={track.isPlaying ? 'Pause' : 'Play'}
             >
               {track.isPlaying ? (
-                <Pause size={12} className="text-foreground" />
+                <Pause size={14} className="fill-foreground" />
               ) : (
-                <Play size={12} className="text-foreground fill-foreground" />
+                <Play size={14} className="fill-foreground" />
               )}
             </button>
             <button
               onClick={() => handleSkip('next')}
-              className="p-0.5 hover:bg-foreground hover:text-background transition-all duration-200 cursor-pointer"
+              className="text-foreground hover:scale-110 transition-transform"
               title="Next"
             >
-              <SkipForward size={12} className="text-foreground" />
+              <SkipForward size={14} className="fill-foreground" />
             </button>
           </div>
           <button
             onClick={handleLike}
-            className="p-0.5 hover:bg-foreground hover:text-background transition-all duration-200 cursor-pointer"
+            className="text-foreground hover:scale-110 transition-transform"
             title="Like"
           >
-            <Heart size={12} className="text-foreground" />
+            <Heart size={14} />
           </button>
         </div>
       </div>

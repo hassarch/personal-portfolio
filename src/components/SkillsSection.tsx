@@ -1,4 +1,4 @@
-import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import { motion } from 'motion/react';
 import { Network, GitBranch, Beaker } from 'lucide-react';
 
 const skills = {
@@ -14,60 +14,67 @@ const allSkills = [
 ];
 
 const SkillsSection = () => {
-  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
-  const { ref: contentRef, isVisible: contentVisible } = useScrollAnimation();
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { staggerChildren: 0.1 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: { opacity: 1, scale: 1, transition: { type: "spring", stiffness: 300, damping: 24 } }
+  };
 
   return (
-    <section id="skills" className="relative py-32 md:py-40 px-6 scroll-mt-28 sm:scroll-mt-32 border-b-4 border-foreground bg-background">
-      <div className="max-w-6xl mx-auto">
-        <div 
-          ref={headerRef}
-          className={`mb-20 transition-all duration-1000 ease-out text-center ${
-            headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-          }`}
-          style={{ willChange: 'opacity, transform' }}
+    <section id="skills" className="section-base">
+      <div className="section-content-narrow">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={{
+            hidden: { opacity: 0, y: 20 },
+            visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+          }}
+          className="section-header-wrapper"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
+          <h2 className="section-header">
             Skills
           </h2>
-          <p className="text-foreground text-sm md:text-base max-w-3xl mx-auto font-mono">
-            Technologies and tools I use to bring ideas to life
+          <p className="section-subtitle">
+            [ Tech Stack & Tooling ]
           </p>
-        </div>
+        </motion.div>
 
-        <div 
-          ref={contentRef}
-          className={`transition-all duration-1000 ease-out delay-200 ${
-            contentVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-          }`}
-          style={{ willChange: 'opacity, transform' }}
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={containerVariants}
+          className="skills-grid"
         >
-          <div className="flex flex-wrap justify-center gap-3 max-w-5xl mx-auto">
-            {allSkills.map((skill, index) => (
-              <SkillPill key={index} label={skill} index={index} />
-            ))}
-          </div>
-        </div>
+          {allSkills.map((skill, index) => (
+            <SkillPill key={index} label={skill} variants={itemVariants} />
+          ))}
+        </motion.div>
       </div>
     </section>
   );
 };
 
-function SkillPill({ label, index }: { label: string; index: number }) {
+function SkillPill({ label, variants }: { label: string; variants: any }) {
   const icon = getIconForSkill(label);
   
   return (
-    <div 
-      className="px-3 py-2 border-2 border-foreground bg-card text-xs md:text-sm text-foreground hover:bg-foreground hover:text-background transition-all duration-200 flex items-center gap-2 cursor-default opacity-0 animate-fade-in-up font-bold"
-      style={{ 
-        animationDelay: `${index * 0.05}s`,
-        animationFillMode: 'forwards',
-        willChange: 'transform, opacity'
-      }}
+    <motion.div 
+      variants={variants}
+      className="skill-pill group"
     >
-      <span style={{ willChange: 'transform' }}>{icon}</span>
-      <span>{label}</span>
-    </div>
+      <span className="grayscale group-hover:grayscale-0 transition-all">{icon}</span>
+      <span className="uppercase tracking-widest">{label}</span>
+    </motion.div>
   );
 }
 
