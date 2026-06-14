@@ -12,10 +12,11 @@ interface Project {
 
 const projects: Project[] = [
   {
-    title: 'Patient Portal',
-    description: 'A comprehensive healthcare management system that allows patients to schedule appointments, view medical records, communicate with doctors, and manage their health information securely.',
-    technologies: ['React', 'Node.js', 'MongoDB', 'Express', 'Tailwind', 'TypeScript'],
-    githubUrl: 'https://github.com/hassarch/patient-portal.git',
+    title: 'DSA Visualizer',
+    description: 'An interactive platform that visualizes data structures and algorithms through step-by-step animations, helping users understand complex concepts intuitively.Features real-time execution, playback controls, custom inputs, and complexity analysis for enhanced learning.',
+    technologies: ['React', 'Next.js', 'Zustand', 'Tailwind', 'TypeScript'],
+    githubUrl: 'https://github.com/hassarch/dsa-visualizer.git',
+    liveUrl: 'https://dsa-visualizer-mu-smoky.vercel.app/sorting',
   },
   {
     title: 'Mind Pulse',
@@ -31,11 +32,10 @@ const projects: Project[] = [
     githubUrl:'https://github.com/hassarch/zone.git',
   },
   {
-    title: 'Expenso',
-    description: 'An intelligent budget tracking application designed to help users monitor expenses, analyze spending trends through interactive visuals, and forecast future costs.',
-    technologies: ['React', 'TypeScript', 'Google OAuth','Vite'],
-    githubUrl: 'https://github.com/hassarch/budget-tracker.git',
-    liveUrl: 'https://expenso-alpha.vercel.app/',
+    title: 'ResumeIQ',
+    description: 'AI Resume Screener helps job seekers evaluate their resumes against job descriptions by analyzing skills, experience, and keyword relevance.It identifies skill gaps and provides intelligent recommendations to improve resume-job compatibility and application success.',
+    technologies: ['React', 'FastAPI', 'PostgreSQL','Docker','Ollama','Redis'],
+    githubUrl: 'https://github.com/hassarch/resume-screening.git',
   },
 ];
 
