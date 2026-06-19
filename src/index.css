@@ -81,25 +81,24 @@
     scroll-behavior: smooth;
     scroll-padding-top: 80px;
   }
-  /* CRT Scanline Overlay */
-  body::before {
-    content: " ";
-    display: block;
+  /* CRT Scanline Overlay - Now handled by TerminalOverlay component */
+  .scanlines-overlay {
     position: fixed;
     top: 0;
     left: 0;
-    bottom: 0;
-    right: 0;
+    width: 100%;
+    height: 100%;
     background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%);
     background-size: 100% 4px;
-    z-index: 50;
-    pointer-events: none;
     opacity: 0.8;
+    z-index: 9999;
+    pointer-events: none;
     animation: scanlines 10s linear infinite;
   }
-  .dark body::before {
+  .dark .scanlines-overlay {
     background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(255, 255, 255, 0.02) 50%);
     background-size: 100% 4px;
+    opacity: 0.6;
   }
   
   ::selection {
@@ -368,6 +367,57 @@
   .font-mono {
     font-family: 'IBM Plex Mono', monospace;
   }
+
+  /* Terminal Frame */
+  .terminal-frame {
+    @apply border-2 border-foreground bg-background mb-8 w-full;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+  }
+  .dark .terminal-frame {
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.15);
+  }
+
+  .terminal-title-bar {
+    @apply flex items-center px-3 py-2 border-b-2 border-foreground;
+    background: rgba(0, 255, 0, 0.03);
+  }
+  @screen sm {
+    .terminal-title-bar { @apply px-4; }
+  }
+  .dark .terminal-title-bar {
+    background: rgba(0, 255, 0, 0.05);
+  }
+
+  .terminal-controls {
+    @apply flex gap-1.5 mr-3;
+  }
+  @screen sm {
+    .terminal-controls { @apply gap-2 mr-4; }
+  }
+
+  .terminal-btn {
+    @apply w-2.5 h-2.5 rounded-full text-[8px] text-foreground;
+  }
+  @screen sm {
+    .terminal-btn { @apply w-3 h-3; }
+  }
+
+  .terminal-title {
+    @apply font-mono text-xs text-foreground uppercase tracking-wide;
+  }
+  @screen sm {
+    .terminal-title { @apply text-sm; }
+  }
+
+  .terminal-content {
+    @apply p-4;
+  }
+  @screen sm {
+    .terminal-content { @apply p-6; }
+  }
+  @screen md {
+    .terminal-content { @apply p-8; }
+  }
 }
 
 @layer utilities {
@@ -397,3 +447,46 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .scanlines-overlay {
+    animation: none;
+    opacity: 0.3;
+  }
+  .animate-blink {
+    animation: none;
+    opacity: 1;
+  }
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Screen-reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Scrollbar styling for terminal */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: currentColor;
+  opacity: 0.3;
+}
+
