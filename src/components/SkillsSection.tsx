@@ -1,118 +1,79 @@
 import { motion } from 'motion/react';
-import { Network, GitBranch, Beaker } from 'lucide-react';
+import TerminalFrame from './TerminalFrame';
+import { TREE_BRANCH, TREE_BRANCH_LAST, TREE_VERTICAL } from '@/constants/asciiArt';
 
-const skills = {
-  frontend: ['React', 'TypeScript', 'Next.js', 'Vue.js', 'Tailwind CSS', 'HTML/CSS'],
-  backend: ['Node.js', 'Python', 'PostgreSQL', 'MongoDB', 'Supabase', 'REST APIs', 'GraphQL'],
-  tools: ['Git', 'Docker', 'Kubernetes', 'AWS', 'Figma', 'CI/CD', 'Testing'],
+const skillTree = {
+  frontend: {
+    label: 'frontend/',
+    items: ['React', 'TypeScript', 'Next.js', 'Vue.js', 'Tailwind_CSS', 'HTML/CSS'],
+  },
+  backend: {
+    label: 'backend/',
+    items: ['Node.js', 'Python', 'PostgreSQL', 'MongoDB', 'Supabase', 'REST_APIs', 'GraphQL'],
+  },
+  tools: {
+    label: 'tools/',
+    items: ['Git', 'Docker', 'Kubernetes', 'AWS', 'Figma', 'CI/CD', 'Testing'],
+  },
 };
 
-const allSkills = [
-  ...skills.frontend,
-  ...skills.backend,
-  ...skills.tools,
-];
+/**
+ * Builds the ASCII directory tree string
+ */
+function buildTree(): string {
+  const lines: string[] = ['skills/'];
+  const categories = Object.values(skillTree);
+
+  categories.forEach((category, catIndex) => {
+    const isLastCategory = catIndex === categories.length - 1;
+    const catBranch = isLastCategory ? TREE_BRANCH_LAST : TREE_BRANCH;
+    const catPrefix = isLastCategory ? '    ' : `${TREE_VERTICAL}   `;
+
+    lines.push(`${catBranch} ${category.label}`);
+
+    category.items.forEach((item, itemIndex) => {
+      const isLastItem = itemIndex === category.items.length - 1;
+      const itemBranch = isLastItem ? TREE_BRANCH_LAST : TREE_BRANCH;
+      lines.push(`${catPrefix}${itemBranch} ${item}`);
+    });
+  });
+
+  lines.push('');
+  lines.push(`${categories.reduce((sum, cat) => sum + cat.items.length, 0)} items, ${categories.length} directories`);
+
+  return lines.join('\n');
+}
 
 const SkillsSection = () => {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { 
-      opacity: 1,
-      transition: { staggerChildren: 0.1 }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, scale: 0.9 },
-    visible: { opacity: 1, scale: 1, transition: { type: "spring", stiffness: 300, damping: 24 } }
-  };
+  const treeOutput = buildTree();
 
   return (
     <section id="skills" className="section-base">
-      <div className="section-content-narrow">
-        <motion.div 
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={{
-            hidden: { opacity: 0, y: 20 },
-            visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
-          }}
-          className="section-header-wrapper"
-        >
-          <h2 className="section-header">
-            Skills
-          </h2>
-          <p className="section-subtitle">
-            [ Tech Stack & Tooling ]
-          </p>
-        </motion.div>
+      <TerminalFrame title="~/skills">
+        <div className="section-content-narrow mx-auto">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+            }}
+          >
+            {/* Terminal command header */}
+            <p className="font-mono text-xs sm:text-sm text-foreground opacity-60 mb-6">
+              $ tree skills/
+            </p>
 
-        <motion.div 
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={containerVariants}
-          className="skills-grid"
-        >
-          {allSkills.map((skill, index) => (
-            <SkillPill key={index} label={skill} variants={itemVariants} />
-          ))}
-        </motion.div>
-      </div>
+            {/* Directory tree output */}
+            <pre className="font-mono text-xs sm:text-sm text-foreground leading-relaxed whitespace-pre select-text overflow-x-auto">
+              {treeOutput}
+            </pre>
+          </motion.div>
+        </div>
+      </TerminalFrame>
     </section>
   );
 };
-
-function SkillPill({ label, variants }: { label: string; variants: any }) {
-  const icon = getIconForSkill(label);
-  
-  return (
-    <motion.div 
-      variants={variants}
-      className="skill-pill group"
-    >
-      <span className="grayscale group-hover:grayscale-0 transition-all">{icon}</span>
-      <span className="uppercase tracking-widest">{label}</span>
-    </motion.div>
-  );
-}
-
-function getIconForSkill(label: string): React.ReactNode {
-  const l = label.toLowerCase();
-  const img = (slug: string, variant: string = 'original') => (
-    <img
-      src={`https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${slug}/${slug}-${variant}.svg`}
-      alt={label}
-      className="h-5 w-5 object-contain"
-      loading="lazy"
-      referrerPolicy="no-referrer"
-    />
-  );
-
-  if (l.includes('react')) return img('react');
-  if (l.includes('type')) return img('typescript');
-  if (l.includes('next')) return img('nextjs');
-  if (l.includes('vue')) return img('vuejs');
-  if (l.includes('tailwind')) return img('tailwindcss', 'original');
-  if (l.includes('html')) return img('html5');
-  if (l.includes('node')) return img('nodejs');
-  if (l.includes('python')) return img('python');
-  if (l.includes('postgre')) return img('postgresql');
-  if (l.includes('mongo')) return img('mongodb');
-  if (l.includes('graphql')) return img('graphql', 'plain');
-  if (l === 'git') return img('git');
-  if (l.includes('docker')) return img('docker');
-  if (l.includes('kubernetes')) return img('kubernetes', 'plain');
-  if (l.includes('supabase')) return img('supabase', 'original');
-  if (l === 'aws' || l.includes('amazon')) return img('amazonwebservices', 'original-wordmark');
-  if (l.includes('figma')) return img('figma');
-
-  if (l.includes('rest')) return <Network className="h-5 w-5" />;
-  if (l.includes('ci')) return <GitBranch className="h-5 w-5" />;
-  if (l.includes('test')) return <Beaker className="h-5 w-5" />;
-
-  return <Network className="h-5 w-5" />;
-}
 
 export default SkillsSection;
