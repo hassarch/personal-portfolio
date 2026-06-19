@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun, Terminal } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Button } from './ui/button';
 import { useTheme } from '@/contexts/ThemeContext';
+import { navigateToSection } from '@/hooks/useScrollNavigation';
 
 const navLinks = [
   { name: 'About', href: '#about' },
@@ -26,15 +27,16 @@ const Navbar = () => {
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
-    const element = document.querySelector(href);
-    if (element) {
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-      const offsetPosition = elementPosition - (window.innerHeight / 2) + (element.clientHeight / 2);
-      
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
+    // Extract section ID from href (remove the # prefix)
+    const sectionId = href.substring(1);
+    navigateToSection(sectionId);
+  };
+
+  const handleTerminalClick = () => {
+    // Find and click the terminal toggle button
+    const terminalButton = document.querySelector('#command-terminal button');
+    if (terminalButton instanceof HTMLElement) {
+      terminalButton.click();
     }
   };
 
@@ -47,13 +49,23 @@ const Navbar = () => {
     >
       <div className="nav-container">
         <div className="nav-header">
-          <button
-            onClick={toggleTheme}
-            className="nav-theme-btn"
-            aria-label="Toggle theme"
-          >
-            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={toggleTheme}
+              className="nav-theme-btn"
+              aria-label="Toggle theme"
+            >
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+
+            <button
+              onClick={handleTerminalClick}
+              className="nav-theme-btn"
+              aria-label="Toggle terminal"
+            >
+              <Terminal size={18} />
+            </button>
+          </div>
 
           <div className="nav-links">
             {navLinks.map((link) => (
@@ -66,11 +78,6 @@ const Navbar = () => {
                 {link.name}
               </a>
             ))}
-            <Button variant="outline" size="sm" className="retro-button text-xs py-1" asChild>
-              <a href="https://drive.google.com/file/d/1-IKwqW_e3AOs8S9IX7M4E1I7cAagKeZP/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
-                Resume
-              </a>
-            </Button>
           </div>
         </div>
       </div>
