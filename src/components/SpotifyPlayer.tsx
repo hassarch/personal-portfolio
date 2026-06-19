@@ -165,12 +165,17 @@ const SpotifyPlayer = () => {
 
   if (loading) {
     return (
-      <div className="w-full bg-card border-2 border-foreground overflow-hidden animate-pulse flex h-24 shadow-[4px_4px_0_0_currentColor]">
-        <div className="w-24 h-full bg-foreground/20"></div>
-        <div className="flex-1 p-4 flex flex-col justify-between">
-          <div className="space-y-2">
-            <div className="h-4 bg-foreground/20 w-3/4"></div>
-            <div className="h-3 bg-foreground/20 w-1/2"></div>
+      <div className="w-full bg-card border-2 border-foreground overflow-hidden shadow-[4px_4px_0_0_currentColor]">
+        <div className="px-3 py-1 border-b border-foreground/20">
+          <span className="font-mono text-[10px] text-foreground opacity-50">$ spotify --now-playing</span>
+        </div>
+        <div className="animate-pulse flex h-24">
+          <div className="w-24 h-full bg-foreground/20"></div>
+          <div className="flex-1 p-4 flex flex-col justify-between">
+            <div className="space-y-2">
+              <div className="h-4 bg-foreground/20 w-3/4"></div>
+              <div className="h-3 bg-foreground/20 w-1/2"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -179,10 +184,13 @@ const SpotifyPlayer = () => {
 
   if (error) {
     return (
-      <div className="w-full bg-card border-2 border-foreground p-4 shadow-[4px_4px_0_0_currentColor]">
-        <div className="text-xs text-foreground font-mono">
-          <p className="font-bold">⚠️ Spotify Error</p>
-          <p className="text-red-600 text-[10px] mt-1">{error}</p>
+      <div className="w-full bg-card border-2 border-foreground shadow-[4px_4px_0_0_currentColor]">
+        <div className="px-3 py-1 border-b border-foreground/20">
+          <span className="font-mono text-[10px] text-foreground opacity-50">$ spotify --now-playing</span>
+        </div>
+        <div className="p-4 text-xs text-foreground font-mono">
+          <p className="font-bold">[✗] Spotify Error</p>
+          <p className="text-destructive text-[10px] mt-1">{error}</p>
         </div>
       </div>
     );
@@ -190,9 +198,14 @@ const SpotifyPlayer = () => {
 
   if (!track) {
     return (
-      <div className="w-full bg-card border-2 border-foreground p-4 flex items-center justify-center gap-3 shadow-[4px_4px_0_0_currentColor] h-24">
-        <Music size={20} className="text-foreground opacity-50" />
-        <span className="text-xs font-mono font-bold text-foreground opacity-50 uppercase tracking-widest">[ Offline ]</span>
+      <div className="w-full bg-card border-2 border-foreground shadow-[4px_4px_0_0_currentColor]">
+        <div className="px-3 py-1 border-b border-foreground/20">
+          <span className="font-mono text-[10px] text-foreground opacity-50">$ spotify --now-playing</span>
+        </div>
+        <div className="p-4 flex items-center justify-center gap-3 h-24">
+          <Music size={20} className="text-foreground opacity-50" />
+          <span className="text-xs font-mono font-bold text-foreground opacity-50 uppercase tracking-widest">[ Offline ]</span>
+        </div>
       </div>
     );
   }
@@ -200,7 +213,11 @@ const SpotifyPlayer = () => {
   const progressPercent = (track.progress / track.duration) * 100;
 
   return (
-    <div className="w-full bg-card border-2 border-foreground overflow-hidden hover:-translate-y-1 hover:-translate-x-1 transition-transform duration-200 flex h-24 shadow-[6px_6px_0_0_currentColor]">
+    <div className="w-full bg-card border-2 border-foreground overflow-hidden hover:-translate-y-1 hover:-translate-x-1 transition-transform duration-200 shadow-[6px_6px_0_0_currentColor]">
+      <div className="px-3 py-1 border-b border-foreground/20">
+        <span className="font-mono text-[10px] text-foreground opacity-50">$ spotify --now-playing</span>
+      </div>
+      <div className="flex h-24">
       <div className="w-24 h-full flex-shrink-0 border-r-2 border-foreground overflow-hidden grayscale hover:grayscale-0 transition-all duration-500">
         <img 
           src={track.imageUrl} 
@@ -268,6 +285,7 @@ const SpotifyPlayer = () => {
             <Heart size={14} />
           </button>
         </div>
+      </div>
       </div>
     </div>
   );
