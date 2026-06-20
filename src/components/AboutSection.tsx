@@ -1,4 +1,3 @@
-import { Code2, Lightbulb, Rocket } from 'lucide-react';
 import { motion } from 'motion/react';
 import TerminalFrame from './TerminalFrame';
 
@@ -13,7 +12,7 @@ const AboutSection = () => {
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+    visible: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 300, damping: 24 } }
   };
 
   return (
@@ -37,53 +36,17 @@ const AboutSection = () => {
               <div className="h-1 w-24 bg-foreground mt-4"></div>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              <motion.div variants={containerVariants} className="about-text">
-                <motion.p variants={itemVariants}>
-                  I'm a Computer Science and Data Science student who enjoys building projects and learning by doing.
-                </motion.p>
-                <motion.p variants={itemVariants}>
-                  I like exploring new technologies and experimenting with ideas. I'm interested in software development, machine learning, and problem solving.
-                </motion.p>
-                <motion.p variants={itemVariants}>
-                  I enjoy turning concepts into real and working applications.
-                </motion.p>
-              </motion.div>
-
-              <motion.div variants={containerVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <StatCard icon={<Code2 size={24} />} value="10+" label="Projects" variants={itemVariants} />
-                <StatCard icon={<Lightbulb size={24} />} value="1-2" label="Years Exp" variants={itemVariants} />
-                <StatCard icon={<Rocket size={24} />} value="7+" label="Hackathons" variants={itemVariants} className="sm:col-span-2" />
-              </motion.div>
-            </div>
+            <motion.div variants={containerVariants} className="about-text space-y-0">
+              <motion.p variants={itemVariants}>
+                I love computers, technology, and building things that people actually enjoy using. I'm always experimenting, learning, and turning random ideas into projects.
+                Most of the time, you'll find me coding, fixing things I accidentally broke, or obsessing over a new technology that caught my attention the night before.
+              </motion.p>
+            </motion.div>
           </motion.div>
         </div>
       </TerminalFrame>
     </section>
   );
 };
-
-const StatCard = ({
-  icon,
-  value,
-  label,
-  variants,
-  className = ""
-}: {
-  icon: React.ReactNode;
-  value: string;
-  label: string;
-  variants: any;
-  className?: string;
-}) => (
-  <motion.div
-    variants={variants}
-    className={`retro-card flex flex-col items-center justify-center p-6 text-center ${className}`}
-  >
-    <div className="flex justify-center mb-4 text-foreground">{icon}</div>
-    <div className="stat-card-value">{value}</div>
-    <div className="stat-card-label">{label}</div>
-  </motion.div>
-);
 
 export default AboutSection;
