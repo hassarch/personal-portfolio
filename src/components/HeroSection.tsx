@@ -3,21 +3,8 @@ import { motion } from 'motion/react';
 import { Button } from './ui/button';
 import SpotifyPlayer from './SpotifyPlayer';
 import TerminalFrame from './TerminalFrame';
-import { getResponsiveLogo } from '@/constants/asciiArt';
-import { useEffect, useState } from 'react';
 
 const HeroSection = () => {
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
-
-  useEffect(() => {
-    const checkScreen = () => setIsSmallScreen(window.innerWidth < 768);
-    checkScreen();
-    window.addEventListener('resize', checkScreen);
-    return () => window.removeEventListener('resize', checkScreen);
-  }, []);
-
-  const logo = getResponsiveLogo(isSmallScreen);
-
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -42,14 +29,6 @@ const HeroSection = () => {
           animate="show"
           className="flex flex-col items-center text-center"
         >
-          {/* ASCII Art Logo */}
-          <motion.pre
-            variants={item}
-            className="text-foreground font-mono text-[7px] sm:text-[9px] md:text-xs leading-tight mb-6 select-none whitespace-pre"
-          >
-            {logo}
-          </motion.pre>
-
           {/* Terminal-style whoami */}
           <motion.div variants={item} className="w-full text-left mb-4">
             <p className="font-mono text-xs sm:text-sm text-foreground opacity-60 mb-1">
@@ -63,17 +42,17 @@ const HeroSection = () => {
           {/* Terminal-style bio */}
           <motion.div variants={item} className="w-full text-left mb-8">
             <p className="font-mono text-xs sm:text-sm text-foreground opacity-60 mb-1">
-              $ cat bio.txt
+              $ cat info.txt
             </p>
             <p className="font-mono text-sm text-foreground leading-relaxed">
-              &gt; Computer Science student &amp; developer. I build clean, user-centric web apps using modern frontend tech.
+              &gt; Computer Science undergrad and  developer, I build cool and useful stuff.
             </p>
           </motion.div>
 
           {/* Action buttons */}
           <motion.div variants={item} className="flex justify-center mb-10 w-full">
             <Button className="retro-button bg-foreground text-background hover:bg-background hover:text-foreground text-sm py-6 px-8 w-full sm:w-auto" asChild>
-              <a href="#contact">$ send_message</a>
+              <a href="#contact">$ hit_me_up</a>
             </Button>
           </motion.div>
 
