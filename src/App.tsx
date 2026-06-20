@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -19,6 +19,13 @@ const queryClient = new QueryClient();
 const AppContent = () => {
   const { state, dispatch } = useTerminal();
   const [showContent, setShowContent] = useState(state.bootCompleted);
+
+  // Sync showContent with bootCompleted state
+  useEffect(() => {
+    if (state.bootCompleted) {
+      setShowContent(true);
+    }
+  }, [state.bootCompleted]);
 
   const handleBootComplete = () => {
     dispatch({ type: 'BOOT_COMPLETE' });
