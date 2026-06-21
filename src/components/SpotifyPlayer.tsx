@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Music, Play, Pause, SkipBack, SkipForward, Heart } from 'lucide-react';
 
 interface Track {
@@ -49,7 +49,7 @@ const SpotifyPlayer = () => {
     }
   };
 
-  const fetchCurrentTrack = async (token?: string) => {
+  const fetchCurrentTrack = useCallback(async (token?: string) => {
     try {
       const currentToken = token || accessToken || await getAccessToken();
       if (!currentToken) {
@@ -97,13 +97,13 @@ const SpotifyPlayer = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [accessToken]);
 
   useEffect(() => {
     fetchCurrentTrack();
     const interval = setInterval(() => fetchCurrentTrack(), 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [fetchCurrentTrack]);
 
   const handlePlayPause = async () => {
     if (!accessToken || !track) return;

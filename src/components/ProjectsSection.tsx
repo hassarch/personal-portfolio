@@ -125,7 +125,7 @@ const ProjectsSection = () => {
   );
 };
 
-const ProjectEntry = ({ project, variants }: { project: Project; variants: any }) => {
+const ProjectEntry = ({ project, variants }: { project: Project; variants: Record<string, unknown> }) => {
   return (
     <motion.div 
       variants={variants}

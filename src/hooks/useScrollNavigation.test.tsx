@@ -132,7 +132,7 @@ describe('navigateToSection', () => {
 });
 
 describe('useCurrentSection', () => {
-  let mockIntersectionObserver: any;
+  let mockIntersectionObserver: typeof IntersectionObserver;
   let observerCallback: IntersectionObserverCallback;
 
   beforeEach(() => {
@@ -150,7 +150,7 @@ describe('useCurrentSection', () => {
       };
     });
 
-    global.IntersectionObserver = mockIntersectionObserver as any;
+    global.IntersectionObserver = mockIntersectionObserver as unknown as typeof IntersectionObserver;
   });
 
   afterEach(() => {
@@ -337,7 +337,7 @@ describe('useCurrentSection', () => {
 });
 
 describe('useScrollNavigation', () => {
-  let mockIntersectionObserver: any;
+  let mockIntersectionObserver: typeof IntersectionObserver;
   let observerCallback: IntersectionObserverCallback;
 
   beforeEach(() => {
@@ -371,7 +371,7 @@ describe('useScrollNavigation', () => {
       };
     });
 
-    global.IntersectionObserver = mockIntersectionObserver as any;
+    global.IntersectionObserver = mockIntersectionObserver as unknown as typeof IntersectionObserver;
   });
 
   afterEach(() => {
