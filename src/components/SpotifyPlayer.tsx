@@ -49,6 +49,41 @@ const SpotifyPlayer = () => {
     }
   };
 
+  const fetchRecentlyPlayed = async (token: string) => {
+    try {
+      const recentResponse = await fetch('https://api.spotify.com/v1/me/player/recently-played?limit=1', {
+        headers: {
+          'Authorization': 'Bearer ' + token,
+        },
+      });
+
+      if (!recentResponse.ok) {
+        return null;
+      }
+
+      const recentData = await recentResponse.json();
+
+      if (!recentData.items || recentData.items.length === 0) {
+        return null;
+      }
+
+      const lastTrack = recentData.items[0].track;
+      return {
+        name: lastTrack.name,
+        artist: lastTrack.artists[0].name,
+        album: lastTrack.album.name,
+        imageUrl: lastTrack.album.images[0]?.url || '',
+        isPlaying: false,
+        progress: 0,
+        duration: lastTrack.duration_ms,
+        spotifyUrl: lastTrack.external_urls.spotify,
+      };
+    } catch (err) {
+      console.error('Error fetching recently played:', err);
+      return null;
+    }
+  };
+
   const fetchCurrentTrack = useCallback(async (token?: string) => {
     try {
       const currentToken = token || accessToken || await getAccessToken();
@@ -66,7 +101,9 @@ const SpotifyPlayer = () => {
       });
 
       if (trackResponse.status === 204 || !trackResponse.ok) {
-        setTrack(null);
+        // No current track, fetch recently played
+        const recentTrack = await fetchRecentlyPlayed(currentToken);
+        setTrack(recentTrack);
         setError(null);
         return;
       }
@@ -74,7 +111,9 @@ const SpotifyPlayer = () => {
       const data = await trackResponse.json();
 
       if (!data.item) {
-        setTrack(null);
+        // No current track, fetch recently played
+        const recentTrack = await fetchRecentlyPlayed(currentToken);
+        setTrack(recentTrack);
         setError(null);
         return;
       }
@@ -215,7 +254,9 @@ const SpotifyPlayer = () => {
   return (
     <div className="w-full bg-card border-2 border-foreground overflow-hidden hover:-translate-y-1 hover:-translate-x-1 transition-transform duration-200 shadow-[6px_6px_0_0_currentColor]">
       <div className="px-3 py-1 border-b border-foreground/20">
-        <span className="font-mono text-[10px] text-foreground opacity-50">$ spotify --now-playing</span>
+        <span className="font-mono text-[10px] text-foreground opacity-50">
+          $ spotify {track.isPlaying ? '--now-playing' : '--last-played'}
+        </span>
       </div>
       <div className="flex h-24">
       <div className="w-24 h-full flex-shrink-0 border-r-2 border-foreground overflow-hidden grayscale hover:grayscale-0 transition-all duration-500">
@@ -244,7 +285,7 @@ const SpotifyPlayer = () => {
             />
           </div>
           <div className="flex justify-between text-[10px] text-foreground font-mono font-bold mt-1">
-            <span>{formatTime(track.progress)}</span>
+            <span>{track.isPlaying ? formatTime(track.progress) : '0:00'}</span>
             <span>{formatTime(track.duration)}</span>
           </div>
         </div>
