@@ -7,7 +7,7 @@ import ProjectsSection from '@/components/ProjectsSection';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 import BackToTop from '@/components/BackToTop';
-import CommandTerminal from '@/components/CommandTerminal';
+import TerminalWindow from '@/components/TerminalWindow';
 
 const Index = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -41,7 +41,7 @@ const Index = () => {
       </div>
       
       <BackToTop />
-      <CommandTerminal />
+      <TerminalWindow />
     </div>
   );
 };

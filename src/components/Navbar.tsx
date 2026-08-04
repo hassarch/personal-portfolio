@@ -3,6 +3,7 @@ import { Moon, Sun, Terminal } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Button } from './ui/button';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useTerminal } from '@/contexts/TerminalContext';
 import { navigateToSection } from '@/hooks/useScrollNavigation';
 
 const navLinks = [
@@ -15,6 +16,7 @@ const navLinks = [
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const { dispatch } = useTerminal();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,11 +35,7 @@ const Navbar = () => {
   };
 
   const handleTerminalClick = () => {
-    // Find and click the terminal toggle button
-    const terminalButton = document.querySelector('#command-terminal button');
-    if (terminalButton instanceof HTMLElement) {
-      terminalButton.click();
-    }
+    dispatch({ type: 'TOGGLE_WINDOW' });
   };
 
   return (
