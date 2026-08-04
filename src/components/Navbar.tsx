@@ -42,43 +42,64 @@ const Navbar = () => {
 
   return (
     <motion.nav 
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className={`nav-bar ${isScrolled ? 'bg-background/90 backdrop-blur-md shadow-sm' : 'bg-transparent'}`}
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ type: "spring", stiffness: 300, damping: 30, duration: 0.5 }}
+      className={`nav-bar ${isScrolled ? 'bg-background/95 backdrop-blur-md shadow-brutal-sm' : 'bg-transparent'}`}
     >
       <div className="nav-container">
         <div className="nav-header">
-          <div className="flex items-center gap-2">
-            <button
+          <motion.div 
+            className="flex items-center gap-2"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <motion.button
               onClick={toggleTheme}
               className="nav-theme-btn"
               aria-label="Toggle theme"
+              whileHover={{ scale: 1.1, rotate: 180 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
             >
               {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
+            </motion.button>
 
-            <button
+            <motion.button
               onClick={handleTerminalClick}
               className="nav-theme-btn"
               aria-label="Toggle terminal"
+              whileHover={{ scale: 1.1, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
             >
               <Terminal size={18} />
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
 
-          <div className="nav-links">
-            {navLinks.map((link) => (
-              <a
+          <motion.div 
+            className="nav-links"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            {navLinks.map((link, index) => (
+              <motion.a
                 key={link.name}
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
                 className="nav-link"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * index + 0.4 }}
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
               >
                 {link.name}
-              </a>
+              </motion.a>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </motion.nav>

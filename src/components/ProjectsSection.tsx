@@ -129,14 +129,21 @@ const ProjectEntry = ({ project, variants }: { project: Project; variants: Recor
   return (
     <motion.div 
       variants={variants}
-      className="retro-card bg-card p-8 flex flex-col h-full"
+      className="project-card"
+      whileHover={{ scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
     >
       {/* Project Title with Icon */}
       <div className="flex items-start justify-between mb-6">
         <h3 className="text-2xl font-bold text-foreground uppercase tracking-tight">
           {project.title}
         </h3>
-        <Github size={20} className="text-foreground flex-shrink-0 ml-4" />
+        <motion.div
+          whileHover={{ rotate: 360, scale: 1.2 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Github size={20} className="text-foreground flex-shrink-0 ml-4" />
+        </motion.div>
       </div>
 
       {/* Description */}
@@ -147,12 +154,16 @@ const ProjectEntry = ({ project, variants }: { project: Project; variants: Recor
       {/* Tech tags */}
       <div className="flex flex-wrap gap-2 mb-6">
         {project.technologies.map((tech, index) => (
-          <span
+          <motion.span
             key={index}
-            className="px-3 py-1.5 text-[10px] border border-foreground text-foreground font-mono uppercase tracking-wider font-bold bg-background"
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            whileHover={{ scale: 1.1, y: -2 }}
+            transition={{ delay: index * 0.05 }}
+            className="project-tech-pill"
           >
             {tech}
-          </span>
+          </motion.span>
         ))}
       </div>
 
@@ -160,7 +171,7 @@ const ProjectEntry = ({ project, variants }: { project: Project; variants: Recor
       <div className="flex gap-3 mt-auto">
         {project.githubUrl && (
           <Button
-            className="retro-button flex-1 text-sm py-4 px-4 shadow-[2px_2px_0_0_currentColor] bg-foreground text-background hover:bg-background hover:text-foreground"
+            className="retro-button flex-1 text-sm py-4 px-4 shadow-[2px_2px_0_0_currentColor] bg-foreground text-background hover:bg-background hover:text-foreground transition-all duration-200 hover:shadow-[4px_4px_0_0_currentColor] hover:-translate-y-0.5"
             asChild
           >
             <a
@@ -176,7 +187,7 @@ const ProjectEntry = ({ project, variants }: { project: Project; variants: Recor
         )}
         {project.liveUrl && (
           <Button
-            className="retro-button flex-1 text-sm py-4 px-4 shadow-[2px_2px_0_0_currentColor] bg-foreground text-background hover:bg-background hover:text-foreground"
+            className="retro-button flex-1 text-sm py-4 px-4 shadow-[2px_2px_0_0_currentColor] bg-foreground text-background hover:bg-background hover:text-foreground transition-all duration-200 hover:shadow-[4px_4px_0_0_currentColor] hover:-translate-y-0.5"
             asChild
           >
             <a

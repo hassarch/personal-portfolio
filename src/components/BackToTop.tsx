@@ -29,11 +29,21 @@ const BackToTop = () => {
     <AnimatePresence>
       {isVisible && (
         <motion.button
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, scale: 0.5, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.5, y: 20 }}
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-50 p-3 bg-background border-2 border-foreground hover:-translate-y-1 hover:bg-foreground hover:text-background text-foreground transition-all duration-200 shadow-[4px_4px_0_0_currentColor]"
+          className="fixed bottom-8 right-8 z-50 p-3 bg-background border-2 border-foreground text-foreground transition-all duration-200 shadow-brutal-md"
+          style={{ borderRadius: '8px' }}
+          whileHover={{ 
+            y: -4, 
+            scale: 1.05,
+            boxShadow: '6px 6px 0 0 currentColor',
+            backgroundColor: 'hsl(var(--foreground))',
+            color: 'hsl(var(--background))'
+          }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ type: "spring", stiffness: 400, damping: 17 }}
           aria-label="Back to top"
         >
           <ArrowUp size={20} />

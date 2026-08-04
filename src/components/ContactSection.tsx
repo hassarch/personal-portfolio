@@ -107,7 +107,12 @@ const ContactSection = () => {
             <h2 className="text-3xl md:text-5xl font-bold text-foreground uppercase tracking-tight">
               Contact
             </h2>
-            <div className="h-1 w-24 bg-foreground mt-4"></div>
+            <motion.div 
+              initial={{ width: 0 }}
+              whileInView={{ width: '6rem' }}
+              transition={{ delay: 0.5, duration: 0.5 }}
+              className="h-1 bg-foreground mt-4"
+            />
           </motion.div>
 
           <motion.div 
@@ -208,10 +213,17 @@ const ContactSection = () => {
 };
 
 const ContactItem = ({ icon, label, value, href }: { icon: React.ReactNode; label: string; value: string; href?: string; }) => (
-  <div className="contact-item group">
-    <div className="contact-item-box group-hover:-translate-y-1">
+  <motion.div 
+    className="contact-item group"
+    whileHover={{ x: 5 }}
+    transition={{ type: "spring", stiffness: 400, damping: 17 }}
+  >
+    <motion.div 
+      className="contact-item-box"
+      whileHover={{ y: -2, boxShadow: '3px 3px 0 0 currentColor' }}
+    >
       {icon}
-    </div>
+    </motion.div>
     <div>
       <p className="text-xs text-foreground font-bold uppercase tracking-widest opacity-60 mb-1 font-mono">{label}:</p>
       {href ? (
@@ -222,19 +234,26 @@ const ContactItem = ({ icon, label, value, href }: { icon: React.ReactNode; labe
         <p className="text-foreground text-sm font-mono font-bold">{value}</p>
       )}
     </div>
-  </div>
+  </motion.div>
 );
 
 const SocialLink = ({ href, icon, label }: { href: string; icon: React.ReactNode; label: string; }) => (
-  <a
+  <motion.a
     href={href}
     target="_blank"
     rel="noopener noreferrer"
     aria-label={label}
-    className="contact-item-box hover:-translate-y-1 inline-flex items-center justify-center"
+    className="contact-item-box inline-flex items-center justify-center"
+    whileHover={{ 
+      y: -4, 
+      scale: 1.1,
+      boxShadow: '3px 3px 0 0 currentColor' 
+    }}
+    whileTap={{ scale: 0.95 }}
+    transition={{ type: "spring", stiffness: 400, damping: 17 }}
   >
     {icon}
-  </a>
+  </motion.a>
 );
 
 export default ContactSection;

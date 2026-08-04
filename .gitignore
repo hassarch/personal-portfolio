@@ -19,3 +19,5 @@ bun.lockb
 # Logs
 *.log
 *.kiro/
+
+*.vscode/

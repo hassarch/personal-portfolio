@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Terminal, ChevronUp, ChevronDown } from 'lucide-react';
 import CommandInput from './CommandInput';
@@ -22,6 +22,23 @@ const CommandTerminal: React.FC = () => {
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [inputHistory, setInputHistory] = useState<string[]>([]);
 
+  // Add welcome message on mount
+  useEffect(() => {
+    const welcomeEntry: CommandHistoryEntry = {
+      input: '',
+      output: `Welcome to the interactive terminal! 🚀
+
+Type 'help' to see available commands.
+Try: cd projects, ls, whoami, or theme dark
+
+Keyboard shortcuts:
+  ↑/↓  - Navigate command history
+  Tab  - Auto-complete (coming soon)`,
+      timestamp: new Date(),
+    };
+    setEntries([welcomeEntry]);
+  }, []);
+
   const handleSubmit = useCallback((command: string) => {
     // Execute command
     const result = interpretCommand(command, state.currentSection);
@@ -30,6 +47,67 @@ const CommandTerminal: React.FC = () => {
     if (result.output === '__CLEAR__') {
       setEntries([]);
       setInput('');
+      return;
+    }
+
+    // Handle theme toggle
+    if (result.output === '__TOGGLE_THEME__') {
+      // Dispatch to theme context
+      const themeBtn = document.querySelector('[aria-label="Toggle theme"]') as HTMLButtonElement;
+      if (themeBtn) themeBtn.click();
+      
+      const newEntry: CommandHistoryEntry = {
+        input: command,
+        output: 'Theme toggled',
+        timestamp: new Date(),
+      };
+      setEntries(prev => [...prev, newEntry]);
+      setInputHistory(prev => [...prev, command]);
+      setHistoryIndex(-1);
+      setInput('');
+      dispatch({ type: 'ADD_COMMAND', payload: command });
+      return;
+    }
+
+    // Handle set theme
+    if (result.output === '__SET_THEME_DARK__' || result.output === '__SET_THEME_LIGHT__') {
+      const isDark = result.output === '__SET_THEME_DARK__';
+      const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+      
+      if ((isDark && currentTheme !== 'dark') || (!isDark && currentTheme !== 'light')) {
+        const themeBtn = document.querySelector('[aria-label="Toggle theme"]') as HTMLButtonElement;
+        if (themeBtn) themeBtn.click();
+      }
+      
+      const newEntry: CommandHistoryEntry = {
+        input: command,
+        output: `Theme set to ${isDark ? 'dark' : 'light'} mode`,
+        timestamp: new Date(),
+      };
+      setEntries(prev => [...prev, newEntry]);
+      setInputHistory(prev => [...prev, command]);
+      setHistoryIndex(-1);
+      setInput('');
+      dispatch({ type: 'ADD_COMMAND', payload: command });
+      return;
+    }
+
+    // Handle show history
+    if (result.output === '__SHOW_HISTORY__') {
+      const historyOutput = inputHistory.length === 0 
+        ? 'No command history yet.' 
+        : inputHistory.map((cmd, idx) => `  ${idx + 1}  ${cmd}`).join('\n');
+      
+      const newEntry: CommandHistoryEntry = {
+        input: command,
+        output: historyOutput,
+        timestamp: new Date(),
+      };
+      setEntries(prev => [...prev, newEntry]);
+      setInputHistory(prev => [...prev, command]);
+      setHistoryIndex(-1);
+      setInput('');
+      dispatch({ type: 'ADD_COMMAND', payload: command });
       return;
     }
 
@@ -57,7 +135,7 @@ const CommandTerminal: React.FC = () => {
         dispatch({ type: 'SET_SECTION', payload: result.navigate! });
       }, 300);
     }
-  }, [state.currentSection, dispatch]);
+  }, [state.currentSection, dispatch, inputHistory]);
 
   const handleHistoryUp = useCallback(() => {
     if (inputHistory.length === 0) return;
@@ -85,16 +163,23 @@ const CommandTerminal: React.FC = () => {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-[9998]" id="command-terminal">
       {/* Toggle bar */}
-      <button
+      <motion.button
         onClick={toggleTerminal}
         className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-background border-t-2 border-foreground text-foreground font-mono text-xs uppercase tracking-widest hover:bg-foreground/5 transition-colors"
         aria-label={isOpen ? 'Close terminal' : 'Open terminal'}
         aria-expanded={isOpen}
+        whileHover={{ y: -2 }}
+        whileTap={{ scale: 0.98 }}
       >
         <Terminal size={14} />
         <span>Terminal</span>
-        {isOpen ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
-      </button>
+        <motion.div
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <ChevronUp size={14} />
+        </motion.div>
+      </motion.button>
 
       {/* Terminal panel */}
       <AnimatePresence>
@@ -103,10 +188,15 @@ const CommandTerminal: React.FC = () => {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="bg-background border-t border-foreground/20 overflow-hidden"
+            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+            className="bg-background border-t border-foreground/20 overflow-hidden shadow-brutal-md"
           >
-            <div className="p-4 max-w-6xl mx-auto">
+            <motion.div 
+              className="p-4 max-w-6xl mx-auto"
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.1 }}
+            >
               <CommandHistory
                 entries={entries}
                 currentSection={state.currentSection}
@@ -119,7 +209,7 @@ const CommandTerminal: React.FC = () => {
                 onHistoryDown={handleHistoryDown}
                 currentSection={state.currentSection}
               />
-            </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

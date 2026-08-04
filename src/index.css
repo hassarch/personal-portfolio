@@ -113,7 +113,7 @@
   }
   .main-container {
     @apply relative z-10 max-w-6xl mx-auto px-4 min-h-screen bg-background;
-    box-shadow: 0 0 40px rgba(0,0,0,0.1);
+    box-shadow: 0 0 60px rgba(0,0,0,0.08);
   }
   @screen sm {
     .main-container { @apply px-6; }
@@ -122,7 +122,7 @@
     .main-container { @apply px-8; }
   }
   .dark .main-container {
-    box-shadow: 0 0 40px rgba(255,255,255,0.05);
+    box-shadow: 0 0 60px rgba(0,0,0,0.3);
   }
   
   /* Sections */
@@ -209,6 +209,7 @@
   .hero-social-link {
     @apply flex items-center justify-center w-12 h-12 border-2 border-foreground bg-background text-foreground transition-colors p-0 hover:bg-foreground hover:text-background;
     box-shadow: 4px 4px 0px 0px currentColor;
+    border-radius: 6px;
   }
 
   /* About */
@@ -244,6 +245,7 @@
   .skill-pill {
     @apply px-4 py-3 border-2 border-foreground bg-card text-xs text-foreground transition-all duration-200 flex items-center gap-3 cursor-default font-bold hover:bg-foreground hover:text-background;
     box-shadow: 4px 4px 0px 0px currentColor;
+    border-radius: 6px;
   }
   @screen md {
     .skill-pill { @apply text-sm; }
@@ -256,23 +258,66 @@
   @screen md {
     .projects-grid { @apply grid-cols-2; }
   }
+  .project-card {
+    @apply retro-card bg-card p-8 flex flex-col h-full relative overflow-hidden transition-all duration-300;
+    border-radius: 10px;
+  }
+  .project-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%);
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .project-card::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, transparent, hsl(var(--foreground) / 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: -1;
+    border-radius: 10px;
+  }
+  .project-card:hover::after {
+    opacity: 1;
+  }
+  .project-card:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 10px 10px 0px 0px currentColor, 0 10px 40px rgba(0,0,0,0.15);
+  }
+  .dark .project-card:hover {
+    box-shadow: 10px 10px 0px 0px currentColor, 0 10px 40px rgba(0,0,0,0.4);
+  }
   .project-header {
     @apply flex justify-between items-start mb-4;
   }
   .project-title {
-    @apply text-xl font-bold text-foreground text-left uppercase tracking-tight;
+    @apply text-xl font-bold text-foreground text-left uppercase tracking-tight relative z-10;
   }
   .project-description {
-    @apply text-foreground text-sm mb-6 flex-grow leading-relaxed text-left font-mono;
+    @apply text-foreground text-sm mb-6 flex-grow leading-relaxed text-left font-mono relative z-10;
   }
   .project-tech-list {
-    @apply flex flex-wrap gap-2 mb-6;
+    @apply flex flex-wrap gap-2 mb-6 relative z-10;
   }
   .project-tech-pill {
-    @apply px-2 py-1 text-[10px] border border-foreground text-foreground font-mono uppercase tracking-widest font-bold bg-background;
+    @apply px-2 py-1 text-[10px] border border-foreground text-foreground font-mono uppercase tracking-widest font-bold bg-background transition-all duration-200;
+    border-radius: 4px;
+  }
+  .project-tech-pill:hover {
+    @apply bg-foreground text-background;
+    transform: translateY(-2px);
   }
   .project-actions {
-    @apply flex gap-4 mt-auto;
+    @apply flex gap-4 mt-auto relative z-10;
   }
 
   /* Contact */
@@ -291,18 +336,21 @@
   .contact-item-box {
     @apply p-3 border-2 border-foreground bg-background text-foreground transition-transform;
     box-shadow: 2px 2px 0 0 currentColor;
+    border-radius: 6px;
   }
   .contact-label {
     @apply mb-2 text-xs font-bold uppercase tracking-widest block;
   }
   .contact-input {
-    @apply bg-background border-2 border-foreground text-sm py-6 rounded-none focus-visible:ring-0 focus-visible:border-foreground;
+    @apply bg-background border-2 border-foreground text-sm py-6 focus-visible:ring-0 focus-visible:border-foreground;
+    border-radius: 6px;
   }
   .contact-input:focus-visible {
     box-shadow: 4px 4px 0 0 currentColor;
   }
   .contact-textarea {
-    @apply bg-background border-2 border-foreground resize-none text-sm p-4 rounded-none focus-visible:ring-0 focus-visible:border-foreground;
+    @apply bg-background border-2 border-foreground resize-none text-sm p-4 focus-visible:ring-0 focus-visible:border-foreground;
+    border-radius: 6px;
   }
   .contact-textarea:focus-visible {
     box-shadow: 4px 4px 0 0 currentColor;
@@ -321,6 +369,7 @@
   .nav-theme-btn {
     @apply flex items-center justify-center w-10 h-10 border-2 border-foreground bg-background text-foreground transition-all hover:-translate-y-0.5;
     box-shadow: 2px 2px 0 0 currentColor;
+    border-radius: 6px;
   }
   .nav-theme-btn:hover {
     box-shadow: 4px 4px 0 0 currentColor;
@@ -330,6 +379,7 @@
   }
   .nav-link {
     @apply text-foreground px-2 sm:px-3 py-1 transition-colors text-[10px] sm:text-xs uppercase tracking-widest font-bold border-2 border-transparent hover:bg-foreground hover:text-background hover:border-foreground;
+    border-radius: 4px;
   }
   .footer-wrapper {
     @apply relative py-8 px-6 bg-background;
@@ -344,10 +394,21 @@
   /* Legacy Shared Tools */
   .retro-container {
     @apply border-2 border-foreground bg-background p-6;
+    border-radius: 8px;
   }
   .retro-card {
     @apply border-2 border-foreground bg-card p-6 shadow-foreground transition-transform duration-200;
-    box-shadow: 6px 6px 0px 0px currentColor; /* Was var(--tw-shadow-color) but we standardize on currentColor in semantic class */
+    box-shadow: 6px 6px 0px 0px currentColor;
+    border-radius: 8px;
+    position: relative;
+  }
+  .retro-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 50%);
+    pointer-events: none;
   }
   .retro-card:hover {
     transform: translate(-2px, -2px);
@@ -357,6 +418,7 @@
   .retro-button {
     @apply px-4 py-2 border-2 border-foreground bg-background text-foreground font-bold hover:bg-foreground hover:text-background transition-colors shadow-foreground;
     box-shadow: 4px 4px 0px 0px currentColor;
+    border-radius: 6px;
   }
   
   .retro-button:active {
@@ -368,49 +430,98 @@
     font-family: 'IBM Plex Mono', monospace;
   }
 
-  /* Terminal Frame */
+  /* Terminal Frame - macOS Style */
   .terminal-frame {
-    @apply border-2 border-foreground bg-background mb-8 w-full;
-    box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+    @apply border-2 border-foreground bg-background mb-8 w-full overflow-hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
   }
   .dark .terminal-frame {
-    box-shadow: 0 0 20px rgba(0, 255, 0, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
   }
 
   .terminal-title-bar {
-    @apply flex items-center px-3 py-2 border-b-2 border-foreground;
-    background: rgba(0, 255, 0, 0.03);
-  }
-  @screen sm {
-    .terminal-title-bar { @apply px-4; }
+    @apply flex items-center justify-between px-4 py-3 border-b-2 border-foreground relative;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.04) 100%);
   }
   .dark .terminal-title-bar {
-    background: rgba(0, 255, 0, 0.05);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
   }
 
+  /* macOS Traffic Light Buttons */
   .terminal-controls {
-    @apply flex gap-1.5 mr-3;
-  }
-  @screen sm {
-    .terminal-controls { @apply gap-2 mr-4; }
+    @apply flex gap-2 z-10;
   }
 
-  .terminal-btn {
-    @apply w-2.5 h-2.5 rounded-full text-[8px] text-foreground;
-  }
-  @screen sm {
-    .terminal-btn { @apply w-3 h-3; }
+  .macos-btn {
+    @apply w-3 h-3 rounded-full border border-foreground/20 flex items-center justify-center cursor-pointer transition-all duration-200;
+    position: relative;
   }
 
+  .macos-btn-close {
+    background: #FF5F57;
+    border-color: #E0443E;
+  }
+  .macos-btn-close:hover {
+    background: #FF5F57;
+    filter: brightness(1.1);
+  }
+  .dark .macos-btn-close {
+    background: #FF5F57;
+    border-color: #E0443E;
+  }
+
+  .macos-btn-minimize {
+    background: #FFBD2E;
+    border-color: #DEA123;
+  }
+  .macos-btn-minimize:hover {
+    background: #FFBD2E;
+    filter: brightness(1.1);
+  }
+  .dark .macos-btn-minimize {
+    background: #FFBD2E;
+    border-color: #DEA123;
+  }
+
+  .macos-btn-maximize {
+    background: #28C840;
+    border-color: #1AAB29;
+  }
+  .macos-btn-maximize:hover {
+    background: #28C840;
+    filter: brightness(1.1);
+  }
+  .dark .macos-btn-maximize {
+    background: #28C840;
+    border-color: #1AAB29;
+  }
+
+  /* Icon styling */
+  .macos-btn-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(0, 0, 0, 0.7);
+  }
+
+  /* Center title */
   .terminal-title {
-    @apply font-mono text-xs text-foreground uppercase tracking-wide;
+    @apply font-mono text-xs text-foreground uppercase tracking-wide absolute left-1/2 transform -translate-x-1/2;
+    font-weight: 600;
   }
   @screen sm {
     .terminal-title { @apply text-sm; }
   }
 
+  /* Spacer to maintain layout */
+  .terminal-controls-spacer {
+    @apply w-16;
+  }
+
   .terminal-content {
-    @apply p-4;
+    @apply p-4 bg-background;
   }
   @screen sm {
     .terminal-content { @apply p-6; }
@@ -436,6 +547,39 @@
   .animate-blink {
     animation: blink 1s step-end infinite;
   }
+  .animate-slide-in-bottom {
+    animation: slideInBottom 0.5s ease-out forwards;
+  }
+  .animate-glitch {
+    animation: glitch 0.3s ease-in-out;
+  }
+  
+  /* Smooth transitions for all interactive elements */
+  .smooth-transition {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Enhanced shadow utilities for brutalist design */
+  .shadow-brutal-sm {
+    box-shadow: 2px 2px 0 0 currentColor;
+  }
+  .shadow-brutal-md {
+    box-shadow: 4px 4px 0 0 currentColor;
+  }
+  .shadow-brutal-lg {
+    box-shadow: 6px 6px 0 0 currentColor;
+  }
+  .shadow-brutal-xl {
+    box-shadow: 8px 8px 0 0 currentColor;
+  }
+  
+  /* Hover state shadows */
+  .hover\:shadow-brutal-lg:hover {
+    box-shadow: 8px 8px 0 0 currentColor;
+  }
+  .hover\:shadow-brutal-xl:hover {
+    box-shadow: 10px 10px 0 0 currentColor;
+  }
 }
 
 @keyframes scanlines {
@@ -446,6 +590,30 @@
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes glitch {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(2px, -2px); }
+  60% { transform: translate(-2px, -2px); }
+  80% { transform: translate(2px, 2px); }
+}
+
+@keyframes slideInBottom {
+  from { 
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /* Reduced motion preferences */

@@ -47,28 +47,60 @@ function buildTree(): string {
 const SkillsSection = () => {
   const treeOutput = buildTree();
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { 
+        staggerChildren: 0.03,
+        delayChildren: 0.2 
+      }
+    }
+  };
+
+  const lineVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: { opacity: 1, x: 0 }
+  };
+
   return (
     <section id="skills" className="section-base">
       <TerminalFrame title="~/skills">
         <div className="section-content-narrow mx-auto">
           <motion.div
-            initial="hidden"
-            whileInView="visible"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
-            }}
+            transition={{ duration: 0.5 }}
           >
             {/* Terminal command header */}
-            <p className="font-mono text-xs sm:text-sm text-foreground opacity-60 mb-6">
+            <motion.p 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 0.6 }}
+              transition={{ delay: 0.3 }}
+              className="font-mono text-xs sm:text-sm text-foreground mb-6"
+            >
               $ tree skills/
-            </p>
+            </motion.p>
 
-            {/* Directory tree output */}
-            <pre className="font-mono text-xs sm:text-sm text-foreground leading-relaxed whitespace-pre select-text overflow-x-auto">
-              {treeOutput}
-            </pre>
+            {/* Directory tree output with line-by-line animation */}
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={containerVariants}
+            >
+              {treeOutput.split('\n').map((line, index) => (
+                <motion.div
+                  key={index}
+                  variants={lineVariants}
+                  className="font-mono text-xs sm:text-sm text-foreground leading-relaxed"
+                  style={{ whiteSpace: 'pre' }}
+                >
+                  {line || '\u00A0'}
+                </motion.div>
+              ))}
+            </motion.div>
           </motion.div>
         </div>
       </TerminalFrame>
