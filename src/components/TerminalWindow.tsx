@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Minus, Square, Terminal as TerminalIcon } from 'lucide-react';
+import { Terminal as TerminalIcon } from 'lucide-react';
 import CommandInput from './CommandInput';
 import CommandHistory, { type CommandHistoryEntry } from './CommandHistory';
 import { interpretCommand } from '@/lib/commandInterpreter';
@@ -237,11 +237,11 @@ Keyboard shortcuts:
         onClick={handleClose}
       >
         <motion.div
-          initial={{ scale: 0.9, opacity: 0, y: 20 }}
+          initial={{ scale: 0.95, opacity: 0, y: 20 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.9, opacity: 0, y: 20 }}
-          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="relative"
+          exit={{ scale: 0.95, opacity: 0, y: 20 }}
+          transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+          className="absolute"
           style={{
             left: position.x,
             top: position.y,
@@ -250,41 +250,71 @@ Keyboard shortcuts:
           }}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="bg-background border-2 border-foreground shadow-brutal-lg rounded-lg overflow-hidden">
-            {/* Window header */}
+          <div className="terminal-frame overflow-hidden">
+            {/* macOS Window Header */}
             <div
               ref={dragRef}
               onMouseDown={handleMouseDown}
-              className="flex items-center justify-between px-4 py-3 bg-foreground/5 border-b-2 border-foreground cursor-move select-none"
+              className="terminal-title-bar cursor-move"
             >
-              <div className="flex items-center gap-2">
+              {/* macOS Traffic Light Buttons */}
+              <div className="terminal-controls">
                 <button
                   onClick={handleClose}
-                  className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-600 transition-colors"
+                  className="macos-btn macos-btn-close group"
                   aria-label="Close terminal"
-                />
+                >
+                  <svg 
+                    className="macos-btn-icon w-2 h-2 opacity-0 group-hover:opacity-100 transition-opacity" 
+                    viewBox="0 0 12 12" 
+                    fill="none" 
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M1 1L11 11M1 11L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
+                </button>
                 <button
                   onClick={handleMinimize}
-                  className="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-600 transition-colors"
+                  className="macos-btn macos-btn-minimize group"
                   aria-label="Minimize terminal"
-                />
+                >
+                  <svg 
+                    className="macos-btn-icon w-2 h-2 opacity-0 group-hover:opacity-100 transition-opacity" 
+                    viewBox="0 0 12 12" 
+                    fill="none" 
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M1 6H11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
+                </button>
                 <button
-                  className="w-3 h-3 rounded-full bg-green-500 hover:bg-green-600 transition-colors"
+                  className="macos-btn macos-btn-maximize group"
                   aria-label="Maximize terminal"
-                />
+                >
+                  <svg 
+                    className="macos-btn-icon w-2 h-2 opacity-0 group-hover:opacity-100 transition-opacity" 
+                    viewBox="0 0 12 12" 
+                    fill="none" 
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M3 3L9 9M3 9L9 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
+                </button>
               </div>
               
-              <div className="flex items-center gap-2 font-mono text-sm">
+              {/* Centered Title */}
+              <div className="terminal-title flex items-center gap-2">
                 <TerminalIcon size={14} />
                 <span>Terminal</span>
               </div>
               
-              <div className="w-16" /> {/* Spacer for centering */}
+              {/* Spacer for symmetry */}
+              <div className="terminal-controls-spacer" />
             </div>
 
             {/* Terminal content */}
             {!isMinimized && (
-              <div className="p-4 h-[500px] overflow-y-auto">
+              <div className="terminal-content h-[500px] overflow-y-auto scrollbar-thin">
                 <CommandHistory
                   entries={entries}
                   currentSection={state.currentSection}

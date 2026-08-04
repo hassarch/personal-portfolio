@@ -1,5 +1,7 @@
 import { createContext, useContext, useReducer, type ReactNode } from 'react';
 
+/* eslint-disable react-refresh/only-export-components */
+
 /**
  * Terminal application state
  */
