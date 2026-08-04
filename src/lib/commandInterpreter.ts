@@ -59,24 +59,35 @@ const errors = {
 const helpHandler: CommandHandler = () => ({
   output: `Available commands:
 
-  help              - Display this help message
-  ls [section]      - List available sections or section contents
-  cd <section>      - Navigate to a section
-  cat <file>        - Display section content
-  pwd               - Print current section
-  clear             - Clear terminal output
+  Navigation:
+    cd <section>      - Navigate to a section
+    home              - Navigate to Home section
+    about             - Navigate to About section
+    projects          - Navigate to Projects section
+    skills            - Navigate to Skills section
+    contact           - Navigate to Contact section
   
-  about             - Navigate to About section
-  projects          - Navigate to Projects section
-  skills            - Navigate to Skills section
-  contact           - Navigate to Contact section
-  home              - Navigate to Home section
+  Information:
+    ls [section]      - List available sections or section contents
+    cat <file>        - Display section content
+    pwd               - Print current section
+    whoami            - Display user information
+    echo <text>       - Print text to terminal
+  
+  Theme:
+    theme [mode]      - Toggle or set theme (dark/light)
+  
+  System:
+    help              - Display this help message
+    clear             - Clear terminal output
+    history           - Show command history
 
 Examples:
   ls                - List all sections
   cd projects       - Go to projects section
   cat about.txt     - Show about section content
-  pwd               - Show current location`,
+  echo hello        - Print 'hello'
+  theme dark        - Switch to dark mode`,
 });
 
 /**
@@ -212,6 +223,66 @@ const clearHandler: CommandHandler = () => ({
 });
 
 /**
+ * Command handler: whoami
+ * Displays information about the user
+ */
+const whoamiHandler: CommandHandler = () => ({
+  output: `Hassan
+Computer Science Undergrad & Developer
+Location: /home/portfolio
+Building cool and useful stuff.
+
+Social:
+  GitHub:   github.com/hassarch
+  LinkedIn: linkedin.com/in/hassan0777
+  Email:    hassanrj245@gmail.com`,
+});
+
+/**
+ * Command handler: echo
+ * Prints the provided text to the terminal
+ */
+const echoHandler: CommandHandler = (args) => {
+  if (args.length === 0) {
+    return { output: '' };
+  }
+  return {
+    output: args.join(' '),
+  };
+};
+
+/**
+ * Command handler: theme
+ * Toggles or sets the theme
+ */
+const themeHandler: CommandHandler = (args) => {
+  if (args.length === 0) {
+    return {
+      output: '__TOGGLE_THEME__', // Special marker for theme toggle
+    };
+  }
+  
+  const mode = args[0].toLowerCase();
+  if (mode === 'dark' || mode === 'light') {
+    return {
+      output: `__SET_THEME_${mode.toUpperCase()}__`,
+    };
+  }
+  
+  return {
+    output: `theme: invalid mode '${mode}'. Use 'dark' or 'light'.`,
+  };
+};
+
+/**
+ * Command handler: history
+ * Shows command history
+ */
+const historyHandler: CommandHandler = () => ({
+  output: '__SHOW_HISTORY__', // Special marker for showing history
+});
+
+/**
  * Navigation command handler factory
  * Creates handlers for direct navigation commands
  */
@@ -232,6 +303,10 @@ const commands: Record<string, CommandHandler> = {
   cat: catHandler,
   pwd: pwdHandler,
   clear: clearHandler,
+  whoami: whoamiHandler,
+  echo: echoHandler,
+  theme: themeHandler,
+  history: historyHandler,
   
   // Direct navigation commands
   home: createNavigationHandler('home'),

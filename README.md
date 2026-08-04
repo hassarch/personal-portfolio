@@ -359,6 +359,26 @@ Edit `src/index.css` to change the color scheme:
 - 📦 Bundle Size: ~130KB gzipped
 - ♿ Accessibility: WCAG 2.1 AA compliant
 
+## 📚 Documentation
+
+Comprehensive documentation is available in the [`docs/`](./docs) directory:
+
+- **[Quick Start Guide](./docs/QUICK_START.md)** - Get running in 5 minutes
+- **[Features Demo](./docs/FEATURES_DEMO.md)** - How to showcase the portfolio
+- **[Enhancements](./docs/ENHANCEMENTS.md)** - Technical implementation details
+- **[macOS Style Guide](./docs/MACOS_STYLE_GUIDE.md)** - Window design system
+- **[Before & After](./docs/BEFORE_AFTER.md)** - Visual comparisons
+- **[Full Documentation Index](./docs/README.md)** - Complete guide navigation
+
+### Key Features Documented:
+- ✨ Smooth animations with spring physics
+- ⌨️ Typing effects in hero section
+- 💻 Interactive terminal with 11 commands
+- 🍎 macOS-style windows with traffic lights
+- 🃏 Enhanced project cards with hover effects
+- 🎨 4-tier brutalist shadow system
+- 🌓 Theme toggle (navbar + terminal)
+
 ## 📝 License
 
 This project is open source and available under the [MIT License](LICENSE).

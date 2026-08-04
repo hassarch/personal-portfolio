@@ -3,8 +3,15 @@ import { motion } from 'motion/react';
 import { Button } from './ui/button';
 import SpotifyPlayer from './SpotifyPlayer';
 import TerminalFrame from './TerminalFrame';
+import { useTypingEffect } from '@/hooks/useTypingEffect';
 
 const HeroSection = () => {
+  const typedName = useTypingEffect({ text: 'Hassan', speed: 100, delay: 300 });
+  const typedBio = useTypingEffect({ 
+    text: '> Computer Science undergrad and developer, I build cool and useful stuff.', 
+    speed: 30, 
+    delay: 1200 
+  });
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -35,17 +42,22 @@ const HeroSection = () => {
               $ whoami
             </p>
             <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-foreground uppercase tracking-tight">
-              Hassan<span className="animate-blink font-light opacity-80">_</span>
+              {typedName}<span className="animate-blink font-light opacity-80">_</span>
             </h1>
           </motion.div>
 
           {/* Terminal-style bio */}
           <motion.div variants={item} className="w-full text-left mb-8">
-            <p className="font-mono text-xs sm:text-sm text-foreground opacity-60 mb-1">
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.6 }}
+              transition={{ delay: 1.0 }}
+              className="font-mono text-xs sm:text-sm text-foreground mb-1"
+            >
               $ cat info.txt
-            </p>
-            <p className="font-mono text-sm text-foreground leading-relaxed">
-              &gt; Computer Science undergrad and  developer, I build cool and useful stuff.
+            </motion.p>
+            <p className="font-mono text-sm text-foreground leading-relaxed min-h-[3rem]">
+              {typedBio}<span className={typedBio.length > 0 ? "animate-blink" : ""}>_</span>
             </p>
           </motion.div>
 
