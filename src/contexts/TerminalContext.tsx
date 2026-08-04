@@ -1,5 +1,7 @@
 import { createContext, useContext, useReducer, type ReactNode } from 'react';
 
+/* eslint-disable react-refresh/only-export-components */
+
 /**
  * Terminal application state
  */
@@ -7,6 +9,7 @@ interface TerminalState {
   bootCompleted: boolean;
   currentSection: string;
   commandHistory: string[];
+  isWindowOpen: boolean;
 }
 
 /**
@@ -16,7 +19,10 @@ type TerminalAction =
   | { type: 'BOOT_COMPLETE' }
   | { type: 'SET_SECTION'; payload: string }
   | { type: 'ADD_COMMAND'; payload: string }
-  | { type: 'CLEAR_HISTORY' };
+  | { type: 'CLEAR_HISTORY' }
+  | { type: 'OPEN_WINDOW' }
+  | { type: 'CLOSE_WINDOW' }
+  | { type: 'TOGGLE_WINDOW' };
 
 /**
  * Context value shape
@@ -46,6 +52,7 @@ const initialState: TerminalState = {
   bootCompleted: checkBootStatus(),
   currentSection: 'home',
   commandHistory: [],
+  isWindowOpen: false,
 };
 
 /**
@@ -72,6 +79,15 @@ const terminalReducer = (state: TerminalState, action: TerminalAction): Terminal
 
     case 'CLEAR_HISTORY':
       return { ...state, commandHistory: [] };
+
+    case 'OPEN_WINDOW':
+      return { ...state, isWindowOpen: true };
+
+    case 'CLOSE_WINDOW':
+      return { ...state, isWindowOpen: false };
+
+    case 'TOGGLE_WINDOW':
+      return { ...state, isWindowOpen: !state.isWindowOpen };
 
     default:
       return state;
