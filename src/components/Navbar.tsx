@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Moon, Sun, Terminal } from 'lucide-react';
-import { motion } from 'motion/react';
-import { Button } from './ui/button';
+import { Moon, Sun, Terminal, Menu, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useTerminal } from '@/contexts/TerminalContext';
-import { navigateToSection } from '@/hooks/useScrollNavigation';
+import { navigateToSection, useCurrentSection } from '@/hooks/useScrollNavigation';
 
 const navLinks = [
   { name: 'About', href: '#about' },
@@ -13,93 +12,171 @@ const navLinks = [
   { name: 'Contact', href: '#contact' },
 ];
 
+const sectionIds = navLinks.map((link) => link.href.substring(1));
+
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const { dispatch } = useTerminal();
+  const activeSection = useCurrentSection(sectionIds, 0.4);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
-    // Extract section ID from href (remove the # prefix)
-    const sectionId = href.substring(1);
-    navigateToSection(sectionId);
+  useEffect(() => {
+    document.body.style.overflow = isMobileOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileOpen]);
+
+  const goToSection = (href: string) => {
+    navigateToSection(href.substring(1));
+    setIsMobileOpen(false);
   };
 
-  const handleTerminalClick = () => {
-    dispatch({ type: 'TOGGLE_WINDOW' });
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setIsMobileOpen(false);
   };
+
+  const toggleTerminal = () => dispatch({ type: 'TOGGLE_WINDOW' });
 
   return (
-    <motion.nav 
+    <motion.nav
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ type: "spring", stiffness: 300, damping: 30, duration: 0.5 }}
-      className={`nav-bar ${isScrolled ? 'bg-background/95 backdrop-blur-md shadow-brutal-sm' : 'bg-transparent'}`}
+      transition={{ type: 'spring', stiffness: 300, damping: 30, duration: 0.5 }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? 'bg-background/90 backdrop-blur-md border-b-2 border-foreground'
+          : 'bg-transparent border-b-2 border-transparent'
+      }`}
     >
-      <div className="nav-container">
-        <div className="nav-header">
-          <motion.div 
-            className="flex items-center gap-2"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="flex h-16 items-center justify-between gap-4">
+          {/* Brand */}
+          <motion.button
+            onClick={scrollToTop}
+            aria-label="Scroll to top"
+            className="group flex items-center gap-2 font-mono text-sm font-bold uppercase tracking-widest"
+            whileHover={{ x: 2 }}
+            whileTap={{ scale: 0.96 }}
           >
+            <span className="flex h-8 w-8 items-center justify-center border-2 border-foreground bg-foreground text-background shadow-brutal-sm transition-shadow group-hover:shadow-brutal-md">
+              H
+            </span>
+            <span className="hidden sm:inline">
+              <span className="opacity-50">~/</span>hassan
+              <span className="animate-blink font-light opacity-70">_</span>
+            </span>
+          </motion.button>
+
+          {/* Desktop links */}
+          <div className="hidden md:flex items-center gap-1">
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.href.substring(1);
+              return (
+                <button
+                  key={link.name}
+                  onClick={() => goToSection(link.href)}
+                  aria-current={isActive ? 'true' : undefined}
+                  className={`relative rounded-[4px] px-3 py-2 font-mono text-xs font-bold uppercase tracking-widest transition-colors ${
+                    isActive ? 'text-background' : 'text-foreground hover:text-foreground/60'
+                  }`}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-active"
+                      className="absolute inset-0 -z-10 rounded-[4px] border-2 border-foreground bg-foreground"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  {link.name}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Actions */}
+          <div className="flex items-center gap-2">
             <motion.button
               onClick={toggleTheme}
               className="nav-theme-btn"
               aria-label="Toggle theme"
               whileHover={{ scale: 1.1, rotate: 180 }}
               whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
             >
               {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
             </motion.button>
 
             <motion.button
-              onClick={handleTerminalClick}
+              onClick={toggleTerminal}
               className="nav-theme-btn"
               aria-label="Toggle terminal"
               whileHover={{ scale: 1.1, y: -2 }}
               whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
             >
               <Terminal size={18} />
             </motion.button>
-          </motion.div>
 
-          <motion.div 
-            className="nav-links"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            {navLinks.map((link, index) => (
-              <motion.a
-                key={link.name}
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                className="nav-link"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 * index + 0.4 }}
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {link.name}
-              </motion.a>
-            ))}
-          </motion.div>
+            <motion.button
+              onClick={() => setIsMobileOpen((open) => !open)}
+              className="nav-theme-btn md:hidden"
+              aria-label="Toggle menu"
+              aria-expanded={isMobileOpen}
+              whileTap={{ scale: 0.95 }}
+            >
+              {isMobileOpen ? <X size={18} /> : <Menu size={18} />}
+            </motion.button>
+          </div>
         </div>
       </div>
+
+      {/* Mobile menu */}
+      <AnimatePresence>
+        {isMobileOpen && (
+          <motion.div
+            key="mobile-menu"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            className="md:hidden overflow-hidden border-b-2 border-foreground bg-background/95 backdrop-blur-md"
+          >
+            <div className="max-w-6xl mx-auto flex flex-col gap-1 px-4 py-4">
+              {navLinks.map((link, index) => {
+                const isActive = activeSection === link.href.substring(1);
+                return (
+                  <motion.button
+                    key={link.name}
+                    onClick={() => goToSection(link.href)}
+                    aria-current={isActive ? 'true' : undefined}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.05 * index }}
+                    className={`flex items-center gap-2 rounded-[4px] border-2 px-3 py-3 text-left font-mono text-sm font-bold uppercase tracking-widest transition-colors ${
+                      isActive
+                        ? 'border-foreground bg-foreground text-background'
+                        : 'border-transparent text-foreground hover:border-foreground'
+                    }`}
+                  >
+                    <span className="opacity-50">{String(index + 1).padStart(2, '0')}</span>
+                    {link.name}
+                  </motion.button>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   );
 };
