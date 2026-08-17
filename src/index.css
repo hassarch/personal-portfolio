@@ -33,7 +33,12 @@
     --border: 0 0% 7%;
     --input: 0 0% 7%;
     --ring: 0 0% 7%;
-    
+
+    /* Space theme tokens (consumed by Tailwind `star` + `glow.*` colors) */
+    --star-color: 0 0% 20%;
+    --glow-primary: 0 0% 7%;
+    --glow-accent: 0 0% 45%;
+
     --radius: 0rem;
   }
 
@@ -65,6 +70,11 @@
     --border: 0 0% 96%;
     --input: 0 0% 96%;
     --ring: 0 0% 96%;
+
+    /* Space theme tokens — bright stars/glow against the near-black void */
+    --star-color: 0 0% 96%;
+    --glow-primary: 0 0% 96%;
+    --glow-accent: 0 0% 75%;
   }
 }
 
