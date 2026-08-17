@@ -8,6 +8,7 @@ import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 import BackToTop from '@/components/BackToTop';
 import TerminalWindow from '@/components/TerminalWindow';
+import Starfield from '@/components/Starfield';
 
 const Index = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -18,7 +19,11 @@ const Index = () => {
 
   return (
     <div className={`page-wrapper ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
-      <div className="fixed inset-0 z-0 bg-grid-pattern pointer-events-none" />
+      {/* Space backdrop: starfield in the void, grid texture layered on top */}
+      <div className="fixed inset-0 z-0 pointer-events-none" aria-hidden="true">
+        <Starfield />
+        <div className="absolute inset-0 bg-grid-pattern" />
+      </div>
       
       {/* Skip to content link for accessibility */}
       <a

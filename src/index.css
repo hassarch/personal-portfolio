@@ -33,7 +33,12 @@
     --border: 0 0% 7%;
     --input: 0 0% 7%;
     --ring: 0 0% 7%;
-    
+
+    /* Space theme tokens (consumed by Tailwind `star` + `glow.*` colors) */
+    --star-color: 0 0% 20%;
+    --glow-primary: 0 0% 7%;
+    --glow-accent: 0 0% 45%;
+
     --radius: 0rem;
   }
 
@@ -65,6 +70,11 @@
     --border: 0 0% 96%;
     --input: 0 0% 96%;
     --ring: 0 0% 96%;
+
+    /* Space theme tokens — bright stars/glow against the near-black void */
+    --star-color: 0 0% 96%;
+    --glow-primary: 0 0% 96%;
+    --glow-accent: 0 0% 75%;
   }
 }
 
@@ -112,8 +122,7 @@
     @apply relative min-h-screen overflow-x-hidden bg-background font-mono transition-opacity duration-700;
   }
   .main-container {
-    @apply relative z-10 max-w-6xl mx-auto px-4 min-h-screen bg-background;
-    box-shadow: 0 0 60px rgba(0,0,0,0.08);
+    @apply relative z-10 max-w-6xl mx-auto px-4 min-h-screen;
   }
   @screen sm {
     .main-container { @apply px-6; }
@@ -121,13 +130,11 @@
   @screen lg {
     .main-container { @apply px-8; }
   }
-  .dark .main-container {
-    box-shadow: 0 0 60px rgba(0,0,0,0.3);
-  }
+  /* .main-container is transparent so the starfield shows through the content */
   
   /* Sections */
   .section-base {
-    @apply relative py-24 px-6 scroll-mt-28 bg-background;
+    @apply relative py-24 px-6 scroll-mt-28;
   }
   @screen sm {
     .section-base { @apply scroll-mt-32; }
@@ -382,7 +389,7 @@
     border-radius: 4px;
   }
   .footer-wrapper {
-    @apply relative py-8 px-6 bg-background;
+    @apply relative py-8 px-6;
   }
   .footer-inner {
     @apply flex flex-col items-center justify-between gap-6 text-sm font-bold uppercase tracking-widest font-mono;
@@ -430,9 +437,12 @@
     font-family: 'IBM Plex Mono', monospace;
   }
 
-  /* Terminal Frame - macOS Style */
+  /* Terminal Frame - macOS Style (frosted glass so the starfield shows through) */
   .terminal-frame {
-    @apply border-2 border-foreground bg-background mb-8 w-full overflow-hidden;
+    @apply border-2 border-foreground mb-8 w-full overflow-hidden;
+    background: hsl(var(--background) / 0.55);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
     border-radius: 10px;
   }
@@ -521,7 +531,7 @@
   }
 
   .terminal-content {
-    @apply p-4 bg-background;
+    @apply p-4;
   }
   @screen sm {
     .terminal-content { @apply p-6; }
