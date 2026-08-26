@@ -148,6 +148,29 @@
   .section-content-narrow {
     @apply max-w-4xl mx-auto;
   }
+
+  /* Bento grid — mixed-size tile cluster at the top of the page.
+     Column spans are set inline on each tile via md:col-span-*. */
+  .bento-grid {
+    @apply grid grid-cols-1 gap-4 mb-8;
+  }
+  @screen md {
+    .bento-grid { @apply grid-cols-12 gap-5; }
+  }
+  /* Tiles stretch to match the tallest in their row */
+  .bento-tile {
+    @apply h-full flex flex-col;
+  }
+  .bento-tile-content {
+    @apply flex-1 p-4;
+  }
+  /* Small label above a tile's value, matching the `$ command` eyebrow voice */
+  .bento-eyebrow {
+    @apply font-mono text-[10px] text-foreground opacity-50 mb-2 block;
+  }
+  .bento-value {
+    @apply font-bold text-foreground uppercase tracking-tight leading-none;
+  }
   .section-header-wrapper {
     @apply mb-16 text-center;
   }

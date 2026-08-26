@@ -1,22 +1,29 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
+import { cn } from '@/lib/utils';
 
 interface TerminalFrameProps {
   title: string;
   children: React.ReactNode;
   className?: string;
+  /** Extra classes for the content wrapper — lets bento tiles tighten the default padding */
+  contentClassName?: string;
+  /** Drops the frame's default bottom margin, which would break grid gap alignment */
+  flush?: boolean;
 }
 
-const TerminalFrame: React.FC<TerminalFrameProps> = ({ 
-  title, 
-  children, 
-  className = '' 
+const TerminalFrame: React.FC<TerminalFrameProps> = ({
+  title,
+  children,
+  className = '',
+  contentClassName = '',
+  flush = false
 }) => {
   const [hoveredButton, setHoveredButton] = useState<string | null>(null);
 
   return (
-    <div 
-      className={`terminal-frame ${className}`}
+    <div
+      className={cn('terminal-frame', flush && 'mb-0', className)}
       role="region"
       aria-label={`${title} - terminal window`}
     >
@@ -68,7 +75,7 @@ const TerminalFrame: React.FC<TerminalFrameProps> = ({
         <div className="terminal-title">{title}</div>
         <div className="terminal-controls-spacer"></div>
       </div>
-      <div className="terminal-content">
+      <div className={cn('terminal-content', contentClassName)}>
         {children}
       </div>
     </div>

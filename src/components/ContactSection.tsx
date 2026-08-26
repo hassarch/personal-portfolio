@@ -10,6 +10,7 @@ import { Textarea } from './ui/textarea';
 import { Label } from './ui/label';
 import { useToast } from '@/hooks/use-toast';
 import TerminalFrame from './TerminalFrame';
+import { EMAIL, PHONE, LOCATION, LINKEDIN_URL, GITHUB_URL, X_URL } from '@/constants/profile';
 
 const contactFormSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -125,18 +126,18 @@ const ContactSection = () => {
             {/* Contact info */}
             <motion.div variants={itemVariants} className="contact-info">
               <div className="space-y-6">
-                <ContactItem icon={<Mail size={18} />} label="--email" value="hassanrj245@gmail.com" href="mailto:hassanrj245@gmail.com" />
-                <ContactItem icon={<Phone size={18} />} label="--phone" value="+91 8710030521" href="tel:+918710030521" />
-                <ContactItem icon={<MapPin size={18} />} label="--location" value="India" />
+                <ContactItem icon={<Mail size={18} />} label="--email" value={EMAIL} href={`mailto:${EMAIL}`} />
+                <ContactItem icon={<Phone size={18} />} label="--phone" value={PHONE} href={`tel:${PHONE.replace(/\s/g, '')}`} />
+                <ContactItem icon={<MapPin size={18} />} label="--location" value={LOCATION} />
               </div>
 
               <div className="pt-4">
                 <h4 className="text-xs font-bold mb-4 uppercase tracking-widest font-mono">[ --social ]</h4>
                 <div className="flex gap-4">
-                  <SocialLink href="https://www.linkedin.com/in/hassan0777/" icon={<Linkedin size={20} />} label="LinkedIn" />
-                  <SocialLink href="https://github.com/hassarch" icon={<Github size={20} />} label="GitHub" />
+                  <SocialLink href={LINKEDIN_URL} icon={<Linkedin size={20} />} label="LinkedIn" />
+                  <SocialLink href={GITHUB_URL} icon={<Github size={20} />} label="GitHub" />
                   <SocialLink
-                    href="https://x.com/sanxshade"
+                    href={X_URL}
                     icon={
                       <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true">
                         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
