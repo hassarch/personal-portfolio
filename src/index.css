@@ -387,6 +387,21 @@
   }
 
   /* Navbar & Footer */
+  /* Floating content-width island, frosted so the starfield reads through it */
+  .nav-island {
+    @apply flex items-center gap-1 border-2 border-foreground p-2 transition-all duration-300;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  /* Bare in-island control — chrome only appears on hover so the row stays quiet */
+  .nav-icon-btn {
+    @apply flex h-8 w-8 items-center justify-center border-2 border-transparent text-foreground transition-colors hover:border-foreground hover:bg-foreground hover:text-background;
+    border-radius: 6px;
+  }
+  .nav-divider {
+    @apply mx-1 h-6 w-0.5 shrink-0 bg-foreground opacity-30;
+  }
   .nav-bar {
     @apply fixed top-0 left-0 right-0 z-50 transition-all duration-300;
   }
