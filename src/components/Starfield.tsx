@@ -3,23 +3,46 @@
  *
  * A lightweight, canvas-based space backdrop that lives behind the content
  * "sheet" and shows through the surrounding gutters — the void the portfolio
- * floats in. It renders three kinds of space elements:
+ * floats in. It renders:
  *
- * - Twinkling parallax stars (varied size + brightness, slow drift)
- * - Occasional shooting stars streaking across the viewport
+ * - Three parallax depth layers of twinkling stars (far/mid/near), each with
+ *   its own size, brightness, drift and scroll-parallax rate
+ * - Frequent shooting stars with a bright glowing head and a tapered tail
  * - A faint line-art ringed planet, matching the brutalist outline aesthetic
  *
  * Design notes:
  * - Colour is driven entirely by the `--star-color` CSS token, so it stays in
- *   sync with the active light/dark theme (dark specks on light, bright on dark).
+ *   sync with the active light/dark theme and never introduces a hue into the
+ *   strictly greyscale palette. The token is re-read whenever the theme flips.
+ * - No edge vignette: the field is mostly seen through the gutters beside the
+ *   content sheet, so darkening the edges would hide the very thing on show.
+ *   Depth comes from the parallax layers instead.
  * - DevicePixelRatio-aware for crisp dots on retina displays.
  * - Respects `prefers-reduced-motion`: paints a single static frame, no loop.
  * - Pauses the animation loop while the tab is hidden to save CPU/battery.
  * - `pointer-events: none` + `aria-hidden` so it never interferes with the UI.
+ * - Returns early when there's no 2D context (e.g. jsdom under test).
+ *
+ * Tuning lives in the constants below — METEOR_* controls how busy the sky is.
  */
 
 import { useEffect, useRef } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
+import { wrapCoord } from '@/lib/starfield';
+
+interface StarLayer {
+  /** Share of the total star budget allocated to this layer */
+  share: number;
+  radius: [number, number];
+  alpha: [number, number];
+  /** Downward drift in px/sec */
+  drift: [number, number];
+  /** How strongly this layer shifts with page scroll (0 = pinned) */
+  parallax: number;
+  twinkle: [number, number];
+  /** Draw the 4-point cross sparkle on this layer's brighter stars */
+  sparkle: boolean;
+}
 
 interface Star {
   x: number;
@@ -29,6 +52,7 @@ interface Star {
   twinkleSpeed: number;
   phase: number;
   drift: number;
+  layer: StarLayer;
 }
 
 interface Meteor {
@@ -37,13 +61,53 @@ interface Meteor {
   vx: number;
   vy: number;
   length: number;
+  thickness: number;
+  brightness: number;
   life: number;
   ttl: number;
 }
 
-// Roughly one star per this many square pixels, capped for performance.
-const STAR_DENSITY = 1 / 7000;
-const MAX_STARS = 180;
+/** Roughly one star per this many square pixels, capped for performance. */
+const STAR_DENSITY = 1 / 4200;
+const MAX_STARS = 260;
+
+/** Sky business: shorter gaps and a higher cap mean more visible activity. */
+const METEOR_FIRST_AT = 700;
+const METEOR_GAP: [number, number] = [800, 2400];
+const MAX_METEORS = 4;
+
+const STAR_LAYERS: StarLayer[] = [
+  // Far: dense, dim, barely moves — reads as depth.
+  {
+    share: 0.55,
+    radius: [0.4, 0.9],
+    alpha: [0.22, 0.5],
+    drift: [2, 5],
+    parallax: 0.05,
+    twinkle: [0.4, 1.1],
+    sparkle: false,
+  },
+  // Mid.
+  {
+    share: 0.3,
+    radius: [0.8, 1.4],
+    alpha: [0.45, 0.8],
+    drift: [5, 10],
+    parallax: 0.13,
+    twinkle: [0.7, 1.8],
+    sparkle: false,
+  },
+  // Near: sparse, bright, fastest parallax — the foreground specks.
+  {
+    share: 0.15,
+    radius: [1.2, 2.1],
+    alpha: [0.7, 1],
+    drift: [10, 18],
+    parallax: 0.26,
+    twinkle: [1, 2.4],
+    sparkle: true,
+  },
+];
 
 const Starfield = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -59,14 +123,28 @@ const Starfield = () => {
       '(prefers-reduced-motion: reduce)'
     ).matches;
 
-    // Read the themed star colour once per (re)mount. `--star-color` is stored
-    // as space-separated HSL channels (e.g. "0 0% 96%"), which slots straight
-    // into the modern `hsl(H S% L% / alpha)` syntax.
-    const starChannels =
-      getComputedStyle(document.documentElement)
-        .getPropertyValue('--star-color')
-        .trim() || '0 0% 96%';
+    // Themed colour tokens. Both are stored as space-separated HSL channels
+    // (e.g. "0 0% 96%"), which slot straight into `hsl(H S% L% / alpha)`.
+    //
+    // These must be re-read whenever the theme flips: this effect depends on
+    // [theme], but React runs child effects before parent ones, so it fires
+    // *before* ThemeProvider has added/removed the `.dark` class on <html>.
+    // Reading once here would therefore latch the previous theme's colours.
+    // Instead the loop watches the class string and refreshes on change.
+    let starChannels = '0 0% 96%';
+    let themeClass = '';
+
+    const refreshTokens = () => {
+      const root = document.documentElement;
+      themeClass = root.className;
+      starChannels =
+        getComputedStyle(root).getPropertyValue('--star-color').trim() ||
+        '0 0% 96%';
+    };
+
     const color = (alpha: number) => `hsl(${starChannels} / ${alpha})`;
+
+    refreshTokens();
 
     let width = 0;
     let height = 0;
@@ -74,26 +152,33 @@ const Starfield = () => {
     const meteors: Meteor[] = [];
     let rafId = 0;
     let lastTime = 0;
-    let nextMeteorAt = 2500;
+    let nextMeteorAt = METEOR_FIRST_AT;
+    let scrollY = window.scrollY;
 
     const rand = (min: number, max: number) => min + Math.random() * (max - min);
+    const randOf = ([min, max]: [number, number]) => rand(min, max);
 
-    const createStar = (): Star => ({
+    const createStar = (layer: StarLayer): Star => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      radius: rand(0.5, 1.6),
-      baseAlpha: rand(0.4, 1),
-      twinkleSpeed: rand(0.6, 2.2),
+      radius: randOf(layer.radius),
+      baseAlpha: randOf(layer.alpha),
+      twinkleSpeed: randOf(layer.twinkle),
       phase: Math.random() * Math.PI * 2,
-      drift: rand(3, 9),
+      drift: randOf(layer.drift),
+      layer,
     });
 
     const initStars = () => {
-      const count = Math.min(
+      const total = Math.min(
         MAX_STARS,
         Math.floor(width * height * STAR_DENSITY)
       );
-      stars = Array.from({ length: count }, createStar);
+      stars = STAR_LAYERS.flatMap((layer) =>
+        Array.from({ length: Math.round(total * layer.share) }, () =>
+          createStar(layer)
+        )
+      );
     };
 
     const resize = () => {
@@ -114,7 +199,8 @@ const Starfield = () => {
     const drawPlanet = () => {
       const r = Math.max(30, Math.min(Math.min(width, height) * 0.055, 66));
       const cx = width * 0.85;
-      const cy = height * 0.22;
+      // Drifts slowly upward as the page scrolls, like the most distant object.
+      const cy = height * 0.22 - scrollY * 0.03;
 
       ctx.save();
       ctx.translate(cx, cy);
@@ -145,62 +231,98 @@ const Starfield = () => {
     };
 
     const spawnMeteor = () => {
-      const angle = rand(Math.PI * 0.12, Math.PI * 0.32); // shallow downward
-      const speed = rand(380, 620);
+      const angle = rand(Math.PI * 0.1, Math.PI * 0.34); // shallow downward
+      // Occasional slower, fatter, brighter "fireball".
+      const isFireball = Math.random() < 0.18;
+      const speed = isFireball ? rand(260, 380) : rand(420, 720);
       const goRight = Math.random() > 0.4;
+
       meteors.push({
-        x: goRight ? rand(-0.1, 0.5) * width : rand(0.5, 1.1) * width,
-        y: rand(0, height * 0.4),
+        // Start off the leading edge so it streaks in rather than popping into view.
+        x: goRight ? rand(-0.15, 0.55) * width : rand(0.45, 1.15) * width,
+        y: rand(-0.05, 0.6) * height,
         vx: Math.cos(angle) * speed * (goRight ? 1 : -1),
         vy: Math.sin(angle) * speed,
-        length: rand(90, 170),
+        length: isFireball ? rand(150, 240) : rand(90, 180),
+        thickness: isFireball ? rand(1.8, 2.6) : rand(1, 1.6),
+        brightness: isFireball ? 1 : rand(0.7, 0.95),
         life: 0,
-        ttl: rand(0.7, 1.2),
+        ttl: isFireball ? rand(1.1, 1.6) : rand(0.6, 1.1),
       });
     };
 
     const drawMeteor = (m: Meteor) => {
-      const tailX = m.x - (m.vx / Math.hypot(m.vx, m.vy)) * m.length;
-      const tailY = m.y - (m.vy / Math.hypot(m.vx, m.vy)) * m.length;
+      const speed = Math.hypot(m.vx, m.vy) || 1;
+      const tailX = m.x - (m.vx / speed) * m.length;
+      const tailY = m.y - (m.vy / speed) * m.length;
       // Fade in quickly, then out over the meteor's lifetime.
-      const fade = Math.sin((m.life / m.ttl) * Math.PI);
-      const gradient = ctx.createLinearGradient(m.x, m.y, tailX, tailY);
-      gradient.addColorStop(0, color(0.9 * fade));
-      gradient.addColorStop(1, color(0));
+      const fade = Math.sin((m.life / m.ttl) * Math.PI) * m.brightness;
 
-      ctx.strokeStyle = gradient;
-      ctx.lineWidth = 1.4;
+      // Tapered tail: bright at the head, transparent at the tip.
+      const tail = ctx.createLinearGradient(m.x, m.y, tailX, tailY);
+      tail.addColorStop(0, color(0.95 * fade));
+      tail.addColorStop(0.35, color(0.45 * fade));
+      tail.addColorStop(1, color(0));
+
+      ctx.save();
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = tail;
+      ctx.lineWidth = m.thickness;
       ctx.beginPath();
       ctx.moveTo(m.x, m.y);
       ctx.lineTo(tailX, tailY);
       ctx.stroke();
+
+      // Glowing head.
+      const headRadius = m.thickness * 5;
+      const head = ctx.createRadialGradient(m.x, m.y, 0, m.x, m.y, headRadius);
+      head.addColorStop(0, color(0.9 * fade));
+      head.addColorStop(0.4, color(0.28 * fade));
+      head.addColorStop(1, color(0));
+      ctx.fillStyle = head;
+      ctx.beginPath();
+      ctx.arc(m.x, m.y, headRadius, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Hot core.
+      ctx.fillStyle = color(Math.min(1, 1.1 * fade));
+      ctx.beginPath();
+      ctx.arc(m.x, m.y, m.thickness * 0.7, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
     };
 
-    const drawStar = (star: Star, twinkle: number) => {
+    const drawStar = (star: Star, drawX: number, drawY: number, twinkle: number) => {
       const alpha = star.baseAlpha * (0.65 + 0.35 * twinkle);
       ctx.fillStyle = color(alpha);
       ctx.beginPath();
-      ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+      ctx.arc(drawX, drawY, star.radius, 0, Math.PI * 2);
       ctx.fill();
 
-      // A subtle 4-point sparkle on the brightest stars.
-      if (star.radius > 1.15) {
-        const s = star.radius * 2.6;
-        ctx.strokeStyle = color(alpha * 0.5);
+      // A subtle 4-point sparkle on the brightest foreground stars.
+      if (star.layer.sparkle && star.radius > 1.55) {
+        const s = star.radius * 2.8;
+        ctx.strokeStyle = color(alpha * 0.45);
         ctx.lineWidth = 0.6;
         ctx.beginPath();
-        ctx.moveTo(star.x - s, star.y);
-        ctx.lineTo(star.x + s, star.y);
-        ctx.moveTo(star.x, star.y - s);
-        ctx.lineTo(star.x, star.y + s);
+        ctx.moveTo(drawX - s, drawY);
+        ctx.lineTo(drawX + s, drawY);
+        ctx.moveTo(drawX, drawY - s);
+        ctx.lineTo(drawX, drawY + s);
         ctx.stroke();
       }
     };
 
+    /** Local alias for the exported, unit-tested wrap helper. */
+    const wrap = wrapCoord;
+
     const renderStatic = () => {
+      refreshTokens();
       ctx.clearRect(0, 0, width, height);
       drawPlanet();
-      stars.forEach((star) => drawStar(star, 1));
+      stars.forEach((star) =>
+        drawStar(star, star.x, wrap(star.y - scrollY * star.layer.parallax, height), 1)
+      );
     };
 
     const render = (time: number) => {
@@ -208,23 +330,25 @@ const Starfield = () => {
       lastTime = time;
       const seconds = time / 1000;
 
+      // Cheap guard against the theme flipping under us (see refreshTokens).
+      if (document.documentElement.className !== themeClass) refreshTokens();
+
       ctx.clearRect(0, 0, width, height);
       drawPlanet();
 
       stars.forEach((star) => {
-        // Gentle downward drift with wrap-around.
-        star.y += star.drift * dt;
-        if (star.y > height + 2) {
-          star.y = -2;
-          star.x = Math.random() * width;
-        }
+        // Gentle downward drift, kept inside the field.
+        star.y = wrap(star.y + star.drift * dt, height);
+        // Scroll parallax is applied at paint time only, so scrolling back up
+        // returns the field to exactly where it was.
+        const drawY = wrap(star.y - scrollY * star.layer.parallax, height);
         const twinkle = Math.sin(seconds * star.twinkleSpeed + star.phase);
-        drawStar(star, (twinkle + 1) / 2);
+        drawStar(star, star.x, drawY, (twinkle + 1) / 2);
       });
 
-      if (time > nextMeteorAt && meteors.length < 2) {
+      if (time > nextMeteorAt && meteors.length < MAX_METEORS) {
         spawnMeteor();
-        nextMeteorAt = time + rand(4000, 9000);
+        nextMeteorAt = time + randOf(METEOR_GAP);
       }
 
       for (let i = meteors.length - 1; i >= 0; i -= 1) {
@@ -232,7 +356,7 @@ const Starfield = () => {
         m.x += m.vx * dt;
         m.y += m.vy * dt;
         m.life += dt;
-        if (m.life >= m.ttl || m.y > height + 40) {
+        if (m.life >= m.ttl || m.y > height + 60) {
           meteors.splice(i, 1);
         } else {
           drawMeteor(m);
@@ -262,8 +386,15 @@ const Starfield = () => {
       }
     };
 
+    const handleScroll = () => {
+      scrollY = window.scrollY;
+      // Reduced motion draws no frames, so repaint to keep parallax in sync.
+      if (prefersReducedMotion) renderStatic();
+    };
+
     resize();
     window.addEventListener('resize', resize);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     document.addEventListener('visibilitychange', handleVisibility);
 
     if (prefersReducedMotion) {
@@ -275,6 +406,7 @@ const Starfield = () => {
     return () => {
       stop();
       window.removeEventListener('resize', resize);
+      window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('visibilitychange', handleVisibility);
     };
   }, [theme]);
