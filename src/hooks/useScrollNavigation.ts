@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 /**
  * Smoothly scrolls to a target section with centered positioning
@@ -31,17 +31,41 @@ export const useCurrentSection = (
   threshold: number = 0.5
 ): string => {
   const [currentSection, setCurrentSection] = useState<string>('');
+  // Last known visibility ratio per section id. Kept across callbacks so the
+  // most-visible section wins, rather than whichever entry happened to fire
+  // last — otherwise a brief intersection during layout sticks permanently.
+  const ratiosRef = useRef<Map<string, number>>(new Map());
 
   useEffect(() => {
+    const ratios = ratiosRef.current;
+    ratios.clear();
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setCurrentSection(entry.target.id);
+          ratios.set(
+            entry.target.id,
+            entry.isIntersecting ? entry.intersectionRatio : 0
+          );
+        });
+
+        let best = '';
+        let bestRatio = 0;
+        ratios.forEach((ratio, id) => {
+          // >= so the most recently updated section wins ties
+          if (ratio > 0 && ratio >= bestRatio) {
+            best = id;
+            bestRatio = ratio;
           }
         });
+
+        // Nothing visible (e.g. scrolled into the footer) — keep the last
+        // active section rather than flickering the nav back to nothing.
+        if (best) {
+          setCurrentSection(best);
+        }
       },
-      { 
+      {
         threshold,
         rootMargin: '-50px 0px -50px 0px' // Adjust for centered detection
       }

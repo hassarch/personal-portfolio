@@ -9,6 +9,10 @@ import Footer from '@/components/Footer';
 import BackToTop from '@/components/BackToTop';
 import TerminalWindow from '@/components/TerminalWindow';
 import Starfield from '@/components/Starfield';
+import SpotifyPlayer from '@/components/SpotifyPlayer';
+import GithubStatsTile from '@/components/bento/GithubStatsTile';
+import ClockTile from '@/components/bento/ClockTile';
+import LocationTile from '@/components/bento/LocationTile';
 
 const Index = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -24,7 +28,7 @@ const Index = () => {
         <Starfield />
         <div className="absolute inset-0 bg-grid-pattern" />
       </div>
-      
+
       {/* Skip to content link for accessibility */}
       <a
         href="#main-content"
@@ -36,15 +40,51 @@ const Index = () => {
       <div className="main-container">
         <Navbar />
         <main id="main-content" className="pt-24 pb-16">
-          <HeroSection />
-          <AboutSection />
+          {/*
+            Bento cluster. Section ids stay on the grid items — Navbar's
+            useCurrentSection and the terminal's navigation commands both
+            resolve these by querySelector('#id').
+          */}
+          <div className="bento-grid">
+            <section id="hero" className="md:col-span-12">
+              <HeroSection />
+            </section>
+
+            <section id="about" className="scroll-mt-28 md:col-span-7">
+              <AboutSection />
+            </section>
+
+            <div className="md:col-span-5">
+              <GithubStatsTile />
+            </div>
+
+            {/*
+              Time/loc sit half-and-half at md — a 3-of-12 tile is only ~160px
+              there, which clips the clock and a longer city name. They go
+              narrow from lg up, where 3 cols is ~225px.
+            */}
+            <div className="md:col-span-6 lg:col-span-3">
+              <ClockTile />
+            </div>
+
+            <div className="md:col-span-6 lg:col-span-3">
+              <LocationTile />
+            </div>
+
+            {/* SpotifyPlayer ships its own bordered chrome — no TerminalFrame wrapper */}
+            <div className="flex items-center md:col-span-12 lg:col-span-6">
+              <SpotifyPlayer />
+            </div>
+          </div>
+
+          {/* Full-width sections below the cluster */}
           <SkillsSection />
           <ProjectsSection />
           <ContactSection />
         </main>
         <Footer />
       </div>
-      
+
       <BackToTop />
       <TerminalWindow />
     </div>

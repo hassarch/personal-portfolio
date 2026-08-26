@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Moon, Sun, Terminal, Menu, X } from 'lucide-react';
+import { Moon, Sun, Terminal, Menu, X, FileText } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useTerminal } from '@/contexts/TerminalContext';
 import { navigateToSection, useCurrentSection } from '@/hooks/useScrollNavigation';
+import { RESUME_URL } from '@/constants/profile';
 
 const navLinks = [
   { name: 'About', href: '#about' },
@@ -105,6 +106,20 @@ const Navbar = () => {
 
           {/* Actions */}
           <div className="flex items-center gap-2">
+            {RESUME_URL && (
+              <motion.a
+                href={RESUME_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hidden items-center gap-1.5 rounded-[6px] border-2 border-foreground bg-foreground px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-widest text-background shadow-brutal-sm transition-shadow hover:shadow-brutal-md sm:flex"
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.96 }}
+              >
+                <FileText size={12} />
+                Resume
+              </motion.a>
+            )}
+
             <motion.button
               onClick={toggleTheme}
               className="nav-theme-btn"
@@ -173,6 +188,21 @@ const Navbar = () => {
                   </motion.button>
                 );
               })}
+
+              {RESUME_URL && (
+                <motion.a
+                  href={RESUME_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.05 * navLinks.length }}
+                  className="mt-1 flex items-center gap-2 rounded-[4px] border-2 border-foreground bg-foreground px-3 py-3 font-mono text-sm font-bold uppercase tracking-widest text-background"
+                >
+                  <FileText size={14} />
+                  Resume
+                </motion.a>
+              )}
             </div>
           </motion.div>
         )}

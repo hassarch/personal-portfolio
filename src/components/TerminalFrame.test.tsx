@@ -43,7 +43,7 @@ describe('TerminalFrame', () => {
       </TerminalFrame>
     );
 
-    const buttons = container.querySelectorAll('.terminal-btn');
+    const buttons = container.querySelectorAll('.macos-btn');
     expect(buttons).toHaveLength(3);
   });
 

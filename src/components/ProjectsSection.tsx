@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { Button } from './ui/button';
 import TerminalFrame from './TerminalFrame';
 import { PROJECT_PREFIX, COMMENT_PREFIX } from '@/constants/asciiArt';
+import { GITHUB_REPOS_URL } from '@/constants/profile';
 
 interface Project {
   title: string;
@@ -48,7 +49,7 @@ const projects: Project[] = [
 
 const ProjectsSection = () => {
   const displayedProjects = [...projects].reverse();
-  const githubReposUrl = 'https://github.com/hassarch?tab=repositories';
+  const githubReposUrl = GITHUB_REPOS_URL;
 
   const containerVariants = {
     hidden: { opacity: 0 },

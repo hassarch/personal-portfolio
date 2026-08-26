@@ -1,17 +1,31 @@
 import { Github, Linkedin, Mail } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Button } from './ui/button';
-import SpotifyPlayer from './SpotifyPlayer';
 import TerminalFrame from './TerminalFrame';
 import { useTypingEffect } from '@/hooks/useTypingEffect';
+import { NAME, SOCIALS, type SocialLinkDef } from '@/constants/profile';
+
+const XIcon = () => (
+  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden="true">
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+);
+
+const socialIcons: Record<SocialLinkDef['icon'], React.ReactNode> = {
+  github: <Github size={18} />,
+  x: <XIcon />,
+  linkedin: <Linkedin size={18} />,
+  mail: <Mail size={18} />,
+};
 
 const HeroSection = () => {
-  const typedName = useTypingEffect({ text: 'Hassan', speed: 100, delay: 300 });
-  const typedBio = useTypingEffect({ 
-    text: '> Computer Science undergrad and developer, I build cool and useful stuff.', 
-    speed: 30, 
-    delay: 1200 
+  const typedName = useTypingEffect({ text: NAME, speed: 100, delay: 300 });
+  const typedBio = useTypingEffect({
+    text: '> Computer Science undergrad and developer, I build cool and useful stuff.',
+    speed: 30,
+    delay: 1200
   });
+
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -28,87 +42,73 @@ const HeroSection = () => {
   };
 
   return (
-    <section id="hero" className="hero-section">
-      <TerminalFrame title="~/welcome" className="w-full max-w-3xl">
-        <motion.div 
-          variants={container}
-          initial="hidden"
-          animate="show"
-          className="flex flex-col items-center text-center"
-        >
-          {/* Terminal-style whoami */}
-          <motion.div variants={item} className="w-full text-left mb-4">
-            <p className="font-mono text-xs sm:text-sm text-foreground opacity-60 mb-1">
-              $ whoami
-            </p>
-            <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-foreground uppercase tracking-tight">
-              {typedName}<span className="animate-blink font-light opacity-80">_</span>
-            </h1>
-          </motion.div>
-
-          {/* Terminal-style bio */}
-          <motion.div variants={item} className="w-full text-left mb-8">
-            <motion.p 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.6 }}
-              transition={{ delay: 1.0 }}
-              className="font-mono text-xs sm:text-sm text-foreground mb-1"
-            >
-              $ cat info.txt
-            </motion.p>
-            <p className="font-mono text-sm text-foreground leading-relaxed min-h-[3rem]">
-              {typedBio}<span className={typedBio.length > 0 ? "animate-blink" : ""}>_</span>
-            </p>
-          </motion.div>
-
-          {/* Action buttons */}
-          <motion.div variants={item} className="flex justify-center mb-10 w-full">
-            <Button className="retro-button bg-foreground text-background hover:bg-background hover:text-foreground text-sm py-6 px-8 w-full sm:w-auto" asChild>
-              <a href="#contact">$ hit_me_up</a>
-            </Button>
-          </motion.div>
-
-          {/* Social links */}
-          <motion.div variants={item} className="hero-socials">
-            <SocialLink href="https://github.com/hassarch" icon={<Github size={18} />} label="GitHub" />
-            <SocialLink
-              href="https://x.com/sanxshade"
-              icon={
-                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden="true">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                </svg>
-              }
-              label="X"
-            />
-            <SocialLink href="https://www.linkedin.com/in/hassan0777/" icon={<Linkedin size={18} />} label="LinkedIn" />
-            <SocialLink href="mailto:hassanrj245@gmail.com" icon={<Mail size={18} />} label="Email" />
-          </motion.div>
-
-          {/* Spotify Player */}
-          <motion.div 
-            variants={item}
-            animate={{ y: [0, -4, 0] }}
-            transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-            className="w-full max-w-sm mt-4 custom-float"
-          >
-            <SpotifyPlayer />
-          </motion.div>
+    <TerminalFrame
+      title="~/welcome"
+      flush
+      className="bento-tile"
+      contentClassName="bento-tile-content sm:p-8 md:p-10"
+    >
+      <motion.div
+        variants={container}
+        initial="hidden"
+        animate="show"
+        className="flex h-full flex-col justify-center"
+      >
+        {/* Terminal-style whoami */}
+        <motion.div variants={item} className="mb-6">
+          <p className="mb-1 font-mono text-xs text-foreground opacity-60 sm:text-sm">
+            $ whoami
+          </p>
+          <h1 className="text-4xl font-bold uppercase tracking-tight text-foreground sm:text-5xl md:text-6xl">
+            {typedName}<span className="animate-blink font-light opacity-80">_</span>
+          </h1>
         </motion.div>
-      </TerminalFrame>
-    </section>
+
+        {/* Terminal-style bio */}
+        <motion.div variants={item} className="mb-8">
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.6 }}
+            transition={{ delay: 1.0 }}
+            className="mb-1 font-mono text-xs text-foreground sm:text-sm"
+          >
+            $ cat info.txt
+          </motion.p>
+          <p className="min-h-[3rem] max-w-2xl font-mono text-sm leading-relaxed text-foreground">
+            {typedBio}<span className={typedBio.length > 0 ? "animate-blink" : ""}>_</span>
+          </p>
+        </motion.div>
+
+        {/* CTA + socials on one row */}
+        <motion.div
+          variants={item}
+          className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-6"
+        >
+          <Button
+            className="retro-button w-full bg-foreground px-8 py-6 text-sm text-background hover:bg-background hover:text-foreground sm:w-auto"
+            asChild
+          >
+            <a href="#contact">$ hit_me_up</a>
+          </Button>
+
+          <div className="flex gap-3">
+            {SOCIALS.map((social) => (
+              <a
+                key={social.label}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={social.label}
+                className="hero-social-link"
+              >
+                {socialIcons[social.icon]}
+              </a>
+            ))}
+          </div>
+        </motion.div>
+      </motion.div>
+    </TerminalFrame>
   );
 };
-
-const SocialLink = ({ href, icon, label }: { href: string; icon: React.ReactNode; label: string; }) => (
-  <a
-    href={href}
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label={label}
-    className="hero-social-link"
-  >
-    {icon}
-  </a>
-);
 
 export default HeroSection;
