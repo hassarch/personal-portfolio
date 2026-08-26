@@ -41,45 +41,24 @@ const Navbar = () => {
     setIsMobileOpen(false);
   };
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    setIsMobileOpen(false);
-  };
-
   const toggleTerminal = () => dispatch({ type: 'TOGGLE_WINDOW' });
 
   return (
-    <motion.nav
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 30, duration: 0.5 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-background/90 backdrop-blur-md border-b-2 border-foreground'
-          : 'bg-transparent border-b-2 border-transparent'
-      }`}
-    >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="flex h-16 items-center justify-between gap-4">
-          {/* Brand */}
-          <motion.button
-            onClick={scrollToTop}
-            aria-label="Scroll to top"
-            className="group flex items-center gap-2 font-mono text-sm font-bold uppercase tracking-widest"
-            whileHover={{ x: 2 }}
-            whileTap={{ scale: 0.96 }}
-          >
-            <span className="flex h-8 w-8 items-center justify-center border-2 border-foreground bg-foreground text-background shadow-brutal-sm transition-shadow group-hover:shadow-brutal-md">
-              H
-            </span>
-            <span className="hidden sm:inline">
-              <span className="opacity-50">~/</span>hassan
-              <span className="animate-blink font-light opacity-70">_</span>
-            </span>
-          </motion.button>
-
+    // Wrapper is click-through so the gutter around the floating island
+    // doesn't swallow clicks on the page beneath it.
+    <div className="pointer-events-none fixed inset-x-0 top-4 z-50 flex justify-center px-4">
+      {/* min-w keeps the bar and its dropdown the same width, open or closed */}
+      <div className="pointer-events-auto min-w-[220px] md:min-w-0">
+        <motion.nav
+          initial={{ y: -80, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+          className={`nav-island ${
+            isScrolled ? 'bg-background/90 shadow-brutal-md' : 'bg-background/60 shadow-brutal-sm'
+          }`}
+        >
           {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden items-center gap-0.5 md:flex">
             {navLinks.map((link) => {
               const isActive = activeSection === link.href.substring(1);
               return (
@@ -87,14 +66,14 @@ const Navbar = () => {
                   key={link.name}
                   onClick={() => goToSection(link.href)}
                   aria-current={isActive ? 'true' : undefined}
-                  className={`relative rounded-[4px] px-3 py-2 font-mono text-xs font-bold uppercase tracking-widest transition-colors ${
-                    isActive ? 'text-background' : 'text-foreground hover:text-foreground/60'
+                  className={`relative rounded-[6px] px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-widest transition-colors ${
+                    isActive ? 'text-background' : 'text-foreground hover:opacity-60'
                   }`}
                 >
                   {isActive && (
                     <motion.span
                       layoutId="nav-active"
-                      className="absolute inset-0 -z-10 rounded-[4px] border-2 border-foreground bg-foreground"
+                      className="absolute inset-0 -z-10 rounded-[6px] border-2 border-foreground bg-foreground"
                       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -104,14 +83,38 @@ const Navbar = () => {
             })}
           </div>
 
-          {/* Actions */}
-          <div className="flex items-center gap-2">
+          <span className="nav-divider hidden md:block" aria-hidden="true" />
+
+          {/* Utility controls */}
+          <div className="flex shrink-0 items-center gap-0.5">
+            <motion.button
+              onClick={toggleTheme}
+              className="nav-icon-btn"
+              aria-label="Toggle theme"
+              whileHover={{ rotate: 180 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+            >
+              {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+            </motion.button>
+
+            <motion.button
+              onClick={toggleTerminal}
+              className="nav-icon-btn"
+              aria-label="Toggle terminal"
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+            >
+              <Terminal size={16} />
+            </motion.button>
+
             {RESUME_URL && (
               <motion.a
                 href={RESUME_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hidden items-center gap-1.5 rounded-[6px] border-2 border-foreground bg-foreground px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-widest text-background shadow-brutal-sm transition-shadow hover:shadow-brutal-md sm:flex"
+                className="ml-1 hidden items-center gap-1.5 rounded-[6px] border-2 border-foreground bg-foreground px-2.5 py-1.5 font-mono text-[10px] font-bold uppercase tracking-widest text-background md:flex"
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.96 }}
               >
@@ -121,52 +124,28 @@ const Navbar = () => {
             )}
 
             <motion.button
-              onClick={toggleTheme}
-              className="nav-theme-btn"
-              aria-label="Toggle theme"
-              whileHover={{ scale: 1.1, rotate: 180 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-            >
-              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-            </motion.button>
-
-            <motion.button
-              onClick={toggleTerminal}
-              className="nav-theme-btn"
-              aria-label="Toggle terminal"
-              whileHover={{ scale: 1.1, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-            >
-              <Terminal size={18} />
-            </motion.button>
-
-            <motion.button
               onClick={() => setIsMobileOpen((open) => !open)}
-              className="nav-theme-btn md:hidden"
+              className="nav-icon-btn md:hidden"
               aria-label="Toggle menu"
               aria-expanded={isMobileOpen}
-              whileTap={{ scale: 0.95 }}
+              whileTap={{ scale: 0.9 }}
             >
-              {isMobileOpen ? <X size={18} /> : <Menu size={18} />}
+              {isMobileOpen ? <X size={16} /> : <Menu size={16} />}
             </motion.button>
           </div>
-        </div>
-      </div>
+        </motion.nav>
 
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {isMobileOpen && (
-          <motion.div
-            key="mobile-menu"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="md:hidden overflow-hidden border-b-2 border-foreground bg-background/95 backdrop-blur-md"
-          >
-            <div className="max-w-6xl mx-auto flex flex-col gap-1 px-4 py-4">
+        {/* Mobile menu — a second island docked under the bar */}
+        <AnimatePresence>
+          {isMobileOpen && (
+            <motion.div
+              key="mobile-menu"
+              initial={{ opacity: 0, y: -8, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -8, scale: 0.98 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 32 }}
+              className="nav-island mt-2 flex-col items-stretch gap-1 bg-background/90 shadow-brutal-md md:hidden"
+            >
               {navLinks.map((link, index) => {
                 const isActive = activeSection === link.href.substring(1);
                 return (
@@ -174,10 +153,10 @@ const Navbar = () => {
                     key={link.name}
                     onClick={() => goToSection(link.href)}
                     aria-current={isActive ? 'true' : undefined}
-                    initial={{ opacity: 0, x: -20 }}
+                    initial={{ opacity: 0, x: -12 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.05 * index }}
-                    className={`flex items-center gap-2 rounded-[4px] border-2 px-3 py-3 text-left font-mono text-sm font-bold uppercase tracking-widest transition-colors ${
+                    transition={{ delay: 0.04 * index }}
+                    className={`flex items-center gap-2 rounded-[6px] border-2 px-3 py-2.5 text-left font-mono text-xs font-bold uppercase tracking-widest transition-colors ${
                       isActive
                         ? 'border-foreground bg-foreground text-background'
                         : 'border-transparent text-foreground hover:border-foreground'
@@ -194,20 +173,20 @@ const Navbar = () => {
                   href={RESUME_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: -12 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.05 * navLinks.length }}
-                  className="mt-1 flex items-center gap-2 rounded-[4px] border-2 border-foreground bg-foreground px-3 py-3 font-mono text-sm font-bold uppercase tracking-widest text-background"
+                  transition={{ delay: 0.04 * navLinks.length }}
+                  className="flex items-center gap-2 rounded-[6px] border-2 border-foreground bg-foreground px-3 py-2.5 font-mono text-xs font-bold uppercase tracking-widest text-background"
                 >
                   <FileText size={14} />
                   Resume
                 </motion.a>
               )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
   );
 };
 
