@@ -71,8 +71,7 @@ const Index = () => {
               <LocationTile />
             </div>
 
-            {/* SpotifyPlayer ships its own bordered chrome — no TerminalFrame wrapper */}
-            <div className="flex items-center md:col-span-12 lg:col-span-6">
+            <div className="md:col-span-12 lg:col-span-6">
               <SpotifyPlayer />
             </div>
           </div>

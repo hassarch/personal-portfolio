@@ -1,5 +1,6 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, type ReactNode } from 'react';
 import { Music, Play, Pause, SkipBack, SkipForward, Heart } from 'lucide-react';
+import TerminalFrame from './TerminalFrame';
 
 interface Track {
   name: string;
@@ -204,133 +205,156 @@ const SpotifyPlayer = () => {
 
   if (loading) {
     return (
-      <div className="w-full bg-card border-2 border-foreground overflow-hidden shadow-[4px_4px_0_0_currentColor]">
-        <div className="px-3 py-1 border-b border-foreground/20">
-          <span className="font-mono text-[10px] text-foreground opacity-50">$ spotify --now-playing</span>
-        </div>
-        <div className="animate-pulse flex h-24">
-          <div className="w-24 h-full bg-foreground/20"></div>
-          <div className="flex-1 p-4 flex flex-col justify-between">
-            <div className="space-y-2">
-              <div className="h-4 bg-foreground/20 w-3/4"></div>
-              <div className="h-3 bg-foreground/20 w-1/2"></div>
-            </div>
+      <PlayerShell>
+        <span className="bento-eyebrow">$ spotify --now-playing</span>
+        <div className="flex flex-1 animate-pulse items-center gap-3">
+          <div className="h-16 w-16 shrink-0 rounded-[6px] border-2 border-foreground bg-foreground/10" />
+          <div className="flex-1 space-y-2">
+            <div className="h-4 w-3/4 bg-foreground/20" />
+            <div className="h-3 w-1/2 bg-foreground/20" />
+            <div className="h-1 w-full bg-foreground/20" />
           </div>
         </div>
-      </div>
+      </PlayerShell>
     );
   }
 
   if (error) {
     return (
-      <div className="w-full bg-card border-2 border-foreground shadow-[4px_4px_0_0_currentColor]">
-        <div className="px-3 py-1 border-b border-foreground/20">
-          <span className="font-mono text-[10px] text-foreground opacity-50">$ spotify --now-playing</span>
+      <PlayerShell>
+        <span className="bento-eyebrow">$ spotify --now-playing</span>
+        <div className="flex flex-1 flex-col items-center justify-center gap-1 text-center">
+          <span className="font-mono text-xs font-bold uppercase tracking-widest text-foreground opacity-50">
+            [ error ]
+          </span>
+          <span className="font-mono text-[10px] text-destructive">{error}</span>
         </div>
-        <div className="p-4 text-xs text-foreground font-mono">
-          <p className="font-bold">[✗] Spotify Error</p>
-          <p className="text-destructive text-[10px] mt-1">{error}</p>
-        </div>
-      </div>
+      </PlayerShell>
     );
   }
 
   if (!track) {
     return (
-      <div className="w-full bg-card border-2 border-foreground shadow-[4px_4px_0_0_currentColor]">
-        <div className="px-3 py-1 border-b border-foreground/20">
-          <span className="font-mono text-[10px] text-foreground opacity-50">$ spotify --now-playing</span>
+      <PlayerShell>
+        <span className="bento-eyebrow">$ spotify --now-playing</span>
+        <div className="flex flex-1 items-center justify-center gap-2">
+          <Music size={14} className="text-foreground opacity-40" aria-hidden="true" />
+          <span className="font-mono text-xs font-bold uppercase tracking-widest text-foreground opacity-50">
+            [ offline ]
+          </span>
         </div>
-        <div className="p-4 flex items-center justify-center gap-3 h-24">
-          <Music size={20} className="text-foreground opacity-50" />
-          <span className="text-xs font-mono font-bold text-foreground opacity-50 uppercase tracking-widest">[ Offline ]</span>
-        </div>
-      </div>
+      </PlayerShell>
     );
   }
 
   const progressPercent = (track.progress / track.duration) * 100;
 
   return (
-    <div className="w-full bg-card border-2 border-foreground overflow-hidden hover:-translate-y-1 hover:-translate-x-1 transition-transform duration-200 shadow-[6px_6px_0_0_currentColor]">
-      <div className="px-3 py-1 border-b border-foreground/20">
-        <span className="font-mono text-[10px] text-foreground opacity-50">
-          $ spotify {track.isPlaying ? '--now-playing' : '--last-played'}
-        </span>
-      </div>
-      <div className="flex h-24">
-      <div className="w-24 h-full flex-shrink-0 border-r-2 border-foreground overflow-hidden grayscale hover:grayscale-0 transition-all duration-500">
-        <img 
-          src={track.imageUrl} 
-          alt={track.album}
-          className="w-full h-full object-cover"
-        />
-      </div>
+    <PlayerShell>
+      <span className="bento-eyebrow">
+        $ spotify {track.isPlaying ? '--now-playing' : '--last-played'}
+      </span>
 
-      <div className="flex-1 px-4 py-2 flex flex-col justify-between">
-        <div className="min-h-0">
-          <h3 className="text-sm font-bold text-foreground truncate uppercase tracking-tight">
-            {track.name}
-          </h3>
-          <p className="text-[10px] text-foreground font-mono truncate uppercase font-bold opacity-75">
+      <div className="flex flex-1 items-center gap-3">
+        {/* Album art stays desaturated until hover — full-colour artwork is the
+            one thing that would break this palette's monochrome. */}
+        <a
+          href={track.spotifyUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="h-16 w-16 shrink-0 overflow-hidden rounded-[6px] border-2 border-foreground grayscale transition-all duration-500 hover:grayscale-0"
+          aria-label={`Open ${track.name} on Spotify`}
+        >
+          <img
+            src={track.imageUrl}
+            alt={track.album}
+            className="h-full w-full object-cover"
+          />
+        </a>
+
+        <div className="min-w-0 flex-1">
+          <p className="bento-value truncate text-base">{track.name}</p>
+          <p className="mt-1 truncate font-mono text-[10px] font-bold uppercase tracking-widest text-foreground opacity-60">
             {track.artist}
           </p>
-        </div>
 
-        <div className="my-1">
-          <div className="w-full h-1 border border-foreground bg-background overflow-hidden">
-            <div 
+          <div className="mt-2 h-1 w-full overflow-hidden border border-foreground/40 bg-foreground/10">
+            <div
               className="h-full bg-foreground transition-all duration-300"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
-          <div className="flex justify-between text-[10px] text-foreground font-mono font-bold mt-1">
-            <span>{track.isPlaying ? formatTime(track.progress) : '0:00'}</span>
-            <span>{formatTime(track.duration)}</span>
-          </div>
-        </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex gap-2">
-            <button
-              onClick={() => handleSkip('previous')}
-              className="text-foreground hover:scale-110 transition-transform"
-              title="Previous"
-            >
-              <SkipBack size={14} className="fill-foreground" />
-            </button>
-            <button
-              onClick={handlePlayPause}
-              className="text-foreground hover:scale-110 transition-transform"
-              title={track.isPlaying ? 'Pause' : 'Play'}
-            >
-              {track.isPlaying ? (
-                <Pause size={14} className="fill-foreground" />
-              ) : (
-                <Play size={14} className="fill-foreground" />
-              )}
-            </button>
-            <button
-              onClick={() => handleSkip('next')}
-              className="text-foreground hover:scale-110 transition-transform"
-              title="Next"
-            >
-              <SkipForward size={14} className="fill-foreground" />
-            </button>
+          <div className="mt-1.5 flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <ControlButton label="Previous" onClick={() => handleSkip('previous')}>
+                <SkipBack size={14} className="fill-current" />
+              </ControlButton>
+              <ControlButton
+                label={track.isPlaying ? 'Pause' : 'Play'}
+                onClick={handlePlayPause}
+              >
+                {track.isPlaying ? (
+                  <Pause size={14} className="fill-current" />
+                ) : (
+                  <Play size={14} className="fill-current" />
+                )}
+              </ControlButton>
+              <ControlButton label="Next" onClick={() => handleSkip('next')}>
+                <SkipForward size={14} className="fill-current" />
+              </ControlButton>
+              <ControlButton label="Like" onClick={handleLike}>
+                <Heart size={14} />
+              </ControlButton>
+            </div>
+
+            <span className="shrink-0 font-mono text-[10px] font-bold tabular-nums text-foreground opacity-60">
+              {/* Paused tracks still report a real progress_ms, and the
+                  recently-played branch sets progress to 0 — so the raw value
+                  is right either way, and stays in step with the bar above. */}
+              {formatTime(track.progress)} / {formatTime(track.duration)}
+            </span>
           </div>
-          <button
-            onClick={handleLike}
-            className="text-foreground hover:scale-110 transition-transform"
-            title="Like"
-          >
-            <Heart size={14} />
-          </button>
         </div>
       </div>
-      </div>
-    </div>
+    </PlayerShell>
   );
 };
+
+/**
+ * Shared chrome for every player state, so the tile reads as a sibling of the
+ * other bento tiles rather than a card with its own borders and shadow.
+ */
+const PlayerShell = ({ children }: { children: ReactNode }) => (
+  <TerminalFrame
+    title="~/spotify"
+    flush
+    className="bento-tile"
+    contentClassName="bento-tile-content"
+  >
+    <div className="flex h-full flex-col">{children}</div>
+  </TerminalFrame>
+);
+
+const ControlButton = ({
+  label,
+  onClick,
+  children,
+}: {
+  label: string;
+  onClick: () => void;
+  children: ReactNode;
+}) => (
+  <button
+    type="button"
+    onClick={onClick}
+    aria-label={label}
+    title={label}
+    className="text-foreground opacity-60 transition-all duration-200 hover:scale-110 hover:opacity-100"
+  >
+    {children}
+  </button>
+);
 
 function formatTime(ms: number): string {
   const seconds = Math.floor(ms / 1000);
