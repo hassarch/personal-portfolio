@@ -2,8 +2,10 @@ import { Star, Book, GitPullRequest, Users } from 'lucide-react';
 import { motion } from 'motion/react';
 import TerminalFrame from '../TerminalFrame';
 import { useGithubStats } from '@/hooks/useGithubStats';
+import { useGithubContributions } from '@/hooks/useGithubContributions';
 import { useCountUp } from '@/hooks/useCountUp';
 import { GITHUB_URL } from '@/constants/profile';
+import ContributionHeatmap from './ContributionHeatmap';
 
 interface StatDef {
   label: string;
@@ -18,6 +20,7 @@ interface StatDef {
  */
 const GithubStatsTile = () => {
   const { stats, loading, error } = useGithubStats();
+  const { contributions, totalContributions, loading: contribLoading, error: contribError } = useGithubContributions();
 
   const items: StatDef[] = [
     { label: 'stars', icon: <Star size={14} />, value: stats?.stars ?? null },
@@ -50,10 +53,32 @@ const GithubStatsTile = () => {
             </span>
           </div>
         ) : (
-          <div className="grid flex-1 grid-cols-2 gap-x-4 gap-y-3 content-center">
-            {items.map((item) => (
-              <Stat key={item.label} {...item} loading={loading} />
-            ))}
+          <div className="flex flex-1 flex-col gap-4 justify-center">
+            <div className="grid grid-cols-2 gap-x-4 gap-y-3">
+              {items.map((item) => (
+                <Stat key={item.label} {...item} loading={loading} />
+              ))}
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: 0.2 }}
+              className="border-t border-foreground border-opacity-10 pt-3"
+            >
+              <div className="mb-2">
+                <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-foreground opacity-40">
+                  $ gh activity --heatmap
+                </span>
+              </div>
+              <ContributionHeatmap
+                contributions={contributions}
+                loading={contribLoading}
+                error={contribError}
+                totalContributions={totalContributions}
+              />
+            </motion.div>
           </div>
         )}
       </div>
