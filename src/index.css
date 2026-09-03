@@ -171,123 +171,15 @@
   .bento-value {
     @apply font-bold text-foreground uppercase tracking-tight leading-none;
   }
-  .section-header-wrapper {
-    @apply mb-16 text-center;
-  }
-  .section-header {
-    @apply text-3xl font-bold mb-4 text-foreground uppercase tracking-tight inline-block border-b-4 border-foreground pb-2;
-  }
-  @screen md {
-    .section-header { @apply text-5xl; }
-  }
-  .section-header-alt {
-    @apply text-3xl font-bold mb-4 text-foreground uppercase tracking-tight;
-  }
-  @screen md {
-    .section-header-alt { @apply text-5xl; }
-  }
-  .section-subtitle {
-    @apply text-foreground text-sm max-w-3xl mx-auto font-mono mt-4;
-  }
-  @screen md {
-    .section-subtitle { @apply text-base; }
-  }
 
   /* Hero Section */
-  .hero-section {
-    @apply relative flex items-center justify-center min-h-[85vh] px-4 py-16;
-  }
-  @screen md {
-    .hero-section { @apply px-6; }
-  }
-  .hero-content {
-    @apply max-w-3xl mx-auto w-full flex flex-col items-center text-center;
-  }
-  .hero-sys-init {
-    @apply text-foreground font-bold text-sm mb-4 tracking-[0.3em] uppercase;
-  }
-  .hero-title {
-    @apply text-4xl font-bold mb-6 text-foreground tracking-tight leading-none uppercase;
-  }
-  @screen sm {
-    .hero-title { @apply text-5xl; }
-  }
-  @screen md {
-    .hero-title { @apply text-7xl; }
-  }
-  .hero-subtitle {
-    @apply text-foreground text-sm max-w-lg mx-auto mb-8 leading-relaxed font-mono;
-  }
-  @screen sm {
-    .hero-subtitle { @apply text-base; }
-  }
-  .hero-actions {
-    @apply flex flex-col gap-4 justify-center mb-10 w-full;
-  }
-  @screen sm {
-    .hero-actions { @apply flex-row w-auto; }
-  }
-  .hero-action-btn {
-    @apply text-sm py-6 px-8 rounded-none w-full;
-  }
-  @screen sm {
-    .hero-action-btn { @apply w-auto; }
-  }
-  .hero-socials {
-    @apply flex gap-4 justify-center mb-12;
-  }
   .hero-social-link {
     @apply flex items-center justify-center w-12 h-12 border-2 border-foreground bg-background text-foreground transition-colors p-0 hover:bg-foreground hover:text-background;
     box-shadow: 4px 4px 0px 0px currentColor;
     border-radius: 6px;
   }
 
-  /* About */
-  .about-grid {
-    @apply grid grid-cols-1 gap-12;
-  }
-  @screen md {
-    .about-grid { @apply grid-cols-2; }
-  }
-  .about-text {
-    @apply space-y-6 font-mono text-sm text-foreground leading-relaxed border-l-2 border-foreground pl-6;
-  }
-  @screen md {
-    .about-text { @apply text-base; }
-  }
-  .about-stats-grid {
-    @apply grid grid-cols-1 gap-6;
-  }
-  @screen sm {
-    .about-stats-grid { @apply grid-cols-2; }
-  }
-  .stat-card-value {
-    @apply text-3xl font-bold text-foreground mb-1;
-  }
-  .stat-card-label {
-    @apply text-[10px] text-foreground uppercase tracking-widest font-bold font-mono;
-  }
-
-  /* Skills */
-  .skills-grid {
-    @apply flex flex-wrap justify-center gap-4 max-w-5xl mx-auto;
-  }
-  .skill-pill {
-    @apply px-4 py-3 border-2 border-foreground bg-card text-xs text-foreground transition-all duration-200 flex items-center gap-3 cursor-default font-bold hover:bg-foreground hover:text-background;
-    box-shadow: 4px 4px 0px 0px currentColor;
-    border-radius: 6px;
-  }
-  @screen md {
-    .skill-pill { @apply text-sm; }
-  }
-
   /* Projects */
-  .projects-grid {
-    @apply grid grid-cols-1 gap-8 max-w-5xl mx-auto;
-  }
-  @screen md {
-    .projects-grid { @apply grid-cols-2; }
-  }
   .project-card {
     @apply retro-card bg-card p-8 flex flex-col h-full relative overflow-hidden transition-all duration-300;
     border-radius: 10px;
@@ -326,18 +218,6 @@
   .dark .project-card:hover {
     box-shadow: 10px 10px 0px 0px currentColor, 0 10px 40px rgba(0,0,0,0.4);
   }
-  .project-header {
-    @apply flex justify-between items-start mb-4;
-  }
-  .project-title {
-    @apply text-xl font-bold text-foreground text-left uppercase tracking-tight relative z-10;
-  }
-  .project-description {
-    @apply text-foreground text-sm mb-6 flex-grow leading-relaxed text-left font-mono relative z-10;
-  }
-  .project-tech-list {
-    @apply flex flex-wrap gap-2 mb-6 relative z-10;
-  }
   .project-tech-pill {
     @apply px-2 py-1 text-[10px] border border-foreground text-foreground font-mono uppercase tracking-widest font-bold bg-background transition-all duration-200;
     border-radius: 4px;
@@ -345,9 +225,6 @@
   .project-tech-pill:hover {
     @apply bg-foreground text-background;
     transform: translateY(-2px);
-  }
-  .project-actions {
-    @apply flex gap-4 mt-auto relative z-10;
   }
 
   /* Contact */
@@ -402,45 +279,11 @@
   .nav-divider {
     @apply mx-1 h-6 w-0.5 shrink-0 bg-foreground opacity-30;
   }
-  .nav-bar {
-    @apply fixed top-0 left-0 right-0 z-50 transition-all duration-300;
-  }
-  .nav-header {
-    @apply flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0;
-  }
-  .nav-container {
-    @apply max-w-6xl mx-auto px-6 py-4;
-  }
-  .nav-theme-btn {
-    @apply flex items-center justify-center w-10 h-10 border-2 border-foreground bg-background text-foreground transition-all hover:-translate-y-0.5;
-    box-shadow: 2px 2px 0 0 currentColor;
-    border-radius: 6px;
-  }
-  .nav-theme-btn:hover {
-    box-shadow: 4px 4px 0 0 currentColor;
-  }
-  .nav-links {
-    @apply flex items-center justify-center gap-2 sm:gap-6 flex-wrap;
-  }
-  .nav-link {
-    @apply text-foreground px-2 sm:px-3 py-1 transition-colors text-[10px] sm:text-xs uppercase tracking-widest font-bold border-2 border-transparent hover:bg-foreground hover:text-background hover:border-foreground;
-    border-radius: 4px;
-  }
   .footer-wrapper {
     @apply relative py-8 px-6;
   }
-  .footer-inner {
-    @apply flex flex-col items-center justify-between gap-6 text-sm font-bold uppercase tracking-widest font-mono;
-  }
-  @screen md {
-    .footer-inner { @apply flex-row; }
-  }
 
   /* Legacy Shared Tools */
-  .retro-container {
-    @apply border-2 border-foreground bg-background p-6;
-    border-radius: 8px;
-  }
   .retro-card {
     @apply border-2 border-foreground bg-card p-6 shadow-foreground transition-transform duration-200;
     box-shadow: 6px 6px 0px 0px currentColor;
@@ -580,10 +423,6 @@
 }
 
 @layer utilities {
-  .text-border {
-    -webkit-text-stroke: 1px var(--foreground);
-    color: transparent;
-  }
   .bg-grid-pattern {
     /* `--foreground` holds bare HSL channels, so it must be wrapped in hsl()
        — using var() directly yields an invalid colour and no gradient at all. */
@@ -601,18 +440,7 @@
   .animate-blink {
     animation: blink 1s step-end infinite;
   }
-  .animate-slide-in-bottom {
-    animation: slideInBottom 0.5s ease-out forwards;
-  }
-  .animate-glitch {
-    animation: glitch 0.3s ease-in-out;
-  }
-  
-  /* Smooth transitions for all interactive elements */
-  .smooth-transition {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  
+
   /* Enhanced shadow utilities for brutalist design */
   .shadow-brutal-sm {
     box-shadow: 2px 2px 0 0 currentColor;
@@ -644,30 +472,6 @@
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
-}
-
-@keyframes typing {
-  from { width: 0; }
-  to { width: 100%; }
-}
-
-@keyframes glitch {
-  0%, 100% { transform: translate(0); }
-  20% { transform: translate(-2px, 2px); }
-  40% { transform: translate(2px, -2px); }
-  60% { transform: translate(-2px, -2px); }
-  80% { transform: translate(2px, 2px); }
-}
-
-@keyframes slideInBottom {
-  from { 
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
 }
 
 /* Reduced motion preferences */
