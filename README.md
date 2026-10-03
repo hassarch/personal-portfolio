@@ -1,405 +1,483 @@
-# ✨ Hassan's Portfolio
+# Personal Portfolio
 
-**Live Demo:** [https://hassancodes.in/](https://hassancodes.in/)
+A retro-inspired personal portfolio website featuring terminal aesthetics, CRT effects, and real-time integrations.
 
-A clean, minimalist portfolio website featuring smooth animations and a professional design. Built with React, TypeScript, and Tailwind CSS.
+[![CI](https://github.com/hassarch/personal-portfolio/workflows/CI/badge.svg)](https://github.com/hassarch/personal-portfolio/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-## 🌟 Features
+## Overview
 
-### Design & UX
-- 🎨 **Minimalist Design** - Clean lines, ample whitespace, and restrained color palette
-- 📱 **Fully Responsive** - Optimized for all screen sizes
-- ✨ **Subtle Animations** - Smooth scroll-triggered animations
-- 🖱️ **Hover Effects** - Interactive elements with clean transitions
-- 💼 **Project Showcase** - Card-based layout with tech tags
-- 🎯 **Skills Display** - Clean pill-based tech stack showcase
+A modern portfolio with nostalgic terminal aesthetics—featuring an animated boot sequence, interactive command interface, live GitHub stats, and optional Spotify integration.
 
-### Functionality
-- 📧 **Contact Form** - Integrated with Formspree for email submissions
-- 🔗 **Social Links** - GitHub, LinkedIn, LeetCode, X (Twitter), and Email
-- 📄 **Resume Link** - Direct access to downloadable resume
-- 🎵 **Easter Egg** - Hidden UFO music feature
-- 🔝 **Back to Top Button** - Smooth scroll navigation
+## Features
 
-## 🛠️ Technologies
+- **Terminal Interface** — Interactive command system with history and keyboard shortcuts (Ctrl+K)
+- **Boot Sequence** — ASCII art animation on first visit (session-aware)
+- **Live GitHub Stats** — Real-time metrics and contribution heatmap
+- **Spotify Integration** — Now playing widget with playback controls (optional)
+- **Bento Grid Layout** — Responsive tiles with clock, location, and stats
+- **Retro Aesthetics** — CRT scanlines, monochrome palette, macOS-style frames
+- **Theme Toggle** — Persistent light/dark mode
+- **Docker Ready** — Multi-stage build with Nginx and health checks
 
-### Core
-- **Vite** - Lightning-fast build tool and dev server
-- **React 18** - Modern UI library with hooks
-- **TypeScript** - Type-safe development
-- **Tailwind CSS** - Utility-first styling
+## Architecture
 
-### UI Components
-- **shadcn/ui** - Beautiful, accessible component library
-- **Radix UI** - Unstyled, accessible primitives
-- **Lucide React** - Clean, consistent icons
+```mermaid
+graph TB
+    User[Browser]
+    App[React App]
+    Context[Context Layer]
+    Components[Components]
+    API[External APIs]
 
-### Form & Validation
-- **React Hook Form** - Performant form state management
-- **Zod** - TypeScript-first schema validation
-- **Formspree** - Backend form handling
+    User --> App
+    App --> Context
+    Context --> Components
+    Components --> API
+    API --> GitHub[GitHub API]
+    API --> Spotify[Spotify API]
+```
 
-### Additional
-- **React Router** - Client-side routing
-- **TanStack Query** - Data fetching and caching
-- **Vercel Analytics** - Performance monitoring
+**Structure:**
+- **Context Layer** — Theme and terminal state management
+- **Component Layer** — UI components with custom hooks for data fetching and animations
+- **External APIs** — GitHub stats and Spotify integration
 
-## 🚀 Getting Started
+
+
+## Tech Stack
+
+| Category | Technology |
+|----------|------------|
+| **Language** | TypeScript |
+| **Framework** | React 18 |
+| **Build Tool** | Vite 5 |
+| **Styling** | Tailwind CSS 3 |
+| **Animation** | Motion 12 (Framer Motion successor) |
+| **State Management** | React Context + TanStack Query |
+| **UI Components** | Radix UI (Label, Toast, Tooltip) |
+| **Form Handling** | React Hook Form + Zod |
+| **Icons** | Lucide React |
+| **Testing** | Vitest + Testing Library |
+| **Linting** | ESLint 9 + TypeScript ESLint |
+| **CI/CD** | GitHub Actions |
+| **Container** | Docker (multi-stage) + Nginx |
+| **Analytics** | Vercel Analytics |
+
+## Project Structure
+
+```text
+personal-portfolio/
+├── src/
+│   ├── components/
+│   │   ├── bento/              # Bento grid tiles
+│   │   │   ├── ClockTile.tsx
+│   │   │   ├── ContributionHeatmap.tsx
+│   │   │   ├── GithubStatsTile.tsx
+│   │   │   └── LocationTile.tsx
+│   │   ├── ui/                 # Radix UI primitives
+│   │   │   ├── button.tsx
+│   │   │   ├── input.tsx
+│   │   │   ├── label.tsx
+│   │   │   ├── textarea.tsx
+│   │   │   ├── toast.tsx
+│   │   │   ├── toaster.tsx
+│   │   │   └── tooltip.tsx
+│   │   ├── AboutSection.tsx
+│   │   ├── BackToTop.tsx
+│   │   ├── BootSequence.tsx     # Boot animation
+│   │   ├── CommandHistory.tsx   # Terminal output
+│   │   ├── CommandInput.tsx     # Terminal input
+│   │   ├── ContactSection.tsx
+│   │   ├── Footer.tsx
+│   │   ├── HeroSection.tsx
+│   │   ├── Navbar.tsx
+│   │   ├── ProjectsSection.tsx
+│   │   ├── SkillsSection.tsx
+│   │   ├── SpotifyPlayer.tsx    # Now playing widget
+│   │   ├── Starfield.tsx        # Animated background
+│   │   ├── TerminalFrame.tsx    # macOS window frame
+│   │   ├── TerminalOverlay.tsx  # Scanline effects
+│   │   └── TerminalWindow.tsx   # Full terminal UI
+│   ├── contexts/
+│   │   ├── TerminalContext.tsx  # Terminal state
+│   │   └── ThemeContext.tsx     # Theme state
+│   ├── hooks/
+│   │   ├── useCountUp.ts        # Number animations
+│   │   ├── useGithubContributions.ts
+│   │   ├── useGithubStats.ts
+│   │   ├── useLocalClock.ts     # Real-time clock
+│   │   ├── useScrollAnimation.ts
+│   │   ├── useScrollNavigation.ts
+│   │   ├── useTypingEffect.ts
+│   │   └── use-toast.ts
+│   ├── lib/
+│   │   ├── commandInterpreter.ts # Command parser
+│   │   └── utils.ts
+│   ├── constants/
+│   │   ├── asciiArt.ts          # ASCII art & boot messages
+│   │   └── profile.ts           # Personal data
+│   ├── App.tsx
+│   ├── index.css                # Global styles
+│   └── main.tsx
+├── public/
+│   ├── robots.txt
+│   └── song.mp3
+├── .github/workflows/
+│   └── ci.yml                   # CI/CD pipeline
+├── Dockerfile                   # Multi-stage production build
+├── docker-compose.yml           # Container orchestration
+├── nginx.conf                   # Nginx configuration
+├── get-spotify-token.cjs        # Spotify token helper
+├── vite.config.ts
+├── tsconfig.json
+└── package.json
+```
+
+## Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ or Bun
-- npm, yarn, or bun package manager
+- **Node.js** 20 or higher
+- **npm**, **yarn**, or **bun**
+- (Optional) **Docker** for containerized deployment
 
 ### Installation
 
-1. **Clone the repository:**
 ```bash
-git clone https://github.com/hassarch/starlight-portfolio.git
-cd starlight-portfolio
-```
+# Clone the repository
+git clone https://github.com/hassarch/personal-portfolio.git
+cd personal-portfolio
 
-2. **Install dependencies:**
-```bash
+# Install dependencies
 npm install
-# or
-yarn install
-# or
-bun install
 ```
 
-3. **Set up environment variables:**
+### Development
+
+```bash
+# Start development server (localhost:5173)
+npm run dev
+```
+
+### Production Build
+
+```bash
+# Build optimized production bundle
+npm run build
+
+# Preview production build locally
+npm run preview
+```
+
+### Testing
+
+```bash
+# Run tests once
+npm test
+
+# Watch mode for development
+npm run test:watch
+
+# Interactive UI mode
+npm run test:ui
+```
+
+### Linting
+
+```bash
+# Run ESLint
+npm run lint
+```
+
+## Configuration
+
+### Environment Variables
 
 Create a `.env` file in the root directory:
+
 ```env
-VITE_FORMSPREE_ENDPOINT=https://formspree.io/f/YOUR_FORM_ID
+# GitHub API (required for stats tile)
+VITE_GITHUB_TOKEN=ghp_your_github_personal_access_token
+
+# Spotify API (optional - tile shows fallback if not configured)
+VITE_SPOTIFY_CLIENT_ID=your_spotify_client_id
+VITE_SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+VITE_SPOTIFY_REFRESH_TOKEN=your_spotify_refresh_token
 ```
 
-4. **Start the development server:**
-```bash
-npm run dev
-# or
-yarn dev
-# or
-bun dev
+<details>
+<summary><strong>How to get GitHub token</strong></summary>
+
+1. Go to [GitHub Settings → Developer settings → Personal access tokens](https://github.com/settings/tokens)
+2. Generate new token (classic)
+3. Select scopes: `read:user`, `repo` (for public repos)
+4. Copy token and add to `.env`
+</details>
+
+<details>
+<summary><strong>How to get Spotify credentials</strong></summary>
+
+1. Create app at [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
+2. Note your Client ID and Client Secret
+3. Add redirect URI: `http://localhost:5173/callback`
+4. Use the included helper script to get a refresh token:
+   ```bash
+   node get-spotify-token.cjs
+   ```
+5. Follow the authorization flow in your browser
+6. Add all three values to `.env`
+</details>
+
+### Personalization
+
+Edit `src/constants/profile.ts` to customize personal information:
+
+```typescript
+export const NAME = 'Your Name';
+export const LOCATION = 'Your City';
+export const TIMEZONE = 'America/New_York';
+export const TIMEZONE_LABEL = 'EST';
+export const GITHUB_USERNAME = 'yourusername';
+export const EMAIL = 'your@email.com';
+export const PHONE = '+1 234 567 8900';
+export const RESUME_URL = 'https://example.com/resume.pdf';
+
+export const LINKEDIN_URL = 'https://www.linkedin.com/in/yourprofile/';
+export const X_URL = 'https://x.com/yourhandle';
 ```
 
-The application will be available at `http://localhost:8080`
+This single file propagates changes across the entire site.
 
-## 📧 Contact Form Setup
+## Docker Deployment
 
-The contact form uses Formspree for handling submissions:
-
-1. **Sign up for Formspree:**
-   - Visit [https://formspree.io/](https://formspree.io/)
-   - Create a free account
-
-2. **Create a new form:**
-   - Click "New Form" in your dashboard
-   - Name it (e.g., "Portfolio Contact")
-   - Copy the endpoint URL: `https://formspree.io/f/YOUR_FORM_ID`
-
-3. **Configure environment:**
-   - Add to `.env`:
-     ```
-     VITE_FORMSPREE_ENDPOINT=https://formspree.io/f/YOUR_FORM_ID
-     ```
-
-4. **Test it:**
-   - Submit the contact form
-   - Check your Formspree dashboard for the submission
-
-**Fallback:** If not configured, the form will open your default email client.
-
-## 🏗️ Build for Production
+### Using Docker Compose (Recommended)
 
 ```bash
-npm run build
-# or
-yarn build
-# or
-bun run build
-```
+# Build and start container
+docker-compose up --build
 
-Built files will be in the `dist` directory.
-
-### Other scripts
-
-| Script        | Description                    |
-|---------------|--------------------------------|
-| `npm run lint`| Run ESLint                     |
-| `npm run build:dev` | Build in development mode |
-| `npm run preview`   | Preview production build  |
-
-### Preview Production Build
-
-```bash
-npm run preview
-# or
-yarn preview
-# or
-bun run preview
-```
-
-## 🐳 Docker Deployment
-
-The project includes production-ready Docker support for easy containerized deployment.
-
-### Quick Start with Docker Compose
-
-```bash
-# Build and run the container
+# Run in detached mode
 docker-compose up -d
 
 # View logs
 docker-compose logs -f
 
-# Stop the container
+# Stop container
 docker-compose down
 ```
 
-The application will be available at `http://localhost:3000`
+Access the site at `http://localhost:3000`
 
-### Using Docker Directly
+### Manual Docker Build
 
 ```bash
-# Build the image
+# Build image
 docker build -t portfolio-app .
 
-# Run the container
+# Run container
 docker run -p 3000:80 portfolio-app
 
-# Run in detached mode with a name
+# Run in detached mode with name
 docker run -d -p 3000:80 --name portfolio portfolio-app
 
 # View logs
 docker logs -f portfolio
 
-# Stop the container
-docker stop portfolio
-
-# Remove the container
-docker rm portfolio
+# Stop and remove
+docker stop portfolio && docker rm portfolio
 ```
 
-### Docker Features
+The multi-stage Dockerfile builds with Node.js 20 Alpine and serves with Nginx (~50MB final image).
 
-- **Multi-stage Build** - Optimized image size (~50MB)
-- **Nginx Server** - Fast static file serving with gzip compression
-- **Health Checks** - Automatic container health monitoring
-- **Security** - Non-root user, minimal attack surface
-- **SPA Routing** - Proper handling of client-side routes
-- **Performance** - Asset caching headers and compression
-- **Networking** - Isolated network for multi-container setups
+## CI/CD
 
-### Environment Variables
+GitHub Actions workflow (`.github/workflows/ci.yml`) runs on every push to `main`/`master`:
 
-To pass environment variables to the Docker container:
+- ✅ **Install dependencies** — `npm ci`
+- ✅ **Lint code** — `npm run lint`
+- ✅ **Build production bundle** — `npm run build`
 
-```bash
-# Using docker-compose with .env file
-docker-compose up -d --env-file .env.production
+The workflow ensures code quality and build integrity before deployment.
 
-# Using docker run
-docker run -p 3000:80 --env-file .env.production portfolio-app
+## Customization
 
-# Or pass individual variables
-docker run -p 3000:80 -e VITE_FORMSPREE_ENDPOINT=https://formspree.io/f/YOUR_ID portfolio-app
+### Adding New Terminal Commands
+
+Edit `src/lib/commandInterpreter.ts`:
+
+```typescript
+const commands: Record<string, CommandHandler> = {
+  mycommand: () => ({
+    output: 'Command output here',
+    type: 'success'
+  }),
+  // ... existing commands
+};
 ```
 
-### Docker Compose Advanced Usage
+### Modifying Projects
 
-**Scale the service:**
-```bash
-docker-compose up -d --scale web=3
+Edit the `projects` array in `src/components/ProjectsSection.tsx`:
+
+```typescript
+const projects: Project[] = [
+  {
+    title: 'Project Name',
+    description: 'Brief description',
+    technologies: ['React', 'TypeScript', 'Tailwind'],
+    githubUrl: 'https://github.com/user/repo',
+    liveUrl: 'https://demo.example.com',
+    date: '2024-01-15',
+  },
+  // ... more projects
+];
 ```
 
-**Use a custom port:**
-```bash
-# Edit docker-compose.yml or override via command
-docker-compose -f docker-compose.yml up -d -e "PORT=8080"
+### Creating New Bento Tiles
+
+1. Create component in `src/components/bento/`
+2. Wrap with `<TerminalFrame>` for consistent styling
+3. Use the `bento-tile` and `bento-tile-content` classes
+4. Add to grid in the relevant section component
+
+Example structure:
+
+```tsx
+<TerminalFrame
+  title="~/my-tile"
+  flush
+  className="bento-tile"
+  contentClassName="bento-tile-content"
+>
+  <div className="flex h-full flex-col">
+    <span className="bento-eyebrow">$ my-command</span>
+    {/* Your content */}
+  </div>
+</TerminalFrame>
 ```
 
-**View container status:**
-```bash
-docker-compose ps
+### Styling
+
+The design uses:
+- **Tailwind utility classes** for component styles
+- **CSS custom properties** in `index.css` for theme colors
+- **Monospace fonts** (`font-mono`) for terminal aesthetic
+- **Motion variants** for consistent animations
+
+Edit theme colors in `src/index.css`:
+
+```css
+:root {
+  --background: 0 0% 100%;
+  --foreground: 0 0% 10%;
+  --primary: 0 0% 10%;
+  /* ... */
+}
+
+.dark {
+  --background: 0 0% 10%;
+  --foreground: 0 0% 95%;
+  /* ... */
+}
 ```
 
-### Troubleshooting
+## Testing
 
-**Container exits immediately:**
-```bash
-docker logs portfolio-app
+The project includes comprehensive tests for critical functionality:
+
+**Covered Areas:**
+- ✅ Terminal command interpreter
+- ✅ Terminal overlay behavior
+- ✅ Terminal frame rendering
+- ✅ Typing effect hook
+- ✅ Count-up animation hook
+- ✅ Local clock functionality
+- ✅ Scroll navigation hook
+- ✅ ASCII art rendering
+
+**Test Files:**
+```text
+src/components/TerminalFrame.test.tsx
+src/components/TerminalOverlay.test.tsx
+src/hooks/useCountUp.test.ts
+src/hooks/useLocalClock.test.ts
+src/hooks/useScrollNavigation.test.tsx
+src/lib/commandInterpreter.test.ts
+src/constants/asciiArt.test.ts
 ```
 
-**Port already in use:**
-```bash
-# Change port in docker-compose.yml or use:
-docker run -p 8080:80 portfolio-app
-```
-
-**Rebuild without cache:**
-```bash
-docker-compose build --no-cache
-docker-compose up -d
-```
-
-**Check container health:**
-```bash
-docker ps --format "table {{.Names}}\t{{.Status}}"
-```
-
-## 🌐 Deployment
+## Deployment
 
 Deploy to any static hosting platform:
 
 ### Vercel (Recommended)
+
 ```bash
 npm i -g vercel
 vercel
 ```
 
+Or connect your GitHub repository in the Vercel dashboard.
+
 ### Netlify
+
 ```bash
 npm run build
 # Drag and drop the 'dist' folder to Netlify
 ```
 
+Or connect via Git with these settings:
+- **Build command:** `npm run build`
+- **Publish directory:** `dist`
+
+### Cloudflare Pages
+
+1. Connect your GitHub repository
+2. **Build command:** `npm run build`
+3. **Output directory:** `dist`
+4. Set environment variables in dashboard
+
 ### GitHub Pages
+
 ```bash
 npm run build
 # Push 'dist' folder to gh-pages branch
 ```
 
-### Cloudflare Pages
-- Connect your GitHub repository
+**Deployment Settings:**
 - Build command: `npm run build`
 - Output directory: `dist`
+- Node version: 20+
+- SPA routing: fallback to `index.html`
 
-## 🔧 CI
+## Terminal Commands
 
-GitHub Actions runs on every push and pull request to `main` / `master`:
+The interactive terminal supports the following commands:
 
-- **Lint** – ESLint
-- **Build** – `npm run build`
+| Command | Description |
+|---------|-------------|
+| `help` | Display all available commands |
+| `about` | Show information about the developer |
+| `skills` | List technical skills and technologies |
+| `projects` | Display featured projects |
+| `contact` | Show contact information |
+| `github` | Open GitHub profile in new tab |
+| `linkedin` | Open LinkedIn profile in new tab |
+| `email` | Open default email client |
+| `x` | Open X (Twitter) profile |
+| `clear` | Clear terminal history |
+| `theme` | Toggle light/dark mode |
+| `time` | Display current time in timezone |
 
-Workflow: [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
+Access the terminal by pressing **Ctrl+K** (or **Cmd+K** on Mac).
 
-## 📁 Project Structure
-
-```
-starlight-portfolio/
-├── .github/
-│   └── workflows/
-│       └── ci.yml        # GitHub Actions CI
-├── src/
-│   ├── components/       # React components
-│   │   ├── ui/           # shadcn/ui components
-│   │   ├── AboutSection.tsx
-│   │   ├── AnimatedBackground.tsx
-│   │   ├── BackToTop.tsx
-│   │   ├── BlurText.tsx
-│   │   ├── ContactSection.tsx
-│   │   ├── Footer.tsx
-│   │   ├── Galaxy.tsx
-│   │   ├── HeroSection.tsx
-│   │   ├── Navbar.tsx
-│   │   ├── ProjectsSection.tsx
-│   │   ├── SkillsSection.tsx
-│   │   ├── StarBackground.tsx
-│   │   └── UfoIcon.tsx
-│   ├── contexts/
-│   │   └── ThemeContext.tsx
-│   ├── hooks/
-│   │   ├── useScrollAnimation.ts
-│   │   ├── useTypingEffect.ts
-│   │   └── use-toast.ts
-│   ├── lib/
-│   │   ├── ufoMusic.ts
-│   │   └── utils.ts
-│   ├── pages/
-│   │   ├── Index.tsx
-│   │   └── NotFound.tsx
-│   ├── App.tsx
-│   ├── index.css
-│   └── main.tsx
-├── public/               # Static assets
-├── Dockerfile
-├── docker-compose.yml
-└── package.json
-```
-
-## 🎨 Customization
-
-### Colors
-Edit `src/index.css` to change the color scheme:
-```css
-:root {
-  --background: 0 0% 100%;   /* White */
-  --foreground: 0 0% 10%;    /* Near Black */
-  --muted-foreground: 0 0% 45%; /* Gray */
-}
-```
-
-### Content
-- **Personal Info:** Edit `src/components/HeroSection.tsx`
-- **About Text:** Edit `src/components/AboutSection.tsx`
-- **Skills:** Edit `src/components/SkillsSection.tsx`
-- **Projects:** Edit `src/components/ProjectsSection.tsx`
-- **Contact:** Edit `src/components/ContactSection.tsx`
-
-### Animations
-- **Scroll Animations:** Change `transitionDelay` in component files
-- **Hover Effects:** Adjust transition durations in Tailwind classes
-
-## 🎯 Performance
-
-- ⚡ Lighthouse Score: 95+
-- 🚀 First Contentful Paint: < 1s
-- 📦 Bundle Size: ~130KB gzipped
-- ♿ Accessibility: WCAG 2.1 AA compliant
-
-## 📚 Documentation
-
-Comprehensive documentation is available in the [`docs/`](./docs) directory:
-
-- **[Quick Start Guide](./docs/QUICK_START.md)** - Get running in 5 minutes
-- **[Features Demo](./docs/FEATURES_DEMO.md)** - How to showcase the portfolio
-- **[Enhancements](./docs/ENHANCEMENTS.md)** - Technical implementation details
-- **[macOS Style Guide](./docs/MACOS_STYLE_GUIDE.md)** - Window design system
-- **[Before & After](./docs/BEFORE_AFTER.md)** - Visual comparisons
-- **[Full Documentation Index](./docs/README.md)** - Complete guide navigation
-
-### Key Features Documented:
-- ✨ Smooth animations with spring physics
-- ⌨️ Typing effects in hero section
-- 💻 Interactive terminal with 11 commands
-- 🍎 macOS-style windows with traffic lights
-- 🃏 Enhanced project cards with hover effects
-- 🎨 4-tier brutalist shadow system
-- 🌓 Theme toggle (navbar + terminal)
-
-## 📝 License
+## License
 
 This project is open source and available under the [MIT License](LICENSE).
 
-## 🤝 Contributing
+## Acknowledgments
 
-Contributions, issues, and feature requests are welcome!
-
-## 👨‍💻 Author
-
-**Mohammed Hassan**
-- Website: [hassancodes.in](https://hassancodes.in/)
-- GitHub: [@hassarch](https://github.com/hassarch)
-- LinkedIn: [hassan0777](https://www.linkedin.com/in/hassan0777/)
-
-## 🙏 Acknowledgments
-
-- Design inspired by minimalist portfolio trends
 - Icons by [Lucide](https://lucide.dev/)
-- UI components by [shadcn/ui](https://ui.shadcn.com/)
-
----
-
-⭐ Star this repo if you found it helpful!
+- UI primitives by [Radix UI](https://www.radix-ui.com/)
+- Animations by [Motion](https://motion.dev/)
