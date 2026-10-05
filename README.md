@@ -201,10 +201,17 @@ Create a `.env` file in the root directory:
 VITE_GITHUB_TOKEN=ghp_your_github_personal_access_token
 
 # Spotify API (optional - tile shows fallback if not configured)
-VITE_SPOTIFY_CLIENT_ID=your_spotify_client_id
-VITE_SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
-VITE_SPOTIFY_REFRESH_TOKEN=your_spotify_refresh_token
+# No VITE_ prefix: these are read by the /api/spotify serverless function and
+# must never be inlined into the client bundle.
+SPOTIFY_CLIENT_ID=your_spotify_client_id
+SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+SPOTIFY_REFRESH_TOKEN=your_spotify_refresh_token
 ```
+
+> **Note:** anything prefixed `VITE_` is compiled into the public JavaScript
+> bundle and readable by any visitor. Only put non-secret values behind that
+> prefix. The Spotify credentials stay unprefixed and are served through
+> `api/spotify.ts`.
 
 <details>
 <summary><strong>How to get GitHub token</strong></summary>
@@ -218,15 +225,47 @@ VITE_SPOTIFY_REFRESH_TOKEN=your_spotify_refresh_token
 <details>
 <summary><strong>How to get Spotify credentials</strong></summary>
 
-1. Create app at [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
+1. Create an app at [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
 2. Note your Client ID and Client Secret
-3. Add redirect URI: `http://localhost:5173/callback`
+3. Add this exact redirect URI: `http://127.0.0.1:3000/callback`
+   (Spotify rejects the `localhost` hostname for loopback redirects — use the IP)
 4. Use the included helper script to get a refresh token:
    ```bash
    node get-spotify-token.cjs
    ```
+   It reads `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET` from `.env`, and
+   requests read-only scopes — the player displays state and never writes to
+   the account.
 5. Follow the authorization flow in your browser
-6. Add all three values to `.env`
+6. Add all three values to `.env` for local dev, **and** to your host's
+   environment variables for production (on Vercel: Project → Settings →
+   Environment Variables). They are read at request time by the serverless
+   function, not baked into the build.
+</details>
+
+<details>
+<summary><strong>How the Spotify tile works</strong></summary>
+
+```
+browser → GET /api/spotify  (CDN-cached, s-maxage=30)
+               ↓ (cache miss only)
+        api/spotify.ts → api/_spotify.ts
+               ↓
+        accounts.spotify.com  (refresh grant, token cached per instance)
+        api.spotify.com/v1/me/player/...
+```
+
+The credentials never leave the server. The CDN layer keeps Spotify call volume
+flat regardless of traffic — without it, every open tab would poll Spotify
+against the same account's rate limit.
+
+`npm run dev` serves the same route through a Vite middleware (see
+`spotifyDevApi` in [vite.config.ts](vite.config.ts)), so local and deployed
+behaviour match without needing `vercel dev`.
+
+The transport controls are decorative. The page is public, so wiring them to
+the Web API would let any visitor skip the owner's music or write to their
+library.
 </details>
 
 ### Personalization

@@ -2,28 +2,76 @@
 
 /**
  * Spotify Refresh Token Generator
- * 
- * This script helps you get a refresh token for the Spotify API
- * 
+ *
+ * Mints the refresh token that the /api/spotify proxy uses.
+ *
  * Usage:
- * 1. Run: node get-spotify-token.cjs
- * 2. Follow the instructions to authorize
- * 3. Copy the refresh token to your .env file
+ *   SPOTIFY_CLIENT_ID=... SPOTIFY_CLIENT_SECRET=... node get-spotify-token.cjs
+ *
+ * Credentials are read from the environment (or .env) rather than hardcoded,
+ * so a client secret never lands in version control. Register the redirect URI
+ * printed at startup in the Spotify dashboard, exactly as written.
  */
 
 const http = require('http');
+const https = require('https');
 const url = require('url');
+const fs = require('fs');
+const path = require('path');
 const querystring = require('querystring');
 
-const CLIENT_ID = '2683270022eb46089b2006107bf24f54';
-const CLIENT_SECRET = '5a1044cd26004b38a10177b635bc1d05';
-const REDIRECT_URI = 'https://www.hassancodes.in/';
-const SCOPES = 'user-read-currently-playing';
+// Minimal .env reader, so the script needs no dependency on dotenv.
+const loadDotEnv = () => {
+  const envPath = path.join(__dirname, '.env');
+  if (!fs.existsSync(envPath)) return;
+
+  for (const line of fs.readFileSync(envPath, 'utf8').split('\n')) {
+    const match = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*?)\s*$/);
+    if (!match) continue;
+
+    const [, key, rawValue] = match;
+    if (process.env[key] === undefined) {
+      process.env[key] = rawValue.replace(/^["']|["']$/g, '');
+    }
+  }
+};
+
+loadDotEnv();
+
+const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
+const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
+
+// Loopback redirects must use the explicit IP, not the `localhost` hostname —
+// Spotify rejects the latter under its current redirect-URI rules.
+const PORT = 3000;
+const REDIRECT_URI = `http://127.0.0.1:${PORT}/callback`;
+
+// Scopes needed for the Spotify player to work fully:
+// - user-read-currently-playing: show what's playing now
+// - user-read-recently-played: show last played track when nothing is playing
+// - user-read-playback-state: read playback state
+// - user-modify-playback-state: play/pause/skip controls
+// - user-library-modify: like button
+// - user-library-read: check if track is liked
+const SCOPES = 'user-read-currently-playing user-read-recently-played user-read-playback-state user-modify-playback-state user-library-modify user-library-read';
+
+if (!CLIENT_ID || !CLIENT_SECRET) {
+  console.error('\n❌ Missing credentials.\n');
+  console.error('Set them in .env, or inline:\n');
+  console.error('  SPOTIFY_CLIENT_ID=... SPOTIFY_CLIENT_SECRET=... node get-spotify-token.cjs\n');
+  process.exit(1);
+}
 
 console.log('\n🎵 Spotify Refresh Token Generator\n');
+console.log(`Redirect URI (must be registered in your Spotify app):\n  ${REDIRECT_URI}\n`);
 console.log('Step 1: Opening authorization URL in your browser...\n');
 
-const authUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(SCOPES)}`;
+const authUrl =
+  'https://accounts.spotify.com/authorize' +
+  `?client_id=${CLIENT_ID}` +
+  '&response_type=code' +
+  `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}` +
+  `&scope=${encodeURIComponent(SCOPES)}`;
 
 console.log('If the browser doesn\'t open, visit this URL:');
 console.log(authUrl);
@@ -43,6 +91,14 @@ if (platform === 'darwin') {
 // Start local server to catch the callback
 const server = http.createServer((req, res) => {
   const parsedUrl = url.parse(req.url, true);
+
+  // Only handle /callback path
+  if (!parsedUrl.pathname.includes('callback')) {
+    res.writeHead(404);
+    res.end('Not found');
+    return;
+  }
+
   const code = parsedUrl.query.code;
   const error = parsedUrl.query.error;
 
@@ -79,7 +135,10 @@ const server = http.createServer((req, res) => {
       },
     };
 
-    const tokenReq = http.request(options, (tokenRes) => {
+    // https, not http: the accounts endpoint is TLS-only. A plain http request
+    // lands on port 80 and returns a redirect that JSON.parse chokes on, which
+    // is why this script could never print a token before.
+    const tokenReq = https.request(options, (tokenRes) => {
       let data = '';
 
       tokenRes.on('data', (chunk) => {
@@ -92,14 +151,16 @@ const server = http.createServer((req, res) => {
 
           if (tokenData.refresh_token) {
             console.log('✅ Refresh token obtained!\n');
-            console.log('📋 Add this to your .env file:\n');
-            console.log(`VITE_SPOTIFY_REFRESH_TOKEN=${tokenData.refresh_token}\n`);
-            console.log('Then restart your dev server.\n');
+            console.log('📋 Add this to .env for local dev:\n');
+            console.log(`SPOTIFY_REFRESH_TOKEN=${tokenData.refresh_token}\n`);
+            console.log('Then add the same value to your Vercel project\'s environment');
+            console.log('variables, alongside SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET.\n');
           } else {
             console.error('❌ No refresh token in response:', tokenData);
           }
         } catch (e) {
           console.error('❌ Error parsing response:', e);
+          console.error('Raw response:', data);
         }
 
         server.close();
@@ -118,13 +179,13 @@ const server = http.createServer((req, res) => {
   }
 });
 
-server.listen(3000, () => {
+server.listen(PORT, '127.0.0.1', () => {
   console.log('Waiting for authorization...\n');
 });
 
 server.on('error', (e) => {
   if (e.code === 'EADDRINUSE') {
-    console.error('❌ Port 3000 is already in use. Please close other applications using this port.');
+    console.error(`❌ Port ${PORT} is already in use. Please close other applications using this port.`);
   } else {
     console.error('❌ Server error:', e);
   }
