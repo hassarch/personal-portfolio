@@ -1,207 +1,10 @@
-import { useEffect, useState, useCallback, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { Music, Play, Pause, SkipBack, SkipForward, Heart } from 'lucide-react';
 import TerminalFrame from './TerminalFrame';
-
-interface Track {
-  name: string;
-  artist: string;
-  album: string;
-  imageUrl: string;
-  isPlaying: boolean;
-  progress: number;
-  duration: number;
-  spotifyUrl: string;
-}
+import { useSpotifyNowPlaying } from '@/hooks/useSpotifyNowPlaying';
 
 const SpotifyPlayer = () => {
-  const [track, setTrack] = useState<Track | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-
-  const getAccessToken = async () => {
-    try {
-      const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
-      const clientSecret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
-      const refreshToken = import.meta.env.VITE_SPOTIFY_REFRESH_TOKEN;
-
-      if (!clientId || !clientSecret || !refreshToken) {
-        throw new Error('Spotify credentials not configured');
-      }
-
-      const authResponse = await fetch('https://accounts.spotify.com/api/token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret),
-        },
-        body: 'grant_type=refresh_token&refresh_token=' + refreshToken,
-      });
-
-      if (!authResponse.ok) {
-        throw new Error('Failed to get Spotify access token');
-      }
-
-      const authData = await authResponse.json();
-      return authData.access_token;
-    } catch (err) {
-      console.error('Error getting access token:', err);
-      return null;
-    }
-  };
-
-  const fetchRecentlyPlayed = async (token: string) => {
-    try {
-      const recentResponse = await fetch('https://api.spotify.com/v1/me/player/recently-played?limit=1', {
-        headers: {
-          'Authorization': 'Bearer ' + token,
-        },
-      });
-
-      if (!recentResponse.ok) {
-        return null;
-      }
-
-      const recentData = await recentResponse.json();
-
-      if (!recentData.items || recentData.items.length === 0) {
-        return null;
-      }
-
-      const lastTrack = recentData.items[0].track;
-      return {
-        name: lastTrack.name,
-        artist: lastTrack.artists[0].name,
-        album: lastTrack.album.name,
-        imageUrl: lastTrack.album.images[0]?.url || '',
-        isPlaying: false,
-        progress: 0,
-        duration: lastTrack.duration_ms,
-        spotifyUrl: lastTrack.external_urls.spotify,
-      };
-    } catch (err) {
-      console.error('Error fetching recently played:', err);
-      return null;
-    }
-  };
-
-  const fetchCurrentTrack = useCallback(async (token?: string) => {
-    try {
-      const currentToken = token || accessToken || await getAccessToken();
-      if (!currentToken) {
-        setError('Failed to authenticate with Spotify');
-        return;
-      }
-
-      if (!accessToken) setAccessToken(currentToken);
-
-      const trackResponse = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
-        headers: {
-          'Authorization': 'Bearer ' + currentToken,
-        },
-      });
-
-      if (trackResponse.status === 204 || !trackResponse.ok) {
-        // No current track, fetch recently played
-        const recentTrack = await fetchRecentlyPlayed(currentToken);
-        setTrack(recentTrack);
-        setError(null);
-        return;
-      }
-
-      const data = await trackResponse.json();
-
-      if (!data.item) {
-        // No current track, fetch recently played
-        const recentTrack = await fetchRecentlyPlayed(currentToken);
-        setTrack(recentTrack);
-        setError(null);
-        return;
-      }
-
-      setTrack({
-        name: data.item.name,
-        artist: data.item.artists[0].name,
-        album: data.item.album.name,
-        imageUrl: data.item.album.images[0]?.url || '',
-        isPlaying: data.is_playing,
-        progress: data.progress_ms,
-        duration: data.item.duration_ms,
-        spotifyUrl: data.item.external_urls.spotify,
-      });
-      setError(null);
-    } catch (err) {
-      console.error('Spotify error:', err);
-      setError(err instanceof Error ? err.message : 'Error loading track');
-      setTrack(null);
-    } finally {
-      setLoading(false);
-    }
-  }, [accessToken]);
-
-  useEffect(() => {
-    fetchCurrentTrack();
-    const interval = setInterval(() => fetchCurrentTrack(), 5000);
-    return () => clearInterval(interval);
-  }, [fetchCurrentTrack]);
-
-  const handlePlayPause = async () => {
-    if (!accessToken || !track) return;
-
-    try {
-      const endpoint = track.isPlaying 
-        ? 'https://api.spotify.com/v1/me/player/pause'
-        : 'https://api.spotify.com/v1/me/player/play';
-
-      await fetch(endpoint, {
-        method: 'PUT',
-        headers: {
-          'Authorization': 'Bearer ' + accessToken,
-        },
-      });
-
-      setTimeout(() => fetchCurrentTrack(accessToken), 500);
-    } catch (err) {
-      console.error('Error toggling playback:', err);
-    }
-  };
-
-  const handleSkip = async (direction: 'next' | 'previous') => {
-    if (!accessToken) return;
-
-    try {
-      const endpoint = direction === 'next'
-        ? 'https://api.spotify.com/v1/me/player/next'
-        : 'https://api.spotify.com/v1/me/player/previous';
-
-      await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Authorization': 'Bearer ' + accessToken,
-        },
-      });
-
-      setTimeout(() => fetchCurrentTrack(accessToken), 500);
-    } catch (err) {
-      console.error('Error skipping track:', err);
-    }
-  };
-
-  const handleLike = async () => {
-    if (!accessToken || !track) return;
-
-    try {
-      const trackId = track.spotifyUrl.split('/').pop();
-      await fetch(`https://api.spotify.com/v1/me/tracks?ids=${trackId}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': 'Bearer ' + accessToken,
-        },
-      });
-    } catch (err) {
-      console.error('Error liking track:', err);
-    }
-  };
+  const { track, loading, error } = useSpotifyNowPlaying();
 
   if (loading) {
     return (
@@ -227,7 +30,9 @@ const SpotifyPlayer = () => {
           <span className="font-mono text-xs font-bold uppercase tracking-widest text-foreground opacity-50">
             [ error ]
           </span>
-          <span className="font-mono text-[10px] text-destructive">{error}</span>
+          <span className="font-mono text-[10px] text-destructive">
+            Could not reach Spotify
+          </span>
         </div>
       </PlayerShell>
     );
@@ -247,7 +52,8 @@ const SpotifyPlayer = () => {
     );
   }
 
-  const progressPercent = (track.progress / track.duration) * 100;
+  // Guard the divide: a malformed payload shouldn't render width: NaN%.
+  const progressPercent = track.duration > 0 ? (track.progress / track.duration) * 100 : 0;
 
   return (
     <PlayerShell>
@@ -273,7 +79,14 @@ const SpotifyPlayer = () => {
         </a>
 
         <div className="min-w-0 flex-1">
-          <p className="bento-value truncate text-base">{track.name}</p>
+          <a
+            href={track.spotifyUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bento-value block truncate text-base hover:underline"
+          >
+            {track.name}
+          </a>
           <p className="mt-1 truncate font-mono text-[10px] font-bold uppercase tracking-widest text-foreground opacity-60">
             {track.artist}
           </p>
@@ -286,26 +99,26 @@ const SpotifyPlayer = () => {
           </div>
 
           <div className="mt-1.5 flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <ControlButton label="Previous" onClick={() => handleSkip('previous')}>
+            {/* Decorative transport. The page is public and these would act on
+                a real account, so they display state rather than drive it —
+                the play/pause glyph still reflects actual playback. */}
+            <div className="flex items-center gap-2" aria-hidden="true">
+              <ControlGlyph>
                 <SkipBack size={14} className="fill-current" />
-              </ControlButton>
-              <ControlButton
-                label={track.isPlaying ? 'Pause' : 'Play'}
-                onClick={handlePlayPause}
-              >
+              </ControlGlyph>
+              <ControlGlyph>
                 {track.isPlaying ? (
                   <Pause size={14} className="fill-current" />
                 ) : (
                   <Play size={14} className="fill-current" />
                 )}
-              </ControlButton>
-              <ControlButton label="Next" onClick={() => handleSkip('next')}>
+              </ControlGlyph>
+              <ControlGlyph>
                 <SkipForward size={14} className="fill-current" />
-              </ControlButton>
-              <ControlButton label="Like" onClick={handleLike}>
+              </ControlGlyph>
+              <ControlGlyph>
                 <Heart size={14} />
-              </ControlButton>
+              </ControlGlyph>
             </div>
 
             <span className="shrink-0 font-mono text-[10px] font-bold tabular-nums text-foreground opacity-60">
@@ -336,24 +149,13 @@ const PlayerShell = ({ children }: { children: ReactNode }) => (
   </TerminalFrame>
 );
 
-const ControlButton = ({
-  label,
-  onClick,
-  children,
-}: {
-  label: string;
-  onClick: () => void;
-  children: ReactNode;
-}) => (
-  <button
-    type="button"
-    onClick={onClick}
-    aria-label={label}
-    title={label}
-    className="text-foreground opacity-60 transition-all duration-200 hover:scale-110 hover:opacity-100"
-  >
-    {children}
-  </button>
+/**
+ * Non-interactive by design — a <button> here would be announced as a control
+ * and offer a hover affordance for something that does nothing. The wrapping
+ * row carries aria-hidden, so this stays out of the accessibility tree.
+ */
+const ControlGlyph = ({ children }: { children: ReactNode }) => (
+  <span className="text-foreground opacity-60">{children}</span>
 );
 
 function formatTime(ms: number): string {
