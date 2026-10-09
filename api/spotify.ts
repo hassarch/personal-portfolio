@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from 'http';
-import { fetchNowPlaying, SpotifyError } from './_spotify';
+import { fetchNowPlaying, SpotifyError } from './_spotify.js';
 
 /**
  * Vercel's Node runtime hands the handler Node's req/res with a few
