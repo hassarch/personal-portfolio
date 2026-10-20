@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -9,6 +10,7 @@ import TerminalOverlay from "@/components/TerminalOverlay";
 import BootSequence from "@/components/BootSequence";
 
 import Index from "./pages/Index";
+import AnimePage from "./pages/Anime";
 
 const queryClient = new QueryClient();
 
@@ -42,7 +44,12 @@ const AppContent = () => {
       )}
 
       {/* Main content - renders after boot completes */}
-      {showContent && <Index />}
+      {showContent && (
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/anime" element={<AnimePage />} />
+        </Routes>
+      )}
 
       {/* Vercel Analytics */}
       <Analytics />
@@ -55,7 +62,9 @@ const App = () => (
     <ThemeProvider>
       <TerminalProvider>
         <TooltipProvider>
-          <AppContent />
+          <BrowserRouter>
+            <AppContent />
+          </BrowserRouter>
         </TooltipProvider>
       </TerminalProvider>
     </ThemeProvider>

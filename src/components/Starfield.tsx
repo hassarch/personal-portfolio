@@ -116,8 +116,14 @@ const Starfield = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
+    if (!ctx) {
+      console.warn('Starfield: Could not get 2D context');
+      return;
+    }
+
+    // Log for debugging
+    console.log('Starfield initialized on:', navigator.userAgent);
 
     const prefersReducedMotion = window.matchMedia(
       '(prefers-reduced-motion: reduce)'
@@ -182,7 +188,7 @@ const Starfield = () => {
     };
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = window.devicePixelRatio || 1;
       width = window.innerWidth;
       height = window.innerHeight;
       canvas.width = Math.floor(width * dpr);
@@ -190,6 +196,9 @@ const Starfield = () => {
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      
+      console.log(`Starfield resize: ${width}x${height}, dpr: ${dpr}`);
+      
       initStars();
       // Under reduced motion there's no loop, so repaint the static frame here.
       if (prefersReducedMotion) renderStatic();
@@ -412,11 +421,18 @@ const Starfield = () => {
   }, [theme]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 h-full w-full"
-      aria-hidden="true"
-    />
+    <>
+      {/* Fallback static background */}
+      <div className="absolute inset-0 h-full w-full starfield-fallback" aria-hidden="true" />
+      
+      {/* Animated canvas overlay */}
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 h-full w-full"
+        style={{ mixBlendMode: 'normal' }}
+        aria-hidden="true"
+      />
+    </>
   );
 };
 
