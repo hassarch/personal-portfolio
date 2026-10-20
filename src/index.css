@@ -150,20 +150,27 @@
   }
 
   /* Bento grid — mixed-size tile cluster at the top of the page.
-     Column spans are set inline on each tile via md:col-span-*. */
+     Column spans are set inline on each tile via col-span-*. */
   .bento-grid {
-    @apply grid grid-cols-1 gap-4 mb-8;
+    @apply grid grid-cols-12 gap-4 mb-8 auto-rows-auto;
   }
-  @screen md {
-    .bento-grid { @apply grid-cols-12 gap-5; }
+  @screen sm {
+    .bento-grid { @apply gap-5; }
   }
-  /* Tiles stretch to match the tallest in their row */
+  
+  /* Tiles stretch to match the tallest in their row, with consistent minimum heights */
   .bento-tile {
-    @apply h-full flex flex-col;
+    @apply h-full flex flex-col min-h-[200px];
   }
+  
   .bento-tile-content {
     @apply flex-1 p-4;
   }
+  
+  @screen sm {
+    .bento-tile-content { @apply p-5; }
+  }
+  
   /* Small label above a tile's value, matching the `$ command` eyebrow voice */
   .bento-eyebrow {
     @apply font-mono text-[10px] text-foreground opacity-50 mb-2 block;
@@ -320,12 +327,13 @@
 
   /* Terminal Frame - macOS Style (frosted glass so the starfield shows through) */
   .terminal-frame {
-    @apply border-2 border-foreground mb-8 w-full overflow-hidden;
+    @apply border-2 border-foreground mb-0 w-full overflow-hidden;
     background: hsl(var(--background) / 0.55);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
     border-radius: 10px;
+    transition: transform 0.2s ease;
   }
   .dark .terminal-frame {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -423,6 +431,17 @@
 }
 
 @layer utilities {
+  /* Starfield fallback - animated gradient background */
+  .starfield-fallback {
+    background: radial-gradient(ellipse at top, hsl(var(--background)) 0%, hsl(var(--background) / 0.95) 100%);
+    animation: starfield-shimmer 20s ease-in-out infinite;
+  }
+  
+  @keyframes starfield-shimmer {
+    0%, 100% { opacity: 0.95; }
+    50% { opacity: 1; }
+  }
+  
   .bg-grid-pattern {
     /* `--foreground` holds bare HSL channels, so it must be wrapped in hsl()
        — using var() directly yields an invalid colour and no gradient at all. */

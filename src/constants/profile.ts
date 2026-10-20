@@ -18,6 +18,10 @@ export const TIMEZONE_LABEL = 'IST';
 
 export const GITHUB_USERNAME = 'hassarch';
 
+export const LEETCODE_USERNAME = 'has_san';
+
+export const ANILIST_USERNAME = 'oreo69';
+
 export const EMAIL = 'hassanrj245@gmail.com';
 
 export const PHONE = '+91 8710030521';

@@ -11,8 +11,8 @@ import TerminalWindow from '@/components/TerminalWindow';
 import Starfield from '@/components/Starfield';
 import SpotifyPlayer from '@/components/SpotifyPlayer';
 import GithubStatsTile from '@/components/bento/GithubStatsTile';
-import ClockTile from '@/components/bento/ClockTile';
-import LocationTile from '@/components/bento/LocationTile';
+import LeetCodeStatsTile from '@/components/bento/LeetCodeStatsTile';
+import AniListTile from '@/components/bento/AniListTile';
 
 const Index = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -46,33 +46,32 @@ const Index = () => {
             resolve these by querySelector('#id').
           */}
           <div className="bento-grid">
-            <section id="hero" className="md:col-span-12">
+            {/* Hero section - full width */}
+            <section id="hero" className="col-span-full">
               <HeroSection />
             </section>
 
-            <section id="about" className="scroll-mt-28 md:col-span-7">
+            {/* About - horizontal rectangle on the left */}
+            <section id="about" className="col-span-full lg:col-span-6 lg:row-span-2">
               <AboutSection />
             </section>
 
-            <div className="md:col-span-5">
+            {/* Rectangle tiles - Spotify and Anime stacked on the right */}
+            <div className="col-span-full sm:col-span-6 lg:col-span-6">
+              <SpotifyPlayer />
+            </div>
+
+            <div className="col-span-full sm:col-span-6 lg:col-span-6">
+              <AniListTile />
+            </div>
+
+            {/* Activity heatmap tiles - full width below */}
+            <div className="col-span-full lg:col-span-6">
               <GithubStatsTile />
             </div>
 
-            {/*
-              Time/loc sit half-and-half at md — a 3-of-12 tile is only ~160px
-              there, which clips the clock and a longer city name. They go
-              narrow from lg up, where 3 cols is ~225px.
-            */}
-            <div className="md:col-span-6 lg:col-span-3">
-              <ClockTile />
-            </div>
-
-            <div className="md:col-span-6 lg:col-span-3">
-              <LocationTile />
-            </div>
-
-            <div className="md:col-span-12 lg:col-span-6">
-              <SpotifyPlayer />
+            <div className="col-span-full lg:col-span-6">
+              <LeetCodeStatsTile />
             </div>
           </div>
 
