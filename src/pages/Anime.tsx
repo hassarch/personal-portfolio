@@ -44,12 +44,12 @@ const AnimePage = () => {
       <div className="main-container">
         <Navbar />
         
-        <main className="pt-24 pb-16">
+        <main className="pt-16 sm:pt-24 pb-12 sm:pb-16">
           {/* Back button + Header */}
-          <div className="max-w-7xl mx-auto px-6 mb-8">
+          <div className="max-w-7xl mx-auto px-2 sm:px-6 mb-6 sm:mb-8">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 font-mono text-sm text-foreground opacity-60 hover:opacity-100 transition-opacity mb-6"
+              className="inline-flex items-center gap-2 font-mono text-sm text-foreground opacity-60 hover:opacity-100 transition-opacity mb-4 sm:mb-6 min-h-[44px]"
             >
               <ArrowLeft size={16} />
               <span>$ cd ..</span>
@@ -58,15 +58,15 @@ const AnimePage = () => {
             <TerminalFrame
               title="~/anime"
               flush
-              className="mb-8"
-              contentClassName="p-8"
+              className="mb-6 sm:mb-8"
+              contentClassName="p-4 sm:p-8"
             >
               <div className="flex items-center justify-between flex-wrap gap-4">
                 <div>
-                  <h1 className="font-mono text-3xl font-bold text-foreground mb-2">
+                  <h1 className="font-mono text-2xl sm:text-3xl font-bold text-foreground mb-2">
                     $ anime --list
                   </h1>
-                  <p className="font-mono text-sm text-foreground opacity-60">
+                  <p className="font-mono text-xs sm:text-sm text-foreground opacity-60">
                     My anime collection from{' '}
                     <a
                       href={`https://anilist.co/user/${ANILIST_USERNAME}`}
@@ -92,9 +92,9 @@ const AnimePage = () => {
           </div>
 
           {/* Anime Grid */}
-          <div className="max-w-7xl mx-auto px-6">
+          <div className="max-w-7xl mx-auto px-2 sm:px-6">
             {error ? (
-              <TerminalFrame title="~/error" contentClassName="p-12">
+              <TerminalFrame title="~/error" contentClassName="p-6 sm:p-12">
                 <div className="text-center">
                   <span className="font-mono text-sm text-foreground opacity-50">
                     [ failed to load anime list ]
@@ -102,7 +102,7 @@ const AnimePage = () => {
                 </div>
               </TerminalFrame>
             ) : loading ? (
-              <TerminalFrame title="~/loading" contentClassName="p-12">
+              <TerminalFrame title="~/loading" contentClassName="p-6 sm:p-12">
                 <div className="flex justify-center">
                   <motion.div
                     animate={{ rotate: 360 }}
@@ -119,12 +119,12 @@ const AnimePage = () => {
                     title="~/watching"
                     flush
                     className="mb-8"
-                    contentClassName="p-6"
+                    contentClassName="p-3.5 sm:p-6"
                   >
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"
+                      className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4"
                     >
                       {watching.map((anime, index) => (
                         <AnimeCard key={anime.id} anime={anime} index={index} />

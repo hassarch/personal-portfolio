@@ -236,11 +236,10 @@ export default function SkillsConstellation() {
       </div>
 
       {/* Content */}
-      <div className="relative p-6 pb-12">
+      <div className="relative p-3.5 sm:p-6 pb-8 sm:pb-12">
         {/* Background starfield */}
         <svg
           className="absolute inset-0 w-full h-full pointer-events-none opacity-30"
-          style={{ filter: 'blur(0.5px)' }}
         >
           {STARFIELD_DOTS.map((dot, i) => (
             <circle
@@ -426,11 +425,10 @@ function MapView({
   }, [skills]);
 
   return (
-    <div className="w-full overflow-x-auto">
+    <div className="w-full overflow-x-auto scrollbar-thin">
       <svg
         viewBox="0 0 880 440"
-        className="w-full h-auto"
-        style={{ minHeight: '400px' }}
+        className="w-full h-auto min-w-[620px] sm:min-w-0"
       >
         <defs>
           {/* Glow filters for each category */}
@@ -572,6 +570,15 @@ function MapView({
                 opacity: isDimmed ? 0.17 : 1,
               }}
             >
+              {/* Expanded touch target for phones */}
+              <circle
+                cx={skill.x}
+                cy={skill.y}
+                r={Math.max(22, radius + 12)}
+                fill="transparent"
+                className="cursor-pointer"
+              />
+
               {/* Glow halo */}
               <circle
                 cx={skill.x}
@@ -580,13 +587,7 @@ function MapView({
                 fill={CATEGORY_COLORS[skill.category]}
                 opacity={isActive ? 0.4 : 0.2}
                 filter={`url(#glow-${skill.category})`}
-                className={cn(
-                  'transition-all duration-300',
-                  !prefersReducedMotion && 'animate-twinkle'
-                )}
-                style={{
-                  animationDelay: `${idx * 0.2}s`,
-                }}
+                className="transition-all duration-300"
               />
 
               {/* Active ring */}

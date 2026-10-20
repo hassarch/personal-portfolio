@@ -134,15 +134,15 @@ const ProjectEntry = ({ project, variants }: { project: Project; variants: Recor
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
     >
       {/* Project Title with Icon */}
-      <div className="flex items-start justify-between mb-6">
-        <h3 className="text-2xl font-bold text-foreground uppercase tracking-tight">
+      <div className="flex items-start justify-between mb-4 sm:mb-6">
+        <h3 className="text-xl sm:text-2xl font-bold text-foreground uppercase tracking-tight break-words">
           {project.title}
         </h3>
         <motion.div
           whileHover={{ rotate: 360, scale: 1.2 }}
           transition={{ duration: 0.5 }}
         >
-          <Github size={20} className="text-foreground flex-shrink-0 ml-4" />
+          <Github size={20} className="text-foreground flex-shrink-0 ml-3" />
         </motion.div>
       </div>
 

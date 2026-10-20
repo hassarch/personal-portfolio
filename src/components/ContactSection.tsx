@@ -150,14 +150,14 @@ const ContactSection = () => {
             </motion.div>
 
             {/* Form */}
-            <motion.div variants={itemVariants} className="retro-card">
-              <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+            <motion.div variants={itemVariants} className="retro-card p-4 sm:p-6">
+              <form className="space-y-5 sm:space-y-6" onSubmit={handleSubmit(onSubmit)}>
                 <div>
                   <Label htmlFor="name" className="contact-label font-mono">--name:</Label>
                   <Input
                     id="name"
                     {...register('name')}
-                    className="contact-input"
+                    className="contact-input text-base sm:text-sm"
                     placeholder="John Doe"
                     disabled={isSubmitting}
                   />
@@ -169,7 +169,7 @@ const ContactSection = () => {
                     id="email"
                     type="email"
                     {...register('email')}
-                    className="contact-input"
+                    className="contact-input text-base sm:text-sm"
                     placeholder="john@example.com"
                     disabled={isSubmitting}
                   />
@@ -181,14 +181,14 @@ const ContactSection = () => {
                     id="message"
                     {...register('message')}
                     rows={4}
-                    className="contact-textarea"
+                    className="contact-textarea text-base sm:text-sm"
                     placeholder="Initialize communication..."
                     disabled={isSubmitting}
                   />
                   {errors.message && <p className="text-xs text-destructive font-bold mt-2 font-mono uppercase">{errors.message.message}</p>}
                 </div>
                 <Button 
-                  className="retro-button w-full text-sm py-6 uppercase tracking-widest bg-foreground text-background hover:bg-background hover:text-foreground" 
+                  className="retro-button w-full text-sm py-5 sm:py-6 uppercase tracking-widest bg-foreground text-background hover:bg-background hover:text-foreground" 
                   type="submit"
                   disabled={isSubmitting}
                 >
@@ -225,14 +225,14 @@ const ContactItem = ({ icon, label, value, href }: { icon: React.ReactNode; labe
     >
       {icon}
     </motion.div>
-    <div>
+    <div className="min-w-0 flex-1">
       <p className="text-xs text-foreground font-bold uppercase tracking-widest opacity-60 mb-1 font-mono">{label}:</p>
       {href ? (
-        <a href={href} className="text-foreground hover:underline transition-all duration-200 text-sm font-mono font-bold">
+        <a href={href} className="text-foreground hover:underline transition-all duration-200 text-sm font-mono font-bold break-all">
           {value}
         </a>
       ) : (
-        <p className="text-foreground text-sm font-mono font-bold">{value}</p>
+        <p className="text-foreground text-sm font-mono font-bold break-words">{value}</p>
       )}
     </div>
   </motion.div>
