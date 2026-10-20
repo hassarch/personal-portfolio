@@ -144,24 +144,19 @@ const LeetCodeHeatmap = ({ username }: LeetCodeHeatmapProps) => {
         <div className="font-mono text-[10px] text-foreground opacity-40">
           loading submissions…
         </div>
-        <div className="flex gap-[3px]">
-          {Array.from({ length: 52 }).map((_, col) => (
-            <div key={col} className="flex flex-col gap-[3px]">
-              {Array.from({ length: 7 }).map((_, row) => (
-                <motion.div
-                  key={`${col}-${row}`}
-                  initial={{ opacity: 0.3 }}
-                  animate={{ opacity: [0.2, 0.5, 0.2] }}
-                  transition={{
-                    duration: 1.5,
-                    repeat: Infinity,
-                    delay: (col + row) * 0.01,
-                  }}
-                  className="w-[8px] h-[8px] rounded-full bg-[#6b4503]"
-                />
-              ))}
-            </div>
-          ))}
+        <div className="relative overflow-x-auto pb-2 scrollbar-thin">
+          <div className="flex gap-[3px] min-w-max animate-pulse">
+            {Array.from({ length: 52 }).map((_, col) => (
+              <div key={col} className="flex flex-col gap-[3px]">
+                {Array.from({ length: 7 }).map((_, row) => (
+                  <div
+                    key={`${col}-${row}`}
+                    className="w-[8px] h-[8px] rounded-full bg-[#6b4503]/40"
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -181,14 +176,13 @@ const LeetCodeHeatmap = ({ username }: LeetCodeHeatmapProps) => {
 
   return (
     <div className="flex flex-col gap-3 select-none">
-      <div className="flex items-center justify-between text-[#eceae4]/40">
-        <span className="font-mono text-[10px]">
+      <div className="flex items-center justify-between font-mono text-[10px] text-foreground opacity-50">
+        <span>
           {totalSubmissions.toLocaleString()} submissions in the last year
         </span>
-        <span className="font-mono text-[10px]">each dot is a day</span>
       </div>
 
-      <div className="relative overflow-x-auto pb-2">
+      <div className="relative overflow-x-auto pb-2 scrollbar-thin">
         <div className="flex gap-[3px] min-w-max">
           <div className="relative flex gap-[3px]">
             {/* Month labels */}
@@ -210,22 +204,15 @@ const LeetCodeHeatmap = ({ username }: LeetCodeHeatmapProps) => {
             {submissions.map((week, colIndex) => (
               <div key={colIndex} className="flex flex-col gap-[3px] relative">
                 {week.days.map((day, rowIndex) => (
-                  <motion.div
+                  <div
                     key={`${colIndex}-${rowIndex}`}
-                    initial={{ opacity: 0, scale: 0 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{
-                      duration: 0.3,
-                      delay: (colIndex * 0.003) + (rowIndex * 0.001),
-                      ease: 'easeOut',
-                    }}
                     onMouseEnter={() => setHovered({ day, col: colIndex, row: rowIndex })}
                     onMouseLeave={() => setHovered(null)}
-                    className={`w-[8px] h-[8px] rounded-full transition-all duration-200 ${LEVEL_COLOR[day.level]} ${
+                    onClick={() => setHovered(prev => (prev?.col === colIndex && prev?.row === rowIndex ? null : { day, col: colIndex, row: rowIndex }))}
+                    className={`w-[8px] h-[8px] rounded-full transition-transform duration-150 cursor-pointer ${LEVEL_COLOR[day.level]} ${
                       hovered?.col === colIndex && hovered?.row === rowIndex
                         ? 'scale-[1.5] z-10 ring-2 ring-white ring-opacity-50'
-                        : day.level > 0 ? 'hover:scale-110' : ''
+                        : day.level > 0 ? 'hover:scale-125' : ''
                     }`}
                     role="img"
                     aria-label={`${formatDate(day.date)}: ${day.count} submissions`}

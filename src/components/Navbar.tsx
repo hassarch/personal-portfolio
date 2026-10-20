@@ -36,6 +36,14 @@ const Navbar = () => {
     };
   }, [isMobileOpen]);
 
+  useEffect(() => {
+    const handleOrientationChange = () => {
+      setIsMobileOpen(false);
+    };
+    window.addEventListener('orientationchange', handleOrientationChange);
+    return () => window.removeEventListener('orientationchange', handleOrientationChange);
+  }, []);
+
   const goToSection = (href: string) => {
     navigateToSection(href.substring(1));
     setIsMobileOpen(false);
@@ -46,7 +54,7 @@ const Navbar = () => {
   return (
     // Wrapper is click-through so the gutter around the floating island
     // doesn't swallow clicks on the page beneath it.
-    <div className="pointer-events-none fixed inset-x-0 top-4 z-50 flex justify-center px-4">
+    <div className="pointer-events-none fixed inset-x-0 top-2 sm:top-4 z-50 flex justify-center px-3 sm:px-4">
       {/* min-w keeps the bar and its dropdown the same width, open or closed */}
       <div className="pointer-events-auto min-w-[220px] md:min-w-0">
         <motion.nav
@@ -144,7 +152,7 @@ const Navbar = () => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.98 }}
               transition={{ type: 'spring', stiffness: 400, damping: 32 }}
-              className="nav-island mt-2 flex-col items-stretch gap-1 bg-background/90 shadow-brutal-md md:hidden"
+              className="nav-island mt-2 flex-col items-stretch gap-1 bg-background/95 shadow-brutal-md md:hidden max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain"
             >
               {navLinks.map((link, index) => {
                 const isActive = activeSection === link.href.substring(1);
@@ -156,7 +164,7 @@ const Navbar = () => {
                     initial={{ opacity: 0, x: -12 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.04 * index }}
-                    className={`flex items-center gap-2 rounded-[6px] border-2 px-3 py-2.5 text-left font-mono text-xs font-bold uppercase tracking-widest transition-colors ${
+                    className={`flex min-h-[44px] items-center gap-2 rounded-[6px] border-2 px-3 py-2 text-left font-mono text-xs font-bold uppercase tracking-widest transition-colors ${
                       isActive
                         ? 'border-foreground bg-foreground text-background'
                         : 'border-transparent text-foreground hover:border-foreground'
@@ -176,7 +184,7 @@ const Navbar = () => {
                   initial={{ opacity: 0, x: -12 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.04 * navLinks.length }}
-                  className="flex items-center gap-2 rounded-[6px] border-2 border-foreground bg-foreground px-3 py-2.5 font-mono text-xs font-bold uppercase tracking-widest text-background"
+                  className="flex min-h-[44px] items-center gap-2 rounded-[6px] border-2 border-foreground bg-foreground px-3 py-2 font-mono text-xs font-bold uppercase tracking-widest text-background"
                 >
                   <FileText size={14} />
                   Resume

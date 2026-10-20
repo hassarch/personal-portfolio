@@ -138,6 +138,7 @@ const Starfield = () => {
     // Reading once here would therefore latch the previous theme's colours.
     // Instead the loop watches the class string and refreshes on change.
     let starChannels = '0 0% 96%';
+    let starBaseColor = 'hsl(0 0% 96% / 1)';
     let themeClass = '';
 
     const refreshTokens = () => {
@@ -146,6 +147,7 @@ const Starfield = () => {
       starChannels =
         getComputedStyle(root).getPropertyValue('--star-color').trim() ||
         '0 0% 96%';
+      starBaseColor = `hsl(${starChannels} / 1)`;
     };
 
     const color = (alpha: number) => `hsl(${starChannels} / ${alpha})`;
@@ -188,7 +190,7 @@ const Starfield = () => {
     };
 
     const resize = () => {
-      const dpr = window.devicePixelRatio || 1;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
       width = window.innerWidth;
       height = window.innerHeight;
       canvas.width = Math.floor(width * dpr);
@@ -303,7 +305,7 @@ const Starfield = () => {
 
     const drawStar = (star: Star, drawX: number, drawY: number, twinkle: number) => {
       const alpha = star.baseAlpha * (0.65 + 0.35 * twinkle);
-      ctx.fillStyle = color(alpha);
+      ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
       ctx.beginPath();
       ctx.arc(drawX, drawY, star.radius, 0, Math.PI * 2);
       ctx.fill();
@@ -311,8 +313,7 @@ const Starfield = () => {
       // A subtle 4-point sparkle on the brightest foreground stars.
       if (star.layer.sparkle && star.radius > 1.55) {
         const s = star.radius * 2.8;
-        ctx.strokeStyle = color(alpha * 0.45);
-        ctx.lineWidth = 0.6;
+        ctx.globalAlpha = Math.max(0, Math.min(1, alpha * 0.45));
         ctx.beginPath();
         ctx.moveTo(drawX - s, drawY);
         ctx.lineTo(drawX + s, drawY);
@@ -329,9 +330,13 @@ const Starfield = () => {
       refreshTokens();
       ctx.clearRect(0, 0, width, height);
       drawPlanet();
+      ctx.fillStyle = starBaseColor;
+      ctx.strokeStyle = starBaseColor;
+      ctx.lineWidth = 0.6;
       stars.forEach((star) =>
         drawStar(star, star.x, wrap(star.y - scrollY * star.layer.parallax, height), 1)
       );
+      ctx.globalAlpha = 1;
     };
 
     const render = (time: number) => {
@@ -345,6 +350,10 @@ const Starfield = () => {
       ctx.clearRect(0, 0, width, height);
       drawPlanet();
 
+      ctx.fillStyle = starBaseColor;
+      ctx.strokeStyle = starBaseColor;
+      ctx.lineWidth = 0.6;
+
       stars.forEach((star) => {
         // Gentle downward drift, kept inside the field.
         star.y = wrap(star.y + star.drift * dt, height);
@@ -354,6 +363,8 @@ const Starfield = () => {
         const twinkle = Math.sin(seconds * star.twinkleSpeed + star.phase);
         drawStar(star, star.x, drawY, (twinkle + 1) / 2);
       });
+
+      ctx.globalAlpha = 1;
 
       if (time > nextMeteorAt && meteors.length < MAX_METEORS) {
         spawnMeteor();
@@ -403,6 +414,7 @@ const Starfield = () => {
 
     resize();
     window.addEventListener('resize', resize);
+    window.addEventListener('orientationchange', resize);
     window.addEventListener('scroll', handleScroll, { passive: true });
     document.addEventListener('visibilitychange', handleVisibility);
 
@@ -415,6 +427,7 @@ const Starfield = () => {
     return () => {
       stop();
       window.removeEventListener('resize', resize);
+      window.removeEventListener('orientationchange', resize);
       window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('visibilitychange', handleVisibility);
     };

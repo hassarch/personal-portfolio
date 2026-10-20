@@ -33,8 +33,12 @@ const BackToTop = () => {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.5, y: 20 }}
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-50 p-3 bg-background border-2 border-foreground text-foreground transition-all duration-200 shadow-brutal-md"
-          style={{ borderRadius: '8px' }}
+          className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-50 p-2.5 sm:p-3 bg-background border-2 border-foreground text-foreground transition-all duration-200 shadow-brutal-md"
+          style={{
+            borderRadius: '8px',
+            bottom: 'max(1rem, env(safe-area-inset-bottom, 1rem))',
+            right: 'max(1rem, env(safe-area-inset-right, 1rem))',
+          }}
           whileHover={{ 
             y: -4, 
             scale: 1.05,

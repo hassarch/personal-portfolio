@@ -59,13 +59,13 @@ const HeroSection = () => {
           <p className="mb-1 font-mono text-xs text-foreground opacity-60 sm:text-sm">
             $ whoami
           </p>
-          <h1 className="text-4xl font-bold uppercase tracking-tight text-foreground sm:text-5xl md:text-6xl">
+          <h1 className="text-3xl font-bold uppercase tracking-tight text-foreground break-words sm:text-5xl md:text-6xl leading-tight">
             {typedName}<span className="animate-blink font-light opacity-80">_</span>
           </h1>
         </motion.div>
 
         {/* Terminal-style bio */}
-        <motion.div variants={item} className="mb-8">
+        <motion.div variants={item} className="mb-6 sm:mb-8">
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.6 }}
@@ -74,7 +74,7 @@ const HeroSection = () => {
           >
             $ cat info.txt
           </motion.p>
-          <p className="min-h-[3rem] max-w-2xl font-mono text-sm leading-relaxed text-foreground">
+          <p className="min-h-[2.5rem] sm:min-h-[3rem] max-w-2xl font-mono text-xs sm:text-sm leading-relaxed text-foreground">
             {typedBio}<span className={typedBio.length > 0 ? "animate-blink" : ""}>_</span>
           </p>
         </motion.div>
@@ -82,16 +82,16 @@ const HeroSection = () => {
         {/* CTA + socials on one row */}
         <motion.div
           variants={item}
-          className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-6"
+          className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:gap-6"
         >
           <Button
-            className="retro-button w-full bg-foreground px-8 py-6 text-sm text-background hover:bg-background hover:text-foreground sm:w-auto"
+            className="retro-button w-full bg-foreground px-6 py-5 sm:px-8 sm:py-6 text-sm text-background hover:bg-background hover:text-foreground sm:w-auto"
             asChild
           >
             <a href="#contact">$ hit_me_up</a>
           </Button>
 
-          <div className="flex gap-3">
+          <div className="flex justify-between sm:justify-start gap-2.5 sm:gap-3">
             {SOCIALS.map((social) => (
               <a
                 key={social.label}
@@ -99,7 +99,7 @@ const HeroSection = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={social.label}
-                className="hero-social-link"
+                className="hero-social-link flex-1 sm:flex-initial"
               >
                 {socialIcons[social.icon]}
               </a>

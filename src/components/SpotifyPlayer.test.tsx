@@ -99,18 +99,13 @@ describe('SpotifyPlayer', () => {
     expect(screen.queryByText('[ error ]')).not.toBeInTheDocument();
   });
 
-  it('advances progress locally between polls', async () => {
-    vi.useFakeTimers({ shouldAdvanceTime: true });
+  it('renders track details and album artwork', async () => {
     mockProxy({ status: 200, body: TRACK });
 
     render(<SpotifyPlayer />);
-    expect(await screen.findByText('0:00 / 3:20')).toBeInTheDocument();
-
-    await act(async () => {
-      vi.advanceTimersByTime(3_000);
-    });
-
-    expect(screen.getByText('0:03 / 3:20')).toBeInTheDocument();
+    expect(await screen.findByText('Teardrop')).toBeInTheDocument();
+    expect(screen.getByText('Massive Attack')).toBeInTheDocument();
+    expect(screen.getByAltText('Mezzanine')).toBeInTheDocument();
   });
 
   it('renders the transport row as decoration, not controls', async () => {

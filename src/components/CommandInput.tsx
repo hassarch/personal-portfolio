@@ -58,8 +58,9 @@ const CommandInput: React.FC<CommandInputProps> = ({
       role="textbox"
       aria-label="Terminal command input"
     >
-      <span className="text-foreground opacity-70 whitespace-nowrap select-none flex-shrink-0">
-        {prompt}
+      <span className="text-foreground opacity-70 whitespace-nowrap select-none flex-shrink-0 text-xs sm:text-sm">
+        <span className="hidden sm:inline">{prompt}</span>
+        <span className="sm:hidden">~/{currentSection}$</span>
       </span>
       <input
         ref={inputRef}
@@ -68,7 +69,7 @@ const CommandInput: React.FC<CommandInputProps> = ({
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={handleKeyDown}
         disabled={disabled}
-        className="flex-1 bg-transparent border-none outline-none text-foreground font-mono text-xs sm:text-sm caret-foreground min-w-0"
+        className="flex-1 bg-transparent border-none outline-none text-foreground font-mono text-base sm:text-sm caret-foreground min-w-0"
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="off"

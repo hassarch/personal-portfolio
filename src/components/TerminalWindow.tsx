@@ -20,25 +20,41 @@ const TerminalWindow: React.FC = () => {
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [inputHistory, setInputHistory] = useState<string[]>([]);
   const [isMinimized, setIsMinimized] = useState(false);
+  const [isMaximized, setIsMaximized] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const dragRef = useRef<HTMLDivElement>(null);
   const dragStart = useRef({ x: 0, y: 0 });
 
-  // Center window on initial open
+  const recalculatePosition = useCallback(() => {
+    if (typeof window === 'undefined') return;
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    const terminalWidth = Math.min(900, windowWidth * 0.94);
+    const terminalHeight = Math.min(560, windowHeight * 0.85);
+
+    setPosition({
+      x: Math.max(8, (windowWidth - terminalWidth) / 2),
+      y: Math.max(8, (windowHeight - terminalHeight) / 2),
+    });
+  }, []);
+
+  // Center window on initial open or reopen
   useEffect(() => {
-    if (state.isWindowOpen && position.x === 0 && position.y === 0) {
-      const windowWidth = window.innerWidth;
-      const windowHeight = window.innerHeight;
-      const terminalWidth = Math.min(900, windowWidth * 0.9);
-      const terminalHeight = Math.min(600, windowHeight * 0.8);
-      
-      setPosition({
-        x: (windowWidth - terminalWidth) / 2,
-        y: (windowHeight - terminalHeight) / 2,
-      });
+    if (state.isWindowOpen) {
+      recalculatePosition();
     }
-  }, [state.isWindowOpen, position.x, position.y]);
+  }, [state.isWindowOpen, recalculatePosition]);
+
+  // Recalculate position on window resize or phone orientation change
+  useEffect(() => {
+    window.addEventListener('resize', recalculatePosition);
+    window.addEventListener('orientationchange', recalculatePosition);
+    return () => {
+      window.removeEventListener('resize', recalculatePosition);
+      window.removeEventListener('orientationchange', recalculatePosition);
+    };
+  }, [recalculatePosition]);
 
   // Add welcome message on mount
   useEffect(() => {
@@ -184,13 +200,43 @@ Keyboard shortcuts:
     setIsMinimized(prev => !prev);
   };
 
+  const handleMaximize = () => {
+    setIsMaximized(prev => !prev);
+  };
+
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.button !== 0) return; // Only left click
+    if (e.button !== 0 || isMaximized) return; // Only left click
     setIsDragging(true);
     dragStart.current = {
       x: e.clientX - position.x,
       y: e.clientY - position.y,
     };
+  };
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (e.touches.length !== 1 || isMaximized) return;
+    setIsDragging(true);
+    dragStart.current = {
+      x: e.touches[0].clientX - position.x,
+      y: e.touches[0].clientY - position.y,
+    };
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!isDragging || isMaximized || e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    const newX = touch.clientX - dragStart.current.x;
+    const newY = touch.clientY - dragStart.current.y;
+    const maxX = window.innerWidth - 120;
+    const maxY = window.innerHeight - 50;
+    setPosition({
+      x: Math.max(0, Math.min(newX, maxX)),
+      y: Math.max(0, Math.min(newY, maxY)),
+    });
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
   };
 
   useEffect(() => {
@@ -233,7 +279,7 @@ Keyboard shortcuts:
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm"
+        className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-2 sm:p-4"
         onClick={handleClose}
       >
         <motion.div
@@ -241,21 +287,33 @@ Keyboard shortcuts:
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.95, opacity: 0, y: 20 }}
           transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-          className="absolute"
-          style={{
-            left: position.x,
-            top: position.y,
-            width: 'min(900px, 90vw)',
-            maxHeight: isMinimized ? 'auto' : 'min(600px, 80vh)',
-          }}
+          className={
+            isMaximized
+              ? 'fixed inset-2 sm:inset-4 z-10 flex flex-col'
+              : 'relative w-full max-w-[900px]'
+          }
+          style={
+            !isMaximized && position.x > 0 && typeof window !== 'undefined' && window.innerWidth >= 768 && window.innerHeight >= 550
+              ? {
+                  position: 'absolute',
+                  left: position.x,
+                  top: position.y,
+                  width: 'min(900px, 92vw)',
+                  maxHeight: isMinimized ? 'auto' : 'min(600px, 85vh)',
+                }
+              : undefined
+          }
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="terminal-frame overflow-hidden">
+          <div className="terminal-frame overflow-hidden w-full flex flex-col shadow-2xl">
             {/* macOS Window Header */}
             <div
               ref={dragRef}
               onMouseDown={handleMouseDown}
-              className="terminal-title-bar cursor-move"
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              className="terminal-title-bar cursor-move select-none shrink-0"
             >
               {/* macOS Traffic Light Buttons */}
               <div className="terminal-controls">
@@ -288,6 +346,7 @@ Keyboard shortcuts:
                   </svg>
                 </button>
                 <button
+                  onClick={handleMaximize}
                   className="macos-btn macos-btn-maximize group"
                   aria-label="Maximize terminal"
                 >
@@ -314,19 +373,30 @@ Keyboard shortcuts:
 
             {/* Terminal content */}
             {!isMinimized && (
-              <div className="terminal-content h-[500px] overflow-y-auto scrollbar-thin">
-                <CommandHistory
-                  entries={entries}
-                  currentSection={state.currentSection}
-                />
-                <CommandInput
-                  value={input}
-                  onChange={setInput}
-                  onSubmit={handleSubmit}
-                  onHistoryUp={handleHistoryUp}
-                  onHistoryDown={handleHistoryDown}
-                  currentSection={state.currentSection}
-                />
+              <div
+                className={`terminal-content flex flex-col overflow-y-auto scrollbar-thin p-3 sm:p-5 ${
+                  isMaximized
+                    ? 'flex-1 h-full'
+                    : 'h-[42vh] sm:h-[420px] md:h-[480px] max-h-[calc(100dvh-6rem)] min-h-[180px]'
+                }`}
+              >
+                <div className="flex-1 overflow-y-auto pr-1">
+                  <CommandHistory
+                    entries={entries}
+                    currentSection={state.currentSection}
+                  />
+                </div>
+                
+                <div className="mt-auto pt-2 shrink-0">
+                  <CommandInput
+                    value={input}
+                    onChange={setInput}
+                    onSubmit={handleSubmit}
+                    onHistoryUp={handleHistoryUp}
+                    onHistoryDown={handleHistoryDown}
+                    currentSection={state.currentSection}
+                  />
+                </div>
               </div>
             )}
           </div>

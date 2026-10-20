@@ -39,7 +39,7 @@ const Index = () => {
 
       <div className="main-container">
         <Navbar />
-        <main id="main-content" className="pt-24 pb-16">
+        <main id="main-content" className="pt-16 sm:pt-24 pb-12 sm:pb-16">
           {/*
             Bento cluster. Section ids stay on the grid items — Navbar's
             useCurrentSection and the terminal's navigation commands both
